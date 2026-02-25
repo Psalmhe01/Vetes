@@ -137,14 +137,14 @@ public class Startup
 
         app.UseEndpoints(x => x.MapControllers());
 
-        app.UseSpa(spa =>
-        {
-            spa.Options.SourcePath = "learning-starter-web";
-            if (env.IsDevelopment())
-            {
-                spa.UseProxyToSpaDevelopmentServer("http://localhost:3001");
-            }
-        });
+        //app.UseSpa(spa =>
+        //{
+         //   spa.Options.SourcePath = "learning-starter-web";
+         //   if (env.IsDevelopment())
+         //   {
+         //       spa.UseProxyToSpaDevelopmentServer("http://localhost:3001");
+        //    }
+        //});
         
         using var scope = app.ApplicationServices.CreateScope();
         var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
