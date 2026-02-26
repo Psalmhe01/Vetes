@@ -14,6 +14,31 @@ public class Products
     public Categories Categories { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
 }
+
+public class ProductsGetDto
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public decimal Price { get; set; }
+    public int CategoryId { get; set; }
+}
+
+public class ProductsCreateDto
+{
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public decimal Price { get; set; }
+    public int CategoryId { get; set; }
+}
+
+public class ProductsUpdateDto
+{
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public decimal Price { get; set; }
+    public int CategoryId { get; set; }
+}
 public class ProductEntityTypeConfiguration : IEntityTypeConfiguration<Products>
 {
     public void Configure(EntityTypeBuilder<Products> builder)
