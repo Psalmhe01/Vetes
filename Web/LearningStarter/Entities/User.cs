@@ -14,6 +14,7 @@ public class User : IdentityUser<int>
     public List<UserRole> UserRoles { get; set; } = new();
 }
 
+
 public class UserCreateDto
 {
     public string FirstName { get; set; }
