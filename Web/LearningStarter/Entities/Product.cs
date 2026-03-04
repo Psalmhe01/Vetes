@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LearningStarter.Entities;
 
-public class Products
+public class Product
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
     public int CategoryId { get; set; }
-    public Categories Categories { get; set; }
+    public Category Category { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
 }
 
-public class ProductsGetDto
+public class ProductGetDto
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -24,7 +24,7 @@ public class ProductsGetDto
     public int CategoryId { get; set; }
 }
 
-public class ProductsCreateDto
+public class ProductCreateDto
 {
     public string Name { get; set; }
     public string Description { get; set; }
@@ -32,19 +32,19 @@ public class ProductsCreateDto
     public int CategoryId { get; set; }
 }
 
-public class ProductsUpdateDto
+public class ProductUpdateDto
 {
     public string Name { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
     public int CategoryId { get; set; }
 }
-public class ProductEntityTypeConfiguration : IEntityTypeConfiguration<Products>
+public class ProductEntityTypeConfiguration : IEntityTypeConfiguration<Product>
 {
-    public void Configure(EntityTypeBuilder<Products> builder)
+    public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("Products");
-        builder.HasOne(x => x.Categories)
-            .WithMany(x => x.Products);
+        builder.ToTable("Product");
+        builder.HasOne(x => x.Category)
+            .WithMany(x => x.Product);
     }
 }
