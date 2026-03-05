@@ -54,7 +54,7 @@ public class ProductsController : ControllerBase
             }).FirstOrDefault(x => x.Id == id);
         if (data == null)
         {
-            response.AddError("id", "Id is required");
+            response.AddError("id", "Product not found");
         }
 
         if (response.HasErrors)
@@ -146,7 +146,7 @@ public class ProductsController : ControllerBase
         
         if (productToUpdate == null)
         {
-            response.AddError("id", "Category not found");
+            response.AddError("id", "Product not found");
         }
         
         var categoryExists = _dataContext.Set<Category>()
@@ -164,6 +164,7 @@ public class ProductsController : ControllerBase
         productToUpdate.Name = updateDto.Name;
         productToUpdate.Description = updateDto.Description;
         productToUpdate.Price = updateDto.Price;
+        productToUpdate.CategoryId = updateDto.CategoryId;
 
         _dataContext.SaveChanges();
 
@@ -171,6 +172,9 @@ public class ProductsController : ControllerBase
         {
             Id = productToUpdate.Id,
             Name = productToUpdate.Name,
+            Description = productToUpdate.Description,
+            Price = productToUpdate.Price,
+            CategoryId = productToUpdate.CategoryId
             
         };
         
@@ -188,7 +192,7 @@ public class ProductsController : ControllerBase
 
         if (productToDelete == null)
         {
-            response.AddError("id", "Category not found");
+            response.AddError("id", "Product not found");
         }
 
         if (response.HasErrors)

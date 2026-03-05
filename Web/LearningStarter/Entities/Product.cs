@@ -43,7 +43,7 @@ public class ProductEntityTypeConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("Product");
+        builder.ToTable("Products");
         builder.HasOne(x => x.Category)
             .WithMany(x => x.Product);
     }
