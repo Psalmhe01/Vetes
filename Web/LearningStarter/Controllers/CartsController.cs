@@ -85,8 +85,8 @@ public class CartsController : ControllerBase
         var cartToReturn = new CartGetDto
         {
             Id = cartToCreate.Id,
-            UserId = createDto.UserId,
-            UpdatedAt = createDto.UpdatedAt
+            UserId = cartToCreate.UserId,
+            UpdatedAt = cartToCreate.UpdatedAt
         };
         
         response.Data = cartToReturn;
