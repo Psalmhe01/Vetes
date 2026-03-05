@@ -23,12 +23,12 @@ public class CategoriesController : ControllerBase
         var response = new Response();
             
             var data = _dataContext
-                .Set<Categories>()
-                .Select(categories => new CategoriesGetDto
+                .Set<Category>()
+                .Select(category => new CategoryGetDto
                 {
-                    Id = categories.Id,
-                    Name = categories.Name,
-                    Products = categories.Products.Select(product => new ProductsGetDto
+                    Id = category.Id,
+                    Name = category.Name,
+                    Products = category.Product.Select(product => new ProductGetDto
                     {
                         Id = product.Id,
                         Name = product.Name,
@@ -41,8 +41,6 @@ public class CategoriesController : ControllerBase
             response.Data = data;
             return Ok(response);
     }
-
-    // think about swapping up the intrinsic meat of the regular get with the get by id and vice versa
     
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
@@ -50,20 +48,36 @@ public class CategoriesController : ControllerBase
         var response = new Response();
             
         var data = _dataContext
-            .Set<Categories>()
-            .Select(categories => new CategoriesGetDto
+            .Set<Category>()
+            .Select(category => new CategoryGetDto
             {
-                Id = categories.Id,
-                Name = categories.Name
+                Id = category.Id,
+                Name = category.Name,
+                Products = category.Product.Select(product => new ProductGetDto
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    CategoryId = product.CategoryId
+                }).ToList()
             })
             .FirstOrDefault(categories => categories.Id == id);
-        
+        if (data == null)
+        {
+            response.AddError("id", "Category not found");
+        }
+
+        if (response.HasErrors)
+        {
+            return BadRequest(response);
+        }
         response.Data = data;
         return Ok(response);
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] CategoriesCreateDto createDto)
+    public IActionResult Create([FromBody] CategoryCreateDto createDto)
     {
         var response = new Response();
 
@@ -77,27 +91,27 @@ public class CategoriesController : ControllerBase
             return BadRequest(response);
         };
 
-        var categoriesToCreate = new Categories
+        var categoryToCreate = new Category
         {
             Name = createDto.Name
         };
 
-        _dataContext.Set<Categories>().Add(categoriesToCreate);
+        _dataContext.Set<Category>().Add(categoryToCreate);
         _dataContext.SaveChanges();
 
-        var categoriesToReturn = new CategoriesGetDto
+        var categoryToReturn = new CategoryGetDto
         {
-            Id = categoriesToCreate.Id,
-            Name = categoriesToCreate.Name
+            Id = categoryToCreate.Id,
+            Name = categoryToCreate.Name
         };
 
-        response.Data = categoriesToReturn;
+        response.Data = categoryToReturn;
         
         return Created("", response);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update([FromBody] CategoriesUpdateDto updateDto, int id)
+    public IActionResult Update([FromBody] CategoryUpdateDto updateDto, int id)
     {
         var response = new Response();
         
@@ -106,10 +120,10 @@ public class CategoriesController : ControllerBase
             response.AddError(nameof(updateDto.Name), "Name is required");
         }
         
-        var categoriesToUpdate = _dataContext.Set<Categories>()
-            .FirstOrDefault(categories => categories.Id == id);
+        var categoryToUpdate = _dataContext.Set<Category>()
+            .FirstOrDefault(category => category.Id == id);
         
-        if (categoriesToUpdate == null)
+        if (categoryToUpdate == null)
         {
             response.AddError("id", "Category not found");
         }
@@ -119,17 +133,17 @@ public class CategoriesController : ControllerBase
             return BadRequest(response);
         }
 
-        categoriesToUpdate.Name = updateDto.Name;
+        categoryToUpdate.Name = updateDto.Name;
 
         _dataContext.SaveChanges();
 
-        var categoriesToReturn = new CategoriesGetDto
+        var categoryToReturn = new CategoryGetDto
         {
-            Id = categoriesToUpdate.Id,
-            Name = categoriesToUpdate.Name
+            Id = categoryToUpdate.Id,
+            Name = categoryToUpdate.Name
         };
         
-        response.Data = categoriesToReturn;
+        response.Data = categoryToReturn;
         
         return Ok(response);
     }
@@ -139,10 +153,10 @@ public class CategoriesController : ControllerBase
     {
         var response = new Response();
 
-        var categoriesToDelete = _dataContext.Set<Categories>()
-            .FirstOrDefault(categories => categories.Id == id);
+        var categoryToDelete = _dataContext.Set<Category>()
+            .FirstOrDefault(category => category.Id == id);
 
-        if (categoriesToDelete == null)
+        if (categoryToDelete == null)
         {
             response.AddError("id", "Category not found");
         }
@@ -152,7 +166,7 @@ public class CategoriesController : ControllerBase
             return BadRequest(response);
         }
 
-        _dataContext.Set<Categories>().Remove(categoriesToDelete);
+        _dataContext.Set<Category>().Remove(categoryToDelete);
         _dataContext.SaveChanges();
         
         response.Data = true;
