@@ -27,13 +27,12 @@ public class CartsController : ControllerBase
                 Id = cart.Id,
                 UserId = cart.UserId,
                 UpdatedAt = cart.UpdatedAt,
-                /*Products = cart.Products.Select(x => new CartProductGetDto
+                Products = cart.Products.Select(x => new CartProductGetDto
                 {
                     Id = x.Id,
-                    CartId = x.CartId,
                     ProductSizeId = x.ProductSizeId,
                     Quantity = x.Quantity
-                }).ToList()*/
+                }).ToList()
             })
             .ToList();
         

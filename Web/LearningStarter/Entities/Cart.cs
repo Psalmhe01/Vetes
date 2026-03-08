@@ -21,7 +21,7 @@ public class CartGetDto
     public int Id { get; set; }
     public int UserId { get; set; }
     public DateTimeOffset UpdatedAt { get; set; }
-    public List<CartProduct> Products { get; set; }
+    public List<CartProductGetDto> Products { get; set; }
 }
 
 public class CartCreateDto

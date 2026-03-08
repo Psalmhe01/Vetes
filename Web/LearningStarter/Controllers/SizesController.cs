@@ -28,6 +28,14 @@ public class SizeController : ControllerBase
             {
                 Id = size.Id,
                 Name = size.Name,
+                Products = size.Products.Select(x => new ProductSizeForSizeGetDto
+                {
+                    ProductId = x.ProductId,
+                    ProductName = x.Product.Name,
+                    ProductDescription = x.Product.Description,
+                    ProductPrice =  x.Product.Price,
+                    Stock = x.Stock
+                }).ToList()
             })
             .ToList();
         
@@ -44,7 +52,15 @@ public class SizeController : ControllerBase
             .Select(size => new SizeGetDto
             {
                 Id = size.Id,
-                Name = size.Name
+                Name = size.Name,
+                Products = size.Products.Select(x => new ProductSizeForSizeGetDto
+                {
+                ProductId = x.Product.Id,
+                ProductName = x.Product.Name,
+                ProductDescription = x.Product.Description,
+                ProductPrice =  x.Product.Price,
+                Stock = x.Stock
+            }).ToList()
             }).FirstOrDefault(cart => cart.Id == id);
         
         response.Data = data;
@@ -58,11 +74,8 @@ public class SizeController : ControllerBase
 
         if (string.IsNullOrEmpty(createDto.Name))
         {
-            response.AddError("Name", "Size must have a value");
-        }
-
-        if (response.HasErrors)
-        {
+            response.AddError("Name",
+                "Size must have a value");
             return BadRequest(response);
         }
 
@@ -83,6 +96,44 @@ public class SizeController : ControllerBase
         response.Data = sizeToReturn;
         
         return Created("", response);
+    }
+
+    [HttpPost("{sizeId}/product/{productId}")]
+    public IActionResult AddProductToSize([FromRoute] int sizeId, int productId, [FromQuery] int stock)
+    {
+        var response = new Response();
+        
+        var size = _dataContext.Set<Size>()
+            .FirstOrDefault(x => x.Id == sizeId);
+        var product = _dataContext.Set<Product>()
+            .FirstOrDefault(x => x.Id == productId);
+
+        var productSize = new ProductSize
+        {
+            Product = product,
+            Size = size,
+            Stock = stock
+        };
+        
+        _dataContext.Set<ProductSize>().Add(productSize);
+        _dataContext.SaveChanges();
+        
+        response.Data = new SizeGetDto
+        {
+            Id = size.Id,
+            Name = size.Name,
+            Products = size.Products.Select(x => new ProductSizeForSizeGetDto
+            {
+                ProductId = x.ProductId,
+                ProductName = x.Product.Name, 
+                ProductDescription = x.Product.Description,
+                ProductPrice =  x.Product.Price,
+                Stock = x.Stock
+            }).ToList()
+        };
+
+        return Ok(response);
+
     }
     
     [HttpPut("{id}")]

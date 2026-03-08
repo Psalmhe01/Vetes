@@ -5,6 +5,10 @@ using LearningStarter.Entities;
 using Microsoft.AspNetCore.Mvc; 
 namespace LearningStarter.Controllers;
 
+// missing above the class:
+[ApiController]
+[Route("api/cartproducts")]
+
 public class CartProductsController : ControllerBase
 {
     private readonly DataContext _dataContext;
@@ -22,7 +26,6 @@ public class CartProductsController : ControllerBase
             .Select(cartProduct => new CartProductGetDto
             {
                 Id = cartProduct.Id,
-                CartId = cartProduct.CartId,
                 ProductSizeId = cartProduct.ProductSizeId,
                 Quantity = cartProduct.Quantity,
             }).ToList();

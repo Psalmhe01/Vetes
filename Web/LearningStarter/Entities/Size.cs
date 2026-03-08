@@ -18,6 +18,7 @@ public class SizeGetDto
 {
     public int Id { get; set; }
     public string Name { get; set; }
+    public List<ProductSizeForSizeGetDto> Products { get; set; }
 
 }
 
