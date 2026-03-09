@@ -154,6 +154,10 @@ public class Startup
         SeedUsers(dataContext, userManager).Wait();
         SeedCategories(dataContext);
         SeedProducts(dataContext);
+        SeedSizes(dataContext);
+        SeedMeasurementTypes(dataContext);
+        SeedMeasurementCategories(dataContext);
+        SeedProductSizes(dataContext);
     }
 
     private static void SeedCategories(DataContext dataContext)
@@ -166,7 +170,6 @@ public class Startup
         var seededCategory1 = new Category
         {
             Name = "Shirts",
-
         };
         
         dataContext.Set<Category>().Add(seededCategory1);
@@ -190,6 +193,74 @@ public class Startup
         
         dataContext.Set<Product>().Add(seededProduct1);
         dataContext.SaveChanges();
+    }
+
+    private static void SeedSizes(DataContext dataContext)
+    {
+        if (dataContext.Set<Size>().Any())
+        {
+            return;
+        }
+
+        var seededSize1 = new Size
+        {
+            Name = "Small",
+        };
+        
+        dataContext.Set<Size>().Add(seededSize1);
+        dataContext.SaveChanges();
+    }
+
+    public static void SeedMeasurementTypes(DataContext dataContext)
+    {
+        if (dataContext.Set<MeasurementType>().Any())
+        {
+            return;
+        }
+
+        var seededMeasurementType = new MeasurementType
+        {
+            Name = "Chest Width",
+            Unit = "inches",
+        };
+        
+        dataContext.Set<MeasurementType>().Add(seededMeasurementType);
+        dataContext.SaveChanges();
+    }
+
+    public static void SeedMeasurementCategories(DataContext dataContext)
+    {
+        if (dataContext.Set<MeasurementCategory>().Any())
+        {
+            return;
+        }
+
+        var seededMeasurementCategory = new MeasurementCategory
+        {
+            CategoryId = dataContext.Set<Category>().First().Id,
+            MeasurementTypeId = dataContext.Set<MeasurementType>().First().Id,
+        };
+        
+        dataContext.Set<MeasurementCategory>().Add(seededMeasurementCategory);
+        dataContext.SaveChanges();
+    }
+
+    public static void SeedProductSizes(DataContext dataContext)
+    {
+        if (dataContext.Set<ProductSize>().Any())
+        {
+            return;
+        }
+
+        var seededProductSize = new ProductSize
+        {
+            Stock = 3,
+            SizeId = dataContext.Set<Size>().First().Id,
+            ProductId = dataContext.Set<Product>().First().Id,
+        };
+            
+            dataContext.Set<ProductSize>().Add(seededProductSize);
+            dataContext.SaveChanges();
     }
 
     private static async Task SeedUsers(DataContext dataContext, UserManager<User> userManager)
