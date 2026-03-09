@@ -19,7 +19,7 @@ public class ProductSizesController : ControllerBase
         _dataContext = dataContext;
     }
 
-    /*[HttpGet]
+    [HttpGet]
     public IActionResult GetAll()
     {
         var response = new Response();
@@ -29,7 +29,10 @@ public class ProductSizesController : ControllerBase
             .Select(product => new ProductSizeGetDto
             {
                 Id = product.Id,
-                
+                ProductName = product.Product.Name,
+                ProductPrice = product.Product.Price,
+                SizeName = product.Size.Name,
+                Stock = product.Stock
             }).ToList();
 
         response.Data = data;
@@ -42,14 +45,14 @@ public class ProductSizesController : ControllerBase
         var response = new Response();
 
         var data = _dataContext
-            .Set<Product>()
-            .Select(product => new ProductGetDto
+            .Set<ProductSize>()
+            .Select(product => new ProductSizeGetDto
             {
                 Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                CategoryId = product.CategoryId
+                ProductName = product.Product.Name,
+                ProductPrice = product.Product.Price,
+                SizeName = product.Size.Name,
+                Stock = product.Stock
             }).FirstOrDefault(x => x.Id == id);
         if (data == null)
         {
@@ -63,7 +66,7 @@ public class ProductSizesController : ControllerBase
 
         response.Data = data;
         return Ok(response);
-    }*/
+    }
     
     [HttpPost]
     public IActionResult Create([FromBody] ProductSizeCreateDto createDto)
@@ -173,8 +176,8 @@ public class ProductSizesController : ControllerBase
         var productSizeToReturn = new ProductSizeGetDto
         {
             Id = productSizeToUpdate.Id,
-            SizeId = productSizeToUpdate.SizeId,
-            ProductId = productSizeToUpdate.ProductId,
+            SizeId = productSizeToUpdate.Size.Id,
+            ProductId = productSizeToUpdate.Product.Id,
             Stock = productSizeToUpdate.Stock
         };
         

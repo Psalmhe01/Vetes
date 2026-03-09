@@ -23,10 +23,9 @@ public class ProductSizeGetDto
     public int Id { get; set; }
     public int Stock { get; set; }
     public int SizeId { get; set; }
-    public string SizeName { get; set; }
     public int ProductId { get; set; }
+    public string SizeName { get; set; }
     public string ProductName { get; set; }
-    public string ProductDescription { get; set; }
     public decimal ProductPrice { get; set; }
 }
 

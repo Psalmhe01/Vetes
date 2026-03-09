@@ -13,7 +13,7 @@ public class Cart
     public User User { get; set; }
     public DateTimeOffset UpdatedAt { get; set; }
     
-    public List<CartProduct> Products { get; set; }
+    public ICollection<CartProduct> Products { get; set; }
 }
 
 public class CartGetDto
@@ -41,5 +41,6 @@ public class CartEntityTypeConfiguration : IEntityTypeConfiguration<Cart>
     public void Configure(EntityTypeBuilder<Cart> builder)
     {
         builder.ToTable("Cart");
+
     }
 }

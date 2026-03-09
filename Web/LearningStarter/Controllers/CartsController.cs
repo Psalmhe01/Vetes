@@ -31,7 +31,10 @@ public class CartsController : ControllerBase
                 {
                     Id = x.Id,
                     ProductSizeId = x.ProductSizeId,
-                    Quantity = x.Quantity
+                    Name = x.ProductSize.Product.Name,
+                    Size = x.ProductSize.Size.Name,
+                    Price = x.ProductSize.Product.Price,
+                    Quantity = x.Quantity,
                 }).ToList()
             })
             .ToList();
@@ -51,6 +54,15 @@ public class CartsController : ControllerBase
                 Id = cart.Id,
                 UserId = cart.UserId,
                 UpdatedAt = cart.UpdatedAt,
+                Products = cart.Products.Select(x => new CartProductGetDto
+                {
+                    Id = x.Id,
+                    ProductSizeId = x.ProductSizeId,
+                    Name = x.ProductSize.Product.Name,
+                    Size = x.ProductSize.Size.Name,
+                    Price = x.ProductSize.Product.Price,
+                    Quantity = x.Quantity,
+                }).ToList()
             }).FirstOrDefault(cart => cart.Id == id);
         
         response.Data = data;
