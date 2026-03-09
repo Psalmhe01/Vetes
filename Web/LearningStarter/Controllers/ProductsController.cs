@@ -30,7 +30,13 @@ public class ProductsController : ControllerBase
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
-                CategoryId = product.CategoryId
+                CategoryId = product.CategoryId,
+                Sizes = product.Sizes.Select(x => new ProductSizeForProductGetDto
+                {
+                    SizeName = x.Size.Name,
+                    SizeId = x.SizeId,
+                    Stock = x.Stock
+                }).ToList()
             }).ToList();
 
         response.Data = data;
