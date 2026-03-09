@@ -83,7 +83,7 @@ public class ProductsController : ControllerBase
         
         if (string.IsNullOrEmpty(createDto.Description))
         {
-            response.AddError(nameof(createDto.Name), "Description is required");
+            response.AddError(nameof(createDto.Description), "Description is required");
         }
 
         if (createDto.Price <= 0)

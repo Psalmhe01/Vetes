@@ -152,6 +152,44 @@ public class Startup
 
         SeedRoles(dataContext, roleManager).Wait();
         SeedUsers(dataContext, userManager).Wait();
+        SeedCategories(dataContext);
+        SeedProducts(dataContext);
+    }
+
+    private static void SeedCategories(DataContext dataContext)
+    {
+        if (dataContext.Set<Category>().Any())
+        {
+            return;
+        }
+
+        var seededCategory1 = new Category
+        {
+            Name = "Shirts",
+
+        };
+        
+        dataContext.Set<Category>().Add(seededCategory1);
+        dataContext.SaveChanges();
+    }
+    
+    private static void SeedProducts(DataContext dataContext)
+    {
+        if (dataContext.Set<Product>().Any())
+        {
+            return;
+        }
+
+        var seededProduct1 = new Product
+        {
+            Name = "Red shirt",
+            Description = "It is a shirt that is red",
+            Price = 20,
+            CategoryId = dataContext.Set<Category>().First().Id,
+        };
+        
+        dataContext.Set<Product>().Add(seededProduct1);
+        dataContext.SaveChanges();
     }
 
     private static async Task SeedUsers(DataContext dataContext, UserManager<User> userManager)
