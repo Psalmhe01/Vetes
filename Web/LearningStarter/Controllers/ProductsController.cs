@@ -30,7 +30,13 @@ public class ProductsController : ControllerBase
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
-                CategoryId = product.CategoryId
+                CategoryId = product.CategoryId,
+                Sizes = product.Sizes.Select(x => new ProductSizeForProductGetDto
+                {
+                    SizeName = x.Size.Name,
+                    SizeId = x.SizeId,
+                    Stock = x.Stock
+                }).ToList()
             }).ToList();
 
         response.Data = data;
@@ -77,7 +83,7 @@ public class ProductsController : ControllerBase
         
         if (string.IsNullOrEmpty(createDto.Description))
         {
-            response.AddError(nameof(createDto.Name), "Description is required");
+            response.AddError(nameof(createDto.Description), "Description is required");
         }
 
         if (createDto.Price <= 0)
