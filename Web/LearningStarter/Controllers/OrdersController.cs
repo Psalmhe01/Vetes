@@ -1,0 +1,200 @@
+
+using System.Linq;
+using LearningStarter.Common;
+using LearningStarter.Data;
+using LearningStarter.Entities;
+using Microsoft.AspNetCore.Mvc;
+namespace LearningStarter.Controllers;
+
+[ApiController]
+[Route("api/orders")]
+
+public class OrdersController: ControllerBase
+{
+    private readonly DataContext _dataContext;
+    
+    public OrdersController(DataContext dataContext)
+    {
+        _dataContext = dataContext;
+    }
+
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        var response = new Response();
+        
+        var data = _dataContext
+            .Set<Orders>()
+            .Select(orders => new OrdersGetDto
+            {
+                Id = orders.Id,
+                UserId = orders.UserId,
+                Status = orders.Status,
+                CreatedAt = orders.CreatedAt,
+                ShippingAddressId = orders.ShippingAddressId
+            })
+            .ToList();
+
+        response.Data = data;
+        return Ok(response);
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        var response = new Response();
+
+        var data = _dataContext
+            .Set<Orders>()
+            .Select(orders => new OrdersGetDto
+            {
+                Id = orders.Id,
+                UserId = orders.UserId,
+                Status = orders.Status,
+                CreatedAt = orders.CreatedAt,
+                ShippingAddressId = orders.ShippingAddressId
+            })
+            .FirstOrDefault(orders => orders.Id == id);
+
+        if (data == null)
+        {
+            response.AddError("id", "Order not found");
+            return NotFound(response);
+        }
+
+        response.Data = data;
+        return Ok(response);
+    }
+
+    [HttpPost]
+    public IActionResult Create([FromBody] OrdersCreateDto createDto)
+    {
+        var response = new Response();
+
+        if (string.IsNullOrEmpty(createDto.Status))
+        {
+            response.AddError(nameof(createDto.Status), "Status must not be empty");
+        }
+
+        if (createDto.ShippingAddressId < 0)
+        {
+            response.AddError(nameof(createDto.ShippingAddressId), "Shipping Address must be positive");
+        }
+
+        var userExists = _dataContext.Set<User>().Any(x => x.Id == createDto.UserId);
+        if (!userExists)
+        {
+            response.AddError(nameof(createDto.UserId), "User does not exist");
+        }
+
+        var addressExists = _dataContext.Set<ShippingAddresses>().Any(x => x.Id == createDto.ShippingAddressId);
+        if (!addressExists)
+        {
+            response.AddError(nameof(createDto.ShippingAddressId), "ShippingAddress does not exist.");
+        }
+
+        if (response.HasErrors)
+        {
+            return BadRequest(response);
+        }
+
+        var ordersToCreate = new Orders
+        {
+            UserId = createDto.UserId,
+            Status = createDto.Status,
+            ShippingAddressId = createDto.ShippingAddressId,
+        };
+
+        _dataContext.Set<Orders>().Add(ordersToCreate);
+        _dataContext.SaveChanges();
+
+        var ordersToReturn = new OrdersGetDto
+        {
+            Id = ordersToCreate.Id,
+            UserId = ordersToCreate.UserId,
+            Status = ordersToCreate.Status,
+            ShippingAddressId = ordersToCreate.ShippingAddressId,
+        };
+        response.Data = ordersToReturn;
+        
+        return Created("", response);
+    }
+    
+    [HttpPut("{id}")]
+    public IActionResult Update([FromBody] OrdersUpdateDto updateDto, int id)
+    {
+        var response = new Response();
+        
+        if (string.IsNullOrEmpty(updateDto.Status))
+        {
+            response.AddError(nameof(updateDto.Status), "Status must not be empty");
+        }
+
+        if (updateDto.ShippingAddressId < 0)
+        {
+            response.AddError(nameof(updateDto.ShippingAddressId), "Shipping Address must be positive");
+        }
+        
+        var ordersToUpdate = _dataContext.Set<Orders>()
+            .FirstOrDefault(orders => orders.Id == id);
+        
+        if (ordersToUpdate == null)
+        {
+            response.AddError("id", "Order not found.");
+        }
+        
+        var addressExists = _dataContext.Set<ShippingAddresses>().Any(x => x.Id == updateDto.ShippingAddressId);
+        if (!addressExists)
+        {
+            response.AddError(nameof(updateDto.ShippingAddressId), "ShippingAddress does not exist.");
+        }
+
+        if (response.HasErrors)
+        {
+            return BadRequest(response);
+        }
+        
+        ordersToUpdate.Status = updateDto.Status;
+        ordersToUpdate.ShippingAddressId = updateDto.ShippingAddressId;
+
+        _dataContext.SaveChanges();
+
+        var ordersToReturn = new OrdersGetDto
+        {
+            Id = ordersToUpdate.Id,
+            UserId = ordersToUpdate.UserId,
+            Status = ordersToUpdate.Status,
+            ShippingAddressId = ordersToUpdate.ShippingAddressId
+
+        };
+        response.Data = ordersToReturn;
+
+        return Ok(response);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        var response = new Response();
+
+        var ordersToDelete = _dataContext.Set<Orders>()
+            .FirstOrDefault(orders => orders.Id == id);
+
+        if (ordersToDelete == null)
+        {
+            response.AddError("id", "Order not found.");
+        }
+
+        if (response.HasErrors)
+        {
+            return BadRequest(response);
+        }
+        
+        _dataContext.Set<Orders>().Remove(ordersToDelete);
+        _dataContext.SaveChanges();
+
+        response.Data = true;
+        return Ok(response);
+    }
+}
+
