@@ -25,12 +25,6 @@ public class MeasurementCategoryCreateDto
     public int MeasurementTypeId { get; set; }
 }
 
-public class MeasurementCategoryDeleteDto
-{
-    public int CategoryId { get; set; }
-    public int MeasurementTypeId { get; set; }
-}
-
 public class MeasurementCategoryEntityTypeConfiguration : IEntityTypeConfiguration<MeasurementCategory>
 {
     public void Configure(EntityTypeBuilder<MeasurementCategory> builder)

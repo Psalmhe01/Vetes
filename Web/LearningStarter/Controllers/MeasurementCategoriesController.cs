@@ -114,6 +114,8 @@ public class MeasurementCategoriesController : ControllerBase
         return Created("", response);
     }
     
+    
+    
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
