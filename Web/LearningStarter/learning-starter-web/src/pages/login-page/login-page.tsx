@@ -7,11 +7,16 @@ import {
   Button,
   Container,
   Input,
+  PasswordInput,
   Text,
 } from "@mantine/core";
 import api from "../../config/axios";
 import { showNotification } from "@mantine/notifications";
 import { createStyles } from "@mantine/emotion";
+import { Navigate } from "react-router-dom";
+import { routes } from "../../routes";
+import { redirect } from "react-router-dom";
+import { useState } from "react";
 
 type LoginRequest = {
   userName: string;
@@ -30,6 +35,7 @@ export const LoginPage = ({
 }) => {
   const styles = useStyles();
   const {classes} = styles;
+  const [register, setRegister] = useState(false);
 
   const form = useForm<LoginRequest>({
     initialValues: {
@@ -64,6 +70,7 @@ export const LoginPage = ({
     }
   }, []);
 
+
   return (
     <PageWrapper >
       <Container>
@@ -79,6 +86,7 @@ export const LoginPage = ({
                 <Container px={0}>
                   <label htmlFor="userName">Username</label>
                 </Container>
+              
                 <Input {...form.getInputProps("userName")} />
                 <Text c="red">{form.errors["userName"]}</Text>
               </Container>
@@ -86,11 +94,14 @@ export const LoginPage = ({
                 <Container px={0}>
                   <label htmlFor="password">Password</label>
                 </Container>
-                <Input type="password" {...form.getInputProps("password")} />
+                <PasswordInput type="password" {...form.getInputProps("password")} />
                 <Text c="red">{form.errors["password"]}</Text>
               </Container>
 
               <Container px={0}>
+                <a href={routes.register} >
+                  New user? Register
+                </a>
                 <Button className={classes.loginButton} type="submit">
                   Login
                 </Button>
