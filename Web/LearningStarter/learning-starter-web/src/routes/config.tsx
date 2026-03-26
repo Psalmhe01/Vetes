@@ -20,8 +20,6 @@ export const Routes = () => {
           <Route path={routes.home} element={<LandingPage />} />
           {/* When path === /iser render UserPage */}
           <Route path={routes.user} element={<UserPage />} />
-          {/* When path === /register render RegisterPage */}
-          <Route path={routes.register} element={<RegisterPage fetchCurrentUser={useUser}/>} />
           {/* Going to route "localhost:5001/" will go to homepage */}
           <Route path={routes.root} element={<Navigate to={routes.home} />} />
 

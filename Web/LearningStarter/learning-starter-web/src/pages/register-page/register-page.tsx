@@ -5,8 +5,10 @@ import { useForm } from "@mantine/form";
 
 export const RegisterPage = ({
     fetchCurrentUser,
+    onBackToLogin,
 }: {
     fetchCurrentUser: () => void;
+    onBackToLogin: () => void;
 }) => {
     const form = useForm({
         mode: 'uncontrolled',
@@ -91,7 +93,13 @@ export const RegisterPage = ({
 
                 
                     <Group justify="flex-end" mt="md">
-                        <Button type="submit">Submit</Button>
+                        <Button onClick={onBackToLogin} aria-label="Not a new user? Login">
+                            Login
+                        </Button>
+                        <Button type="submit">
+                            Submit
+                        </Button>
+
                     </Group>
                 </form>
             </Container>

@@ -6,6 +6,7 @@ import {
   Alert,
   Button,
   Container,
+  Group,
   Input,
   PasswordInput,
   Text,
@@ -30,8 +31,10 @@ type LoginResponse = ApiResponse<boolean>;
 //For more info on flexbox: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 export const LoginPage = ({
   fetchCurrentUser,
+  onRegisterClick,
 }: {
   fetchCurrentUser: () => void;
+  onRegisterClick: () => void;
 }) => {
   const styles = useStyles();
   const {classes} = styles;
@@ -99,12 +102,14 @@ export const LoginPage = ({
               </Container>
 
               <Container px={0}>
-                <a href={routes.register} >
-                  New user? Register
-                </a>
-                <Button className={classes.loginButton} type="submit">
-                  Login
-                </Button>
+                <Group justify="flex-end" mt="md" align="center">
+                  <Button className={classes.loginButton} onClick={onRegisterClick} aria-label="New User? Register">
+                    Register
+                  </Button>
+                  <Button className={classes.loginButton} type="submit">
+                    Login
+                  </Button>
+                </Group>
               </Container>
             </Container>
           </form>
