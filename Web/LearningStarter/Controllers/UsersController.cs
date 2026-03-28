@@ -33,7 +33,9 @@ public class UsersController : ControllerBase
                 Id = x.Id,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                UserName = x.UserName
+                UserName = x.UserName,
+                Email = x.Email,
+                Phone = x.Phone
             })
             .ToList();
 
@@ -60,6 +62,8 @@ public class UsersController : ControllerBase
             FirstName = user.FirstName,
             LastName = user.LastName,
             UserName = user.UserName,
+            Email = user.Email,
+            Phone = user.Phone,
         };
 
         response.Data = userGetDto;
@@ -93,6 +97,11 @@ public class UsersController : ControllerBase
             response.AddError("password", "Password cannot be empty.");
         }
 
+        if ((_context.Users.FirstOrDefault(x => x.UserName == userCreateDto.UserName)) != null)
+        {
+            response.AddError("username", "Username already exists.");
+        }
+
         if (response.HasErrors)
         {
             return BadRequest(response);
@@ -103,6 +112,8 @@ public class UsersController : ControllerBase
             FirstName = userCreateDto.FirstName,
             LastName = userCreateDto.LastName,
             UserName = userCreateDto.UserName,
+            Email = userCreateDto.Email,
+            Phone = userCreateDto.Phone,
         };
 
         _userManager.CreateAsync(userToCreate, userCreateDto.Password).Wait();
@@ -114,7 +125,9 @@ public class UsersController : ControllerBase
             Id = userToCreate.Id,
             FirstName = userToCreate.FirstName,
             LastName = userToCreate.LastName,
-            UserName = userToCreate.UserName
+            UserName = userToCreate.UserName,
+            Email = userToCreate.Email,
+            Phone = userToCreate.Phone,
         };
 
         response.Data = userGetDto;
@@ -162,6 +175,11 @@ public class UsersController : ControllerBase
         {
             response.AddError("password", "Password cannot be empty.");
         }
+        
+        if ((_context.Users.FirstOrDefault(x => (x.UserName == userUpdateDto.UserName && x.Id != userUpdateDto.Id))) != null)
+        {
+            response.AddError("username", "Username already exists.");
+        }
 
         if (response.HasErrors)
         {
@@ -171,6 +189,8 @@ public class UsersController : ControllerBase
         userToEdit.FirstName = userUpdateDto.FirstName;
         userToEdit.LastName = userUpdateDto.LastName;
         userToEdit.UserName = userUpdateDto.UserName;
+        userToEdit.Email = userUpdateDto.Email;
+        userToEdit.Phone = userUpdateDto.Phone;
 
         _context.SaveChanges();
 
@@ -180,6 +200,8 @@ public class UsersController : ControllerBase
             FirstName = userToEdit.FirstName,
             LastName = userToEdit.LastName,
             UserName = userToEdit.UserName,
+            Email = userToEdit.Email,
+            Phone = userToEdit.Phone,
         };
 
         response.Data = userGetDto;

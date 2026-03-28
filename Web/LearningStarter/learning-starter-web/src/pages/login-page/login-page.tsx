@@ -38,7 +38,6 @@ export const LoginPage = ({
 }) => {
   const styles = useStyles();
   const {classes} = styles;
-  const [register, setRegister] = useState(false);
 
   const form = useForm<LoginRequest>({
     initialValues: {
@@ -103,7 +102,12 @@ export const LoginPage = ({
 
               <Container px={0}>
                 <Group justify="flex-end" mt="md" align="center">
-                  <Button className={classes.loginButton} onClick={onRegisterClick} aria-label="New User? Register">
+                  <Button 
+                    className={classes.loginButton} 
+                    onClick={onRegisterClick} 
+                    aria-label="New User? Register"
+                    variant="outline"
+                  >
                     Register
                   </Button>
                   <Button className={classes.loginButton} type="submit">

@@ -1,6 +1,9 @@
-import { Container, Checkbox, Input, TextInput, PasswordInput, Group, Button, Fieldset } from "@mantine/core"
-import { PageWrapper } from "../../components/page-wrapper/page-wrapper"
-import { useForm } from "@mantine/form";
+import { Container, Checkbox, Input, TextInput, PasswordInput, Group, Button, Fieldset } from "@mantine/core";
+import { PageWrapper } from "../../components/page-wrapper/page-wrapper";
+import { FormErrors, useForm } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
+import { ApiResponse, UserCreateUpdateDto, UserDto } from "../../constants/types";
+import api from "../../config/axios";
 //import { IMaskInput } from 'react-imask';
 
 export const RegisterPage = ({
@@ -10,7 +13,7 @@ export const RegisterPage = ({
     fetchCurrentUser: () => void;
     onBackToLogin: () => void;
 }) => {
-    const form = useForm({
+    const form = useForm<UserCreateUpdateDto>({
         mode: 'uncontrolled',
         initialValues: {
             firstname: '',
@@ -20,8 +23,6 @@ export const RegisterPage = ({
             password: '',
             confirmpass: '',
             phone: '',
-        termsOfService: false,
-        validateInputOnBlur: true,
         },
 
         validate: {
@@ -32,10 +33,31 @@ export const RegisterPage = ({
         confirmpass: (value, values) => value !== values.password ? 'Passwords did not match' : null
         },
     });
+
+    const submitUser = async (values: UserCreateUpdateDto) => {
+        const response = await api.post<ApiResponse<UserDto>>(`/api/users`, values);
+
+        if (response.data.hasErrors) {
+                const formErrors: FormErrors = response.data.errors.reduce(
+                    (prev, curr) => {
+                    Object.assign(prev, { [curr.property]: curr.message });
+                    return prev;
+                    },
+                    {} as FormErrors
+                );
+                form.setErrors(formErrors);
+                }
+            
+                if (response.data.data) {
+                showNotification({ message: "User Successfully Created!", color: "green" });
+                onBackToLogin();
+            }
+    }
+
     return (
         <PageWrapper>
             <Container>
-                <form onSubmit={form.onSubmit((values) => console.log(values))}>
+                <form onSubmit={form.onSubmit(submitUser)}>
                     <Fieldset legend="Personal Information">
                         <TextInput
                             withAsterisk
@@ -93,8 +115,12 @@ export const RegisterPage = ({
 
                 
                     <Group justify="flex-end" mt="md">
-                        <Button onClick={onBackToLogin} aria-label="Not a new user? Login">
-                            Login
+                        <Button 
+                            onClick={onBackToLogin} 
+                            aria-label="Not a new user? Login"
+                            variant="outline"
+                        >
+                            Back to Login
                         </Button>
                         <Button type="submit">
                             Submit

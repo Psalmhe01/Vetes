@@ -16,6 +16,8 @@ public static class Helpers
             FirstName = user.FirstName,
             LastName = user.LastName,
             UserName = user.UserName,
+            Email = user.Email,
+            Phone = user.Phone,
         };
 
         return userDto;
