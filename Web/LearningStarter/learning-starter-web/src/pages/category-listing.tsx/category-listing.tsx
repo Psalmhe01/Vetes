@@ -14,20 +14,24 @@ export const CategoryListing = () => {
     useEffect(() => {
         fetchCategories();
         
-        async function fetchCategories() {
-            const response = await api.get<ApiResponse<CategoryGetDto[]>>(`api/categories`)
-            
-            if (response.data.hasErrors){
-                showNotification({message: "Error fetching products.", color: "red"});
-            }
+          async function fetchCategories() {
+    try {
+      const response = await api.get<ApiResponse<CategoryGetDto[]>>(`/api/categories`);
 
-            if (response.data.data){
-                setCategories(response.data.data)
-            }
-            
-            setLoading(false);
-        }
-    }, []);
+      if (response.data.hasErrors) {
+        showNotification({ message: "Error fetching categories.", color: "red" });
+      }
+
+      if (response.data.data) {
+        setCategories(response.data.data);
+      }
+    } catch (error) {
+      showNotification({ message: "Error fetching categories.", color: "red" });
+    } finally {
+      setLoading(false);
+    }
+  }
+}, []);
     
         if (loading) {
     return (

@@ -3,6 +3,7 @@ import { LandingPage } from "../pages/landing-page/landing-page";
 import { NotFoundPage } from "../pages/not-found";
 import { useUser } from "../authentication/use-auth";
 import { UserPage } from "../pages/user-page/user-page";
+import { RegisterPage } from "../pages/register-page/register-page";
 import { PageWrapper } from "../components/page-wrapper/page-wrapper";
 import { routes } from ".";
 import { CategoryListing } from "../pages/category-listing.tsx/category-listing";

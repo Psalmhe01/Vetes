@@ -20,6 +20,8 @@ export type UserDto = {
   firstName: string;
   lastName: string;
   userName: string;
+  email: string;
+  phone: string;
 };
 
 export type ProductGetDto = {
@@ -34,4 +36,15 @@ export type CategoryGetDto = {
   id: number;
   name: string;
   products: ProductGetDto[];
-}
+};
+
+export type UserCreateUpdateDto = {
+  firstname: string;
+  lastname: string;
+  username: string;
+  password: string;
+  confirmpass: string;
+  email: string;
+  phone: string;
+
+};
