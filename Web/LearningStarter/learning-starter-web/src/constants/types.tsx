@@ -21,3 +21,17 @@ export type UserDto = {
   lastName: string;
   userName: string;
 };
+
+export type ProductGetDto = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  categoryId: number;
+};
+
+export type CategoryGetDto = {
+  id: number;
+  name: string;
+  products: ProductGetDto[];
+}
