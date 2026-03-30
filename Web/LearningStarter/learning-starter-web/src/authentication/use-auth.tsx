@@ -7,6 +7,7 @@ import { UserDto } from "../constants/types";
 import { StatusCodes } from "../constants/status-codes";
 import { Loader } from "@mantine/core";
 import api from "../config/axios";
+import { RegisterPage } from "../pages/register-page/register-page";
 
 const currentUser = "currentUser";
 
@@ -38,6 +39,7 @@ export const AuthContext = createContext<AuthState>(INITIAL_STATE);
 export const AuthProvider = (props: any) => {
   const [errors, setErrors] = useState<ApiError[]>(INITIAL_STATE.errors);
   const [user, setUser] = useState<UserDto | null>(INITIAL_STATE.user);
+  const [showRegister, setShowRegister] = useState(false);
 
   //This is the main function for getting the user information from the database.
   //This function gets called on every "notify("user-login") in order to refetch the user data."
@@ -91,7 +93,13 @@ export const AuthProvider = (props: any) => {
   //Brings unauthenticated users to the login page.
   //This can be made to bring them to a different part of the app eventually
   if (!user && !fetchCurrentUser.loading) {
-    return <LoginPage fetchCurrentUser={fetchCurrentUser.retry} />;
+    if (showRegister)
+    {
+      return <RegisterPage fetchCurrentUser={fetchCurrentUser.retry} onBackToLogin = {() => setShowRegister(false)}/>;
+    }
+    else{
+      return <LoginPage fetchCurrentUser={fetchCurrentUser.retry} onRegisterClick = {() => setShowRegister(true)}/>;
+    }
   }
 
   //Once they are logged in and not loading, it brings them to the app.
@@ -129,4 +137,6 @@ export const mapUser = (user: any): UserDto => ({
   firstName: user.firstName,
   lastName: user.lastName,
   userName: user.userName,
+  email: user.email,
+  phone: user.phone,
 });

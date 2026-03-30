@@ -6,12 +6,18 @@ import {
   Alert,
   Button,
   Container,
+  Group,
   Input,
+  PasswordInput,
   Text,
 } from "@mantine/core";
 import api from "../../config/axios";
 import { showNotification } from "@mantine/notifications";
 import { createStyles } from "@mantine/emotion";
+import { Navigate } from "react-router-dom";
+import { routes } from "../../routes";
+import { redirect } from "react-router-dom";
+import { useState } from "react";
 
 type LoginRequest = {
   userName: string;
@@ -25,8 +31,10 @@ type LoginResponse = ApiResponse<boolean>;
 //For more info on flexbox: https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 export const LoginPage = ({
   fetchCurrentUser,
+  onRegisterClick,
 }: {
   fetchCurrentUser: () => void;
+  onRegisterClick: () => void;
 }) => {
   const styles = useStyles();
   const {classes} = styles;
@@ -64,6 +72,7 @@ export const LoginPage = ({
     }
   }, []);
 
+
   return (
     <PageWrapper >
       <Container>
@@ -79,6 +88,7 @@ export const LoginPage = ({
                 <Container px={0}>
                   <label htmlFor="userName">Username</label>
                 </Container>
+              
                 <Input {...form.getInputProps("userName")} />
                 <Text c="red">{form.errors["userName"]}</Text>
               </Container>
@@ -86,14 +96,24 @@ export const LoginPage = ({
                 <Container px={0}>
                   <label htmlFor="password">Password</label>
                 </Container>
-                <Input type="password" {...form.getInputProps("password")} />
+                <PasswordInput type="password" {...form.getInputProps("password")} />
                 <Text c="red">{form.errors["password"]}</Text>
               </Container>
 
               <Container px={0}>
-                <Button className={classes.loginButton} type="submit">
-                  Login
-                </Button>
+                <Group justify="flex-end" mt="md" align="center">
+                  <Button 
+                    className={classes.loginButton} 
+                    onClick={onRegisterClick} 
+                    aria-label="New User? Register"
+                    variant="outline"
+                  >
+                    Register
+                  </Button>
+                  <Button className={classes.loginButton} type="submit">
+                    Login
+                  </Button>
+                </Group>
               </Container>
             </Container>
           </form>

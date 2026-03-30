@@ -18,13 +18,34 @@ export const UserPage = () => {
             </Text>
             <Text size="md">{user.firstName}</Text>
           </Flex>
+
           <Divider />
+
           <Flex direction="row">
             <Text size="md" className={classes.labelText}>
               Last Name:
             </Text>
             <Text size="md">{user.lastName}</Text>
           </Flex>
+
+          <Divider />
+
+          <Flex direction="row">
+            <Text size="md" className={classes.labelText}>
+              Email Address:
+            </Text>
+            <Text size="md">{user.email}</Text>
+          </Flex>
+
+          <Divider />
+
+          <Flex direction="row">
+            <Text size="md" className={classes.labelText}>
+              Phone:
+            </Text>
+            <Text size="md">{user.phone}</Text>
+          </Flex>
+          
         </Container>
       </Container>
     </Container>
