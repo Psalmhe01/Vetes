@@ -6,6 +6,10 @@ import { UserPage } from "../pages/user-page/user-page";
 import { RegisterPage } from "../pages/register-page/register-page";
 import { PageWrapper } from "../components/page-wrapper/page-wrapper";
 import { routes } from ".";
+import { CategoryListing } from "../pages/category-page/category-listing";
+import { CategoryDetail } from "../pages/category-page/category-detail";
+import { ProductListing } from "../pages/product-page/product-listing";
+import { ProductDetail } from "../pages/product-page/product-detail";
 
 //This is where you will tell React Router what to render when the path matches the route specified.
 export const Routes = () => {
@@ -20,6 +24,11 @@ export const Routes = () => {
           <Route path={routes.home} element={<LandingPage />} />
           {/* When path === /iser render UserPage */}
           <Route path={routes.user} element={<UserPage />} />
+          <Route path={routes.categoryListing} element={<CategoryListing />} />
+          <Route path={routes.categoryDetail} element={<CategoryDetail />} />
+          <Route path={routes.productListing} element={<ProductListing />} />
+          <Route path={routes.productDetail} element={<ProductDetail />} />
+
           {/* Going to route "localhost:5001/" will go to homepage */}
           <Route path={routes.root} element={<Navigate to={routes.home} />} />
 
