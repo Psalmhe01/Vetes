@@ -74,6 +74,13 @@ const navigation: NavigationItem[] = [
       to: routes.categoryListing,
     },
   },
+  {
+    text: "Products",
+    hide: false,
+    nav: {
+    to: routes.productListing,
+    },
+  },
 ];
 
 const DesktopNavigation = () => {
