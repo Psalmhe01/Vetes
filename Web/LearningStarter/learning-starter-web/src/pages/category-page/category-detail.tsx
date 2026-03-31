@@ -56,7 +56,7 @@ export const CategoryDetail = () => {
     if (!category) return null;
 
     return (
-    <PageWrapper>
+   // <PageWrapper>
       <Container>
         <Breadcrumbs mb="md">
           <Anchor onClick={() => navigate("/categories")} style={{ cursor: "pointer" }}>
@@ -89,6 +89,6 @@ export const CategoryDetail = () => {
           </SimpleGrid>
         )}
       </Container>
-    </PageWrapper>
+   // </PageWrapper>
   );
 };

@@ -3,11 +3,11 @@ import { PageWrapper } from "../../components/page-wrapper/page-wrapper"
 
 export const ProductDetail = () => {
     return (
-        <PageWrapper>
+       // <PageWrapper>
             <Container>
                 <Text fw={500} size="x1">Products</Text>
                 <Text c="dimmed">Coming Soon.</Text>
             </Container>
-        </PageWrapper>
+       // </PageWrapper>
     )
 }

@@ -50,7 +50,7 @@ export const CategoryListing = () => {
   }
 
   return (
-    <PageWrapper>
+   // <PageWrapper>
       <Container>
         <Text fw={500} size="xl" mb={4}>Shop by category</Text>
         <Text size="sm" c="dimmed" mb="lg">Select a category to browse available products</Text>
@@ -75,6 +75,6 @@ export const CategoryListing = () => {
           </SimpleGrid>
         )}
       </Container>
-    </PageWrapper>
+   // </PageWrapper>
   );
 };
