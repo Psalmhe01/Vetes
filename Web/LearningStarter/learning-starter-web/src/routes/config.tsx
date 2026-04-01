@@ -10,6 +10,8 @@ import { CategoryListing } from "../pages/category-page/category-listing";
 import { CategoryDetail } from "../pages/category-page/category-detail";
 import { ProductListing } from "../pages/product-page/product-listing";
 import { ProductDetail } from "../pages/product-page/product-detail";
+import { Container } from "@mantine/core";
+import { Footer } from "../pages/footer/footer-page";
 
 //This is where you will tell React Router what to render when the path matches the route specified.
 export const Routes = () => {
@@ -36,6 +38,9 @@ export const Routes = () => {
             If the path has no match, show page not found */}
           <Route path="*" element={<NotFoundPage />} />
         </Switch>
+        <Container>
+          <Footer />
+        </Container>
       </PageWrapper>
     </>
   );
