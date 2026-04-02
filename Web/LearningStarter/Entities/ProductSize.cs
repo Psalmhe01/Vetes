@@ -16,6 +16,7 @@ public class ProductSize
     
     public int ProductId { get; set; }
     public Product Product{ get; set; }
+    public List<ProductSizeMeasurement> Measurements { get; set; }
 }
 
 public class ProductSizeGetDto
@@ -27,6 +28,7 @@ public class ProductSizeGetDto
     public string SizeName { get; set; }
     public string ProductName { get; set; }
     public decimal ProductPrice { get; set; }
+    
 }
 
 // Used inside SizeGetDto — only shows product info (size is already known from context)
@@ -47,6 +49,7 @@ public class ProductSizeForProductGetDto
     public int Stock { get; set; }
     public int SizeId { get; set; }
     public string SizeName { get; set; }
+    public List<ProductSizeMeasurementForSizeGetDto> Measurements { get; set; }
 }
 
 public class ProductSizeCreateDto
