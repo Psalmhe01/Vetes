@@ -3,7 +3,6 @@ import { ApiResponse, CategoryGetDto } from "../../constants/types"
 import { showNotification } from "@mantine/notifications";
 import api from "../../config/axios";
 import { useNavigate } from "react-router-dom";
-import { PageWrapper } from "../../components/page-wrapper/page-wrapper";
 import { Card, Container, SimpleGrid, Skeleton, Text } from "@mantine/core";
 
 export const CategoryListing = () => {
@@ -14,24 +13,27 @@ export const CategoryListing = () => {
     useEffect(() => {
         fetchCategories();
         
-        async function fetchCategories() {
-            const response = await api.get<ApiResponse<CategoryGetDto[]>>(`api/categories`)
-            
-            if (response.data.hasErrors){
-                showNotification({message: "Error fetching products.", color: "red"});
-            }
+          async function fetchCategories() {
+    try {
+      const response = await api.get<ApiResponse<CategoryGetDto[]>>(`/api/categories`);
 
-            if (response.data.data){
-                setCategories(response.data.data)
-            }
-            
-            setLoading(false);
-        }
-    }, []);
+      if (response.data.hasErrors) {
+        showNotification({ message: "Error fetching categories.", color: "red" });
+      }
+
+      if (response.data.data) {
+        setCategories(response.data.data);
+      }
+    } catch (error) {
+      showNotification({ message: "Error fetching categories.", color: "red" });
+    } finally {
+      setLoading(false);
+    }
+  }
+}, []);
     
         if (loading) {
     return (
-      <PageWrapper>
         <Container>
           <Skeleton height={28} width={200} mb={4} />
           <Skeleton height={16} width={280} mb="xl" />
@@ -41,12 +43,10 @@ export const CategoryListing = () => {
             ))}
           </SimpleGrid>
         </Container>
-      </PageWrapper>
     );
   }
 
   return (
-    <PageWrapper>
       <Container>
         <Text fw={500} size="xl" mb={4}>Shop by category</Text>
         <Text size="sm" c="dimmed" mb="lg">Select a category to browse available products</Text>
@@ -71,6 +71,5 @@ export const CategoryListing = () => {
           </SimpleGrid>
         )}
       </Container>
-    </PageWrapper>
   );
 };

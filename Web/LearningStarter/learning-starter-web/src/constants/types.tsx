@@ -20,6 +20,23 @@ export type UserDto = {
   firstName: string;
   lastName: string;
   userName: string;
+  email: string;
+  phone: string;
+};
+
+export type ProductSizeMeasurementForSizeGetDto = {
+  id: number;
+  measurementTypeName: string;
+  measurementTypeUnit: string;
+  value: number;
+};
+
+export type ProductSizeForProductGetDto = {
+  id: number;
+  stock: number;
+  sizeId: number;
+  sizeName: string;
+  measurements: ProductSizeMeasurementForSizeGetDto[];
 };
 
 export type ProductGetDto = {
@@ -28,10 +45,22 @@ export type ProductGetDto = {
   description: string;
   price: number;
   categoryId: number;
+  sizes: ProductSizeForProductGetDto[];
 };
 
 export type CategoryGetDto = {
   id: number;
   name: string;
   products: ProductGetDto[];
-}
+};
+
+export type UserCreateUpdateDto = {
+  firstname: string;
+  lastname: string;
+  username: string;
+  password: string;
+  confirmpass: string;
+  email: string;
+  phone: string;
+
+};
