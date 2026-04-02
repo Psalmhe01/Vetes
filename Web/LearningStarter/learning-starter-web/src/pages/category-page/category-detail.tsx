@@ -38,7 +38,6 @@ export const CategoryDetail = () => {
 
     if (loading) {
         return (
-            <PageWrapper>
         <Container>
           <Skeleton height={20} width={180} mb="md" />
           <Skeleton height={28} width={140} mb={4} />
@@ -49,14 +48,12 @@ export const CategoryDetail = () => {
             ))}
           </SimpleGrid>
         </Container>
-      </PageWrapper>
         );
     }
     
     if (!category) return null;
 
     return (
-   // <PageWrapper>
       <Container>
         <Breadcrumbs mb="md">
           <Anchor onClick={() => navigate("/categories")} style={{ cursor: "pointer" }}>
@@ -79,7 +76,7 @@ export const CategoryDetail = () => {
                 radius="md"
                 padding="md"
                 style={{ cursor: "pointer" }}
-                onClick={() => navigate(`/products/${product.id}`)}
+                onClick={() => navigate(`/products/${product.id}`, {state: {from: "category"}})}
               >
                 <Text fw={500} size="sm" mb={4}>{product.name}</Text>
                 <Text size="xs" c="dimmed" lineClamp={2} mb="sm">{product.description}</Text>
@@ -89,6 +86,5 @@ export const CategoryDetail = () => {
           </SimpleGrid>
         )}
       </Container>
-   // </PageWrapper>
   );
 };

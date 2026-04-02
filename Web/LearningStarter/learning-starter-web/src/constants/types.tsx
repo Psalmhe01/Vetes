@@ -24,12 +24,28 @@ export type UserDto = {
   phone: string;
 };
 
+export type ProductSizeMeasurementForSizeGetDto = {
+  id: number;
+  measurementTypeName: string;
+  measurementTypeUnit: string;
+  value: number;
+};
+
+export type ProductSizeForProductGetDto = {
+  id: number;
+  stock: number;
+  sizeId: number;
+  sizeName: string;
+  measurements: ProductSizeMeasurementForSizeGetDto[];
+};
+
 export type ProductGetDto = {
   id: number;
   name: string;
   description: string;
   price: number;
   categoryId: number;
+  sizes: ProductSizeForProductGetDto[];
 };
 
 export type CategoryGetDto = {
