@@ -31,7 +31,15 @@ public class OrdersController: ControllerBase
                 UserId = orders.UserId,
                 Status = orders.Status,
                 CreatedAt = orders.CreatedAt,
-                ShippingAddressId = orders.ShippingAddressId
+                ShippingAddressId = orders.ShippingAddressId,
+                Payments = orders.Payments.Select(payment => new PaymentGetDto {
+                    Id = payment.Id,
+                    OrderId = payment.OrderId,
+                    PaymentMethodId = payment.PaymentMethodId,
+                    PaymentStatusId = payment.PaymentStatusId,
+                    Amount = payment.Amount,
+                    PaidAt = payment.PaidAt
+                }).ToList()
             })
             .ToList();
 
@@ -53,6 +61,14 @@ public class OrdersController: ControllerBase
                 Status = orders.Status,
                 CreatedAt = orders.CreatedAt,
                 ShippingAddressId = orders.ShippingAddressId
+                Payments = orders.Payments.Select(payment => PaymentGetDto {
+                    Id = payment.Id,
+                    OrderId = payment.OrderId,
+                    PaymentMethodId = payment.PaymentMethodId,
+                    PaymentStatusId = payment.PaymentStatusId,
+                    Amount = payment.Amount,
+                    PaidAt = payment.PaidAt
+                }).ToList()
             })
             .FirstOrDefault(orders => orders.Id == id);
 
