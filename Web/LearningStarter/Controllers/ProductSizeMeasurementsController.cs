@@ -31,7 +31,8 @@ public class ProductSizeMeasurementsController : ControllerBase
             {
                 Id = productSizeMeasurement.Id,
                 ProductSizeId = productSizeMeasurement.ProductSizeId,
-                MeasurementTypeId = productSizeMeasurement.MeasurementTypeId
+                MeasurementTypeId = productSizeMeasurement.MeasurementTypeId,
+                Value = productSizeMeasurement.Value
             }).ToList();
 
         response.Data = data;
@@ -49,7 +50,8 @@ public class ProductSizeMeasurementsController : ControllerBase
             {
                 Id = productSizeMeasurement.Id,
                 ProductSizeId = productSizeMeasurement.ProductSizeId,
-                MeasurementTypeId = productSizeMeasurement.MeasurementTypeId
+                MeasurementTypeId = productSizeMeasurement.MeasurementTypeId,
+                Value = productSizeMeasurement.Value
             }).FirstOrDefault(x => x.Id == id);
         if (data == null)
         {
@@ -129,7 +131,8 @@ public class ProductSizeMeasurementsController : ControllerBase
         var productSizeMeasurementToCreate = new ProductSizeMeasurement
         {
             ProductSizeId = createDto.ProductSizeId,
-            MeasurementTypeId = createDto.MeasurementTypeId
+            MeasurementTypeId = createDto.MeasurementTypeId,
+            Value = createDto.Value
         };
 
         _dataContext.Set<ProductSizeMeasurement>().Add(productSizeMeasurementToCreate);
@@ -139,7 +142,8 @@ public class ProductSizeMeasurementsController : ControllerBase
         {
             Id = productSizeMeasurementToCreate.Id,
             ProductSizeId = productSizeMeasurementToCreate.ProductSizeId,
-            MeasurementTypeId = productSizeMeasurementToCreate.MeasurementTypeId
+            MeasurementTypeId = productSizeMeasurementToCreate.MeasurementTypeId,
+            Value = productSizeMeasurementToCreate.Value
         };
 
         response.Data = productSizeMeasurementToReturn;
@@ -218,13 +222,15 @@ public class ProductSizeMeasurementsController : ControllerBase
         
         productSizeMeasurementToUpdate.ProductSizeId = updateDto.ProductSizeId;
         productSizeMeasurementToUpdate.MeasurementTypeId = updateDto.MeasurementTypeId;
+        productSizeMeasurementToUpdate.Value = updateDto.Value;
 
         _dataContext.SaveChanges();
         var productSizeMeasurementToReturn = new ProductSizeMeasurementGetDto
         {
             Id = productSizeMeasurementToUpdate.Id,
             ProductSizeId = productSizeMeasurementToUpdate.ProductSizeId,
-            MeasurementTypeId = productSizeMeasurementToUpdate.MeasurementTypeId
+            MeasurementTypeId = productSizeMeasurementToUpdate.MeasurementTypeId,
+            Value = productSizeMeasurementToUpdate.Value
         };
 
         response.Data = productSizeMeasurementToReturn;
