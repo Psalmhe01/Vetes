@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using LearningStarter.Common;
 using LearningStarter.Data;
@@ -21,55 +22,54 @@ public class PaymentController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var payments = _dataContext.Payments
-            .Include(p => p.Order)
-            .Include(p => p.PaymentMethod)
-            .Include(p => p.PaymentStatus)
-            .Select(p => new
+        var response = new Response();
+        var data = _dataContext
+            .Set<Payment>()
+            .Select(payment => new PaymentGetDto
             {
-                p.Id,
-                p.OrderId,
-                PaymentMethod = p.PaymentMethod.Type,
-                Provider = p.PaymentMethod.Provider,
-                Status = p.PaymentStatus.Status,
-                p.Amount,
-                p.PaidAt
-            })
-            .ToList();
-
-        return Ok(payments);
+                Id = payment.Id,
+                OrderId = payment.OrderId,
+                PaymentMethodId = payment.PaymentMethodId,
+                PaymentStatusId = payment.PaymentStatusId,
+                Amount = payment.Amount,
+                PaidAt = payment.PaidAt,
+            }).ToList();
+        
+        response.Data = data;
+        return Ok(response);
+        
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var payment = _dataContext.Payments
-            .Include(p => p.PaymentMethod)
-            .Include(p => p.PaymentStatus)
-            .Where(p => p.Id == id)
-            .Select(p => new
+        var response = new Response();
+        var data = _dataContext
+            .Set<Payment>()
+            .Select(payment => new PaymentGetDto
             {
-                p.Id,
-                p.OrderId,
-                PaymentMethod = p.PaymentMethod.Type,
-                Provider = p.PaymentMethod.Provider,
-                Status = p.PaymentStatus.Status,
-                p.Amount,
-                p.PaidAt
-            })
-            .FirstOrDefault();
-
-        if (payment == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(payment);
+                Id = payment.Id,
+                OrderId = payment.OrderId,
+                PaymentMethodId = payment.PaymentMethodId,
+                PaymentStatusId = payment.PaymentStatusId,
+                Amount = payment.Amount,
+                PaidAt = payment.PaidAt,
+            }).FirstOrDefault(payment => payment.Id == id);
+        
+        response.Data = data;
+        return Ok(response);
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] CreatePaymentRequest request)
+    public IActionResult Create([FromBody] PaymentCreateDto request)
     {
+        var response = new Response();
+
+        if (response.HasErrors)
+        {
+            return BadRequest(response);
+        }
+        
         var payment = new Payment
         {
             OrderId = request.OrderId,
@@ -78,10 +78,23 @@ public class PaymentController : ControllerBase
             Amount = request.Amount,
             PaidAt = DateTimeOffset.UtcNow
         };
-
-        _dataContext.Payments.Add(payment);
+        
+        _dataContext.Set<Payment>().Add(payment);
         _dataContext.SaveChanges();
 
-        return Ok(payment);
+        var paymentToReturn = new PaymentGetDto
+        {
+            Id = payment.Id,
+            OrderId = payment.OrderId,
+            PaymentMethodId = payment.PaymentMethodId,
+            PaymentStatusId = payment.PaymentStatusId,
+            Amount = payment.Amount,
+            PaidAt = payment.PaidAt,
+        };
+        
+        response.Data = paymentToReturn;
+        return Ok(response);
+        
+        
     }
 }

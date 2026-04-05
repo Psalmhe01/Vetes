@@ -29,6 +29,15 @@ public class PaymentGetDto {
     public decimal Amount { get; set; }
     public DateTimeOffset PaidAt { get; set; }
 }
+
+public class PaymentCreateDto {
+  public int OrderId { get; set; }
+  public int PaymentMethodId { get; set; }
+  public int PaymentStatusId { get; set; }
+  public decimal Amount { get; set; }
+  public DateTimeOffset PaidAt { get; set; }
+}
+
 public class PaymentMethod {
   public int Id { get; set; }
   public int UserId { get; set; }
@@ -66,7 +75,7 @@ public class PaymentEntityConfiguration : IEntityTypeConfiguration<Payment> {
       .WithMany()
       .HasForeignKey(p => p.PaymentMethodId);
 
-    builder.HasOne(p = p.PaymentStatus)
+    builder.HasOne(p => p.PaymentStatus)
       .WithMany()
       .HasForeignKey(p => p.PaymentStatusId);  
   }
