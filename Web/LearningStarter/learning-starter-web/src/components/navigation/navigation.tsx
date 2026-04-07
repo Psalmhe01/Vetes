@@ -225,8 +225,11 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
                   alt="logo"
                 />
               </NavLink>
-              {user && !isMobile && <DesktopNavigation />}
+              
             </Flex>
+          </Group>
+          <Group>
+            {user && !isMobile && <DesktopNavigation />}
           </Group>
           <Group>
             {user && (
