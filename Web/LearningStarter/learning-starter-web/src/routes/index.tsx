@@ -3,4 +3,9 @@ export const routes = {
   root: `/`,
   home: `/home`,
   user: `/user`,
+  categoryListing: `/categories`,
+  categoryDetail: `/categories/:id`,
+  productListing: `/products`,
+  productDetail: `/products/:id`,
+  register: '/register',
 };

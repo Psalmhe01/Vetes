@@ -82,6 +82,8 @@ public class AuthenticationController : ControllerBase
             FirstName = user.FirstName,
             LastName = user.LastName,
             UserName = user.UserName,
+            Email = user.Email,
+            Phone = user.Phone,
         };
 
         response.Data = userGetDto;

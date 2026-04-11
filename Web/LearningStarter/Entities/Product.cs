@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,6 +13,7 @@ public class Product
     public decimal Price { get; set; }
     public int CategoryId { get; set; }
     public Category Category { get; set; }
+    public List<ProductSize> Sizes { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
 }
 
@@ -22,6 +24,7 @@ public class ProductGetDto
     public string Description { get; set; }
     public decimal Price { get; set; }
     public int CategoryId { get; set; }
+    public List<ProductSizeForProductGetDto> Sizes { get; set; }
 }
 
 public class ProductCreateDto
