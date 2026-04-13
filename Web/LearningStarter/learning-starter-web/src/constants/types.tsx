@@ -64,3 +64,25 @@ export type UserCreateUpdateDto = {
   phone: string;
 
 };
+
+export type CartProductGetDto = {
+  id: number;
+  productSizeIdId: number;
+  name: string;
+  price: number;
+  size: string;
+  quantity: number;
+};
+
+export type CartGetDto = {
+  id: number;
+  userId: number;
+  updatedAt: string;
+  products: CartProductGetDto[];
+};
+
+export type CartProductCreateUpdateDto = {
+  cartId: number;
+  productSizeId: number;
+  quantity: number;
+};
