@@ -7,5 +7,6 @@ export const routes = {
   categoryDetail: `/categories/:id`,
   productListing: `/products`,
   productDetail: `/products/:id`,
+  updateUser: `/user/:id`,
   register: '/register',
 };

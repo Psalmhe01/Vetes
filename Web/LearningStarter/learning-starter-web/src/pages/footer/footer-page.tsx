@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Container, Divider, Group, Space, Image, ActionIcon } from "@mantine/core";
 
 
-
 export const Footer = () => {
 
     const logo = "/logo.png"

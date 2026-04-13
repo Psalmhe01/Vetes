@@ -12,6 +12,7 @@ import { ProductListing } from "../pages/product-page/product-listing";
 import { ProductDetail } from "../pages/product-page/product-detail";
 import { Container } from "@mantine/core";
 import { Footer } from "../pages/footer/footer-page";
+import { UpdateUserPage } from "../pages/user-page/update-user";
 
 //This is where you will tell React Router what to render when the path matches the route specified.
 export const Routes = () => {
@@ -26,6 +27,7 @@ export const Routes = () => {
           <Route path={routes.home} element={<LandingPage />} />
           {/* When path === /iser render UserPage */}
           <Route path={routes.user} element={<UserPage />} />
+          <Route path={routes.updateUser} element={<UpdateUserPage />} />
           <Route path={routes.categoryListing} element={<CategoryListing />} />
           <Route path={routes.categoryDetail} element={<CategoryDetail />} />
           <Route path={routes.productListing} element={<ProductListing />} />
