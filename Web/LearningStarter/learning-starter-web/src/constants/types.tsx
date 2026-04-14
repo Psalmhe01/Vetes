@@ -53,12 +53,13 @@ export type CategoryGetDto = {
   name: string;
   products: ProductGetDto[];
 };
-
+/** DUPLICATE
 export type CartGetDto = {
   id: number;
   userid: number;
   products: CartProductGetDto[];
 };
+*/
 
 export type CartProductGetDto = {
   id: number;
@@ -78,15 +79,6 @@ export type UserCreateUpdateDto = {
   email: string;
   phone: string;
 
-};
-
-export type CartProductGetDto = {
-  id: number;
-  productSizeId: number;
-  name: string;
-  price: number;
-  size: string;
-  quantity: number;
 };
 
 export type CartGetDto = {
