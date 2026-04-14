@@ -1,10 +1,14 @@
-import { Container, Divider, Flex, Text } from "@mantine/core";
+import { Button, Container, Divider, Flex, Text } from "@mantine/core";
 import { useUser } from "../../authentication/use-auth";
 import { createStyles } from "@mantine/emotion";
+import { routes } from "../../routes";
+import { useNavigate } from "react-router-dom";
 
 export const UserPage = () => {
   const user = useUser();
   const { classes } = useStyles();
+  const navigate = useNavigate();
+  
   return (
     <Container>
       <Container>
@@ -45,6 +49,9 @@ export const UserPage = () => {
             </Text>
             <Text size="md">{user.phone}</Text>
           </Flex>
+
+          <Divider />
+          <Button onClick={() => navigate(routes.updateUser)}>Update</Button>
           
         </Container>
       </Container>

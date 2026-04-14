@@ -54,6 +54,21 @@ export type CategoryGetDto = {
   products: ProductGetDto[];
 };
 
+export type CartGetDto = {
+  id: number;
+  userid: number;
+  products: CartProductGetDto[];
+};
+
+export type CartProductGetDto = {
+  id: number;
+  productSizeId: number;
+  name: string;
+  price: number;
+  size: string;
+  quantity: number;
+}
+
 export type UserCreateUpdateDto = {
   firstname: string;
   lastname: string;

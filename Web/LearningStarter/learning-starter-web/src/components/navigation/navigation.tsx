@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { routes } from "../../routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import {
   Menu,
@@ -13,8 +14,8 @@ import {
   Text,
   Avatar,
   Title,
-  useMantineTheme,
-  parseThemeColor,
+  Overlay,
+  Burger,
 } from "@mantine/core";
 import {
   NAVBAR_HEIGHT,
@@ -25,6 +26,9 @@ import logo from "../../assets/logo.png";
 import { UserDto } from "../../constants/types";
 import { useAuth } from "../../authentication/use-auth";
 import { createStyles } from "@mantine/emotion";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { SideCart } from "../../pages/side-cart-page/side-cart-page";
+import { ClassNames } from "@emotion/react";
 
 type PrimaryNavigationProps = {
   user?: UserDto;
@@ -78,7 +82,7 @@ const navigation: NavigationItem[] = [
     text: "Products",
     hide: false,
     nav: {
-    to: routes.productListing,
+      to: routes.productListing,
     },
   },
 ];
@@ -156,12 +160,53 @@ const DesktopNavigation = () => {
   );
 };
 
+const BurgerNavigation = () => {
+  const burgerItems = navigation.filter(
+    (item): item is NavigationItem & { nav: NavLinkProps } =>
+      !item.hide && item.nav !== undefined
+  );
+  const [opened, { toggle, close }] = useDisclosure();
+
+  return (
+    <>
+    {opened && <Overlay onClick={close} />}
+    <Menu
+      opened={opened}
+      onChange={(o) => (o ? toggle() : close())}
+      trigger="click"
+      radius={0}
+      position="bottom"
+      offset={15}
+      transitionProps={{ transition: 'fade-down', duration: 150 }}
+      width="100vw"
+    >
+      <Menu.Target>
+        <Burger opened={opened} onClick={toggle} />
+      </Menu.Target>
+
+      <Menu.Dropdown style={{ left: 0 }}>
+        {burgerItems.map((x) => {
+          return (
+            <Menu.Item key={`${x.text}`} to={x.nav.to} component={NavLink} onClick={close}>
+              <Text size="sm" ta="center">
+                {x.icon && <FontAwesomeIcon icon={x.icon} />} {x.text}
+              </Text>
+            </Menu.Item>
+          );
+        })}
+      </Menu.Dropdown>
+    </Menu>
+  </>);
+};
+
 export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
   user,
 }) => {
   const { classes } = useStyles();
   const { logout } = useAuth();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const isMobile = useMediaQuery("(max-width: 50em)");
+  const [opened, { open, close }] = useDisclosure(false);
   const dark = colorScheme === "dark";
   return (
     <Title order={4}>
@@ -173,19 +218,24 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
                 <Image
                   className={classes.logo}
                   w={60}
-                  h={50}
+                  h={60}
                   radius="sm"
                   fallbackSrc="https://placehold.co/600x400?text=Placeholder"
                   src={logo}
                   alt="logo"
                 />
               </NavLink>
-              {user && <DesktopNavigation />}
+              
             </Flex>
+          </Group>
+          <Group>
+            {user && !isMobile && <DesktopNavigation />}
           </Group>
           <Group>
             {user && (
               <Menu>
+                {isMobile && <BurgerNavigation />}
+                <SideCart />
                 <Menu.Target>
                   <Avatar className={classes.pointer}>
                     {user.firstName.substring(0, 1)}
@@ -223,8 +273,16 @@ const useStyles = createStyles((theme) => {
     },
     linkActive: {
       "&, &:hover": {
-        backgroundColor: theme.variantColorResolver({theme: theme, color: theme.primaryColor, variant: 'light'}).background,
-        color: theme.variantColorResolver({theme: theme, color: theme.primaryColor, variant: 'light'}).color,
+        backgroundColor: theme.variantColorResolver({
+          theme: theme,
+          color: theme.primaryColor,
+          variant: "light",
+        }).background,
+        color: theme.variantColorResolver({
+          theme: theme,
+          color: theme.primaryColor,
+          variant: "light",
+        }).color,
       },
     },
     desktopNav: {
