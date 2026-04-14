@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,6 +15,8 @@ public class Orders
 
     public virtual User User { get; set; }
     public virtual ShippingAddresses ShippingAddress { get; set; }
+
+    public virtual List<Payment> Payments { get; set; } = new();
 }
 
 public class OrdersGetDto
@@ -23,6 +26,9 @@ public class OrdersGetDto
     public string Status { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public int ShippingAddressId { get; set; }
+
+    public virtual List<PaymentGetDto> Payments { get; set; } = new();
+
 }
 
 public class OrdersCreateDto
@@ -52,6 +58,7 @@ public class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Orders>
             .WithMany()
             .HasForeignKey(x => x.ShippingAddressId)
             .OnDelete(DeleteBehavior.NoAction);
+
     }
 }
 

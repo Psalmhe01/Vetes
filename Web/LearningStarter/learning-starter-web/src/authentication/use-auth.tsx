@@ -116,6 +116,7 @@ export const AuthProvider = (props: any) => {
   );
 };
 
+
 export type GetUserResponse = ApiResponse<UserDto>;
 
 export function useAuth(): AuthState {

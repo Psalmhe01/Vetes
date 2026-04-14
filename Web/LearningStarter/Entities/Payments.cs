@@ -9,24 +9,35 @@ public class Payment {
   public int Id { get; set; }
   
   public int OrderId { get; set; }
-  public Order Order { get; set; }
+  public virtual Orders Order { get; set; }
   
   public int PaymentMethodId { get; set; }
-  public PaymentMethod PaymentMethod { get; set; }
+  public virtual PaymentMethod PaymentMethod { get; set; }
   
+  public int PaymentStatusId { get; set; }
+  public virtual PaymentStatus PaymentStatus { get; set; }
+
+  public decimal Amount { get; set; }
+  public DateTimeOffset PaidAt { get; set; }
+}
+
+public class PaymentGetDto {
+    public int Id { get; set; }
+    public int OrderId { get; set; }
+    public int PaymentMethodId { get; set; }
+    public int PaymentStatusId { get; set; }
+    public decimal Amount { get; set; }
+    public DateTimeOffset PaidAt { get; set; }
+}
+
+public class PaymentCreateDto {
+  public int OrderId { get; set; }
+  public int PaymentMethodId { get; set; }
   public int PaymentStatusId { get; set; }
   public decimal Amount { get; set; }
   public DateTimeOffset PaidAt { get; set; }
 }
-public class Order {
-  public int Id { get; set; }
-  public int UserId { get; set; }
-  public string Status { get; set; }
-  public DateTimeOffset CreatedAt { get; set; }
-  public int ShippingAddress { get; set; }
 
-  public List<Payment> Payment { get; set; }
-}
 public class PaymentMethod {
   public int Id { get; set; }
   public int UserId { get; set; }
@@ -46,14 +57,26 @@ public class PaymentStatus {
 public class PaymentEntityConfiguration : IEntityTypeConfiguration<Payment> {
   public void Configure(EntityTypeBuilder<Payment> builder) {
     builder.ToTable("Payments");
+
     builder.HasKey(p => p.Id);
+
     builder.Property(p => p.Amount)
       .HasColumnType("decimal(10,2)")
       .IsRequired();
+
     builder.Property(p => p.PaidAt)
       .IsRequired();
-    builder.HasOne<Order>()
-      .WithMany()
+
+    builder.HasOne(p => p.Order)
+      .WithMany(o => o.Payments)
       .HasForeignKey(p => p.OrderId);
+
+    builder.HasOne(p => p.PaymentMethod)
+      .WithMany()
+      .HasForeignKey(p => p.PaymentMethodId);
+
+    builder.HasOne(p => p.PaymentStatus)
+      .WithMany()
+      .HasForeignKey(p => p.PaymentStatusId);  
   }
 }
