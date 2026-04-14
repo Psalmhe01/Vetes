@@ -46,7 +46,7 @@ export const CartPage = () => {
 
         const values: CartProductCreateUpdateDto = {
             cartId: cart.id,
-            productSizeId: item.productSizeIdId,
+            productSizeId: item.productSizeId,
             quantity: newQuantity
         };
 

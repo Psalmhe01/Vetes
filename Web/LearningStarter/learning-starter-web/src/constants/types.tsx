@@ -67,7 +67,7 @@ export type UserCreateUpdateDto = {
 
 export type CartProductGetDto = {
   id: number;
-  productSizeIdId: number;
+  productSizeId: number;
   name: string;
   price: number;
   size: string;
