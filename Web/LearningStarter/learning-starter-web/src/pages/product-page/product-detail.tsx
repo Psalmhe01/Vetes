@@ -78,7 +78,6 @@ export const ProductDetail = () => {
 
         <Grid gutter="xl">
 
-          {/* left side - image */}
           <Grid.Col span={{ base: 12, sm: 5 }}>
             <Card
               withBorder
@@ -94,7 +93,6 @@ export const ProductDetail = () => {
             </Card>
           </Grid.Col>
 
-          {/* right side - product info */}
           <Grid.Col span={{ base: 12, sm: 7 }}>
             <Text fw={500} size="xl" mb={4}>{product.name}</Text>
             <Text size="sm" c="dimmed" mb="sm">{product.description}</Text>

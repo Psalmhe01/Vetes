@@ -54,6 +54,10 @@ export type CategoryGetDto = {
   products: ProductGetDto[];
 };
 
+export type CategoryCreateUpdateDto = {
+  name: string;
+}
+
 export type UserCreateUpdateDto = {
   firstname: string;
   lastname: string;
