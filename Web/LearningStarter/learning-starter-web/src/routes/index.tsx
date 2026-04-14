@@ -9,4 +9,6 @@ export const routes = {
   productDetail: `/products/:id`,
   updateUser: `/user/:id`,
   register: '/register',
+  cartPage: `/cart`,
+  checkoutPage: "/checkout",
 };
