@@ -171,10 +171,7 @@ public class UsersController : ControllerBase
             response.AddError("userName", "User name cannot be empty.");
         }
 
-        if (string.IsNullOrEmpty(userUpdateDto.Password))
-        {
-            response.AddError("password", "Password cannot be empty.");
-        }
+        
         
         if ((_context.Users.FirstOrDefault(x => (x.UserName == userUpdateDto.UserName && x.Id != userUpdateDto.Id))) != null)
         {
