@@ -17,6 +17,7 @@ import {
   NumberInputHandlers,
   NumberInput,
   ActionIcon,
+  Skeleton,
 } from "@mantine/core";
 import {
   faCartShopping,
@@ -37,104 +38,22 @@ import {
   CartProductGetDto,
 } from "../../constants/types";
 import { useUser } from "../../authentication/use-auth";
+import { routes } from "../../routes";
+import { useCart } from "../../cart/cart-context";
+
 
 export const SideCart = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const isMobile = useMediaQuery("(max-width: 50em)");
-
-  const { id }: { id: number } = useUser();
+  const cartel = useCart();
   const navigate = useNavigate();
-  const [cart, setCart] = useState<CartGetDto | null>(null);
-  const [loading, setLoading] = useState(true);
-  const cartTotal = cart?.products.reduce((total, val) => total + (val.price * val.quantity), 0);
-  const totalItems = cart?.products.length;
+  const cartTotal =
+    cartel.cart?.products.reduce(
+      (total, val) => total + val.price * val.quantity,
+      0,
+    ) ?? 0;
+  const totalItems =
+    cartel.cart?.products.reduce((total, val) => total + val.quantity, 0) ?? 0;
 
-  useEffect(() => {
-    if (!id) return;
-    fetchCart();
-
-    async function fetchCart() {
-      try {
-        const response = await api.get<ApiResponse<CartGetDto>>(
-          `/api/cart/${id}`,
-        );
-        if (response.data.hasErrors) {
-          showNotification({ message: "Error fetching cart.", color: "red" });
-          navigate("/home");
-        }
-        
-        if (response.data.data) {
-          setCart(response.data.data);
-        }
-      } catch (error) {
-        showNotification({ message: "Error fetching cart.", color: "red" });
-        navigate("/home");
-      } finally {
-        setLoading(false);
-      }
-    }
-  }, [id]);
-
-  async function deleteCartProduct(prodId: number) {
-    try {
-      const response = await api.delete<ApiResponse<CartGetDto>>(
-        `/api/cartproducts/${prodId}`,
-      );
-
-      if (response.data.hasErrors) {
-        showNotification({ message: "Error deleting cart item", color: "red" });
-        return;
-      }
-
-      setCart((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          products: prev.products.filter((p) => p.id !== prodId),
-        };
-      });
-    } catch (error) {
-      showNotification({ message: "Error deleting cart item", color: "red" });
-    }
-  }
-
-  async function updateCartProduct(
-    id: number,
-    quantity: number,
-    productSizeId: number,
-    cartId: number,
-  ) {
-    try {
-      const response = await api.put<ApiResponse<CartProductGetDto>>(
-        `/api/cartproducts/${id}`,
-        { quantity, productSizeId, cartId },
-      );
-
-      if (response.data.hasErrors) {
-        showNotification({
-          message: "Error updating this cart item",
-          color: "red",
-        });
-        return;
-      }
-
-
-      setCart((prev) => {
-        if (!prev) return prev;
-        const updatedProduct = response.data.data;
-        return {
-          ...prev,
-          products: prev.products.map((p) =>
-            p.id === id && updatedProduct ? updatedProduct : p,
-          ),
-        };
-      });
-    } 
-    
-    catch (error) {
-      showNotification({ message: "Error updating cart item", color: "red" });
-    }
-  }
 
   const CartItem = ({
     product,
@@ -183,17 +102,17 @@ export const SideCart = () => {
               <ActionIcon
                 onClick={() => {
                   const newQuantity = quantity - 1;
-                  if (newQuantity < 1){
-                    deleteCartProduct(product.id);
+                  if (newQuantity < 1) {
+                    cartel.deleteCartProduct(product.id);
+                  } else {
+                    setQuantity(newQuantity);
+                    cartel.updateCartProduct(
+                      product.id,
+                      newQuantity,
+                      product.productSizeId,
+                      cartId,
+                    );
                   }
-                  else{
-                  setQuantity(newQuantity);
-                  updateCartProduct(
-                    product.id,
-                    newQuantity,
-                    product.productSizeId,
-                    cartId,
-                  );}
                 }}
                 variant="subtle"
                 size={36}
@@ -211,7 +130,7 @@ export const SideCart = () => {
                   const nextQuantity =
                     typeof value === "string" ? Number(value) : (value ?? 0);
                   setQuantity(nextQuantity);
-                  updateCartProduct(
+                  cartel.updateCartProduct(
                     product.id,
                     nextQuantity,
                     product.productSizeId,
@@ -228,7 +147,7 @@ export const SideCart = () => {
                 onClick={() => {
                   const newQuantity = quantity + 1;
                   setQuantity(newQuantity);
-                  updateCartProduct(
+                  cartel.updateCartProduct(
                     product.id,
                     newQuantity,
                     product.productSizeId,
@@ -246,7 +165,7 @@ export const SideCart = () => {
 
           <Stack justify="space-between" gap="xl" align="flex-end">
             <ActionIcon
-              onClick={() => deleteCartProduct(product.id)}
+              onClick={() => cartel.deleteCartProduct(product.id)}
               variant="subtle"
               size={36}
               radius={0}
@@ -264,15 +183,40 @@ export const SideCart = () => {
   };
 
   const Content = () => {
-    if (!cart) return null;
+    if (!cartel.cart) return null;
+    if (cartel.loading) {
+      return (
+        <Stack>
+          <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="md">
+            {[...Array(2)].map((_, i) => (
+              <Group>
+                <Skeleton key={i} height={50} width={80} radius="md" />
+                <Stack>
+                  <Skeleton height={20} width={130} mb="md" />
+                  <Skeleton height={20} width={130} mb="md" />
+                  <Skeleton height={20} width={130} mb="md" />
+                  <Skeleton height={40} width={130} mb="md" />
+                </Stack>
+                <Stack>
+                  <Skeleton height={40} width={40} mb="md" />
+                  <Skeleton height={30} width={70} mb="md" />
+                </Stack>
+              </Group>
+            ))}
+          </SimpleGrid>
+        </Stack>
+      );
+    }
+
+    if (totalItems === 0) {
+      return <Text c="dimmed">No products in this cart yet.</Text>;
+    }
     return (
       <Container>
-        {cart.products.length === 0 ? (
-          <Text c="dimmed">No products in this cart yet.</Text>
-        ) : (
+        {cartel.cart && (
           <Stack>
-            {cart.products.map((product) => (
-              <CartItem key={product.id} product={product} cartId={cart.id} />
+            {cartel.cart.products.map((product) => (
+              <CartItem key={product.id} product={product} cartId={cartel.cart!.id} />
             ))}
           </Stack>
         )}
@@ -285,7 +229,14 @@ export const SideCart = () => {
       <Drawer
         opened={opened}
         onClose={close}
-        title={`Cart ${totalItems}`}
+        title={
+          <Group justify="space-between" align="center">
+            <Text size="lg">Cart</Text>{" "}
+            <Text size="sm" c="dimmed">
+              {totalItems} items
+            </Text>
+          </Group>
+        }
         scrollAreaComponent={ScrollArea.Autosize}
         radius={0}
         lockScroll
@@ -304,10 +255,23 @@ export const SideCart = () => {
               <Text size="xl">${cartTotal?.toFixed(2)}</Text>
             </Group>
             <Text>Taxes and shipping are calculated at checkout.</Text>
-            <Button fullWidth radius={0}>
+            <Button
+              fullWidth
+              radius={0}
+              onClick={() => {
+                (navigate(routes.checkoutPage), close());
+              }}
+            >
               Checkout
             </Button>
-            <Button variant="outline" radius={0} fullWidth>
+            <Button
+              variant="outline"
+              radius={0}
+              onClick={() => {
+                (navigate(routes.cartPage), close());
+              }}
+              fullWidth
+            >
               View Cart
             </Button>
             <Text size="m" ta="center">
@@ -317,21 +281,27 @@ export const SideCart = () => {
         </Container>
       </Drawer>
 
-      <Indicator
-        color="blue"
-        inline
-        label={totalItems}
-        autoContrast
-        position="bottom-end"
-        size="s"
-        offset={12}
-        onClick={open}
-        withBorder
-      >
+      {totalItems ? (
+        <Indicator
+          color="blue"
+          inline
+          label={totalItems}
+          autoContrast
+          position="bottom-end"
+          size="sm"
+          offset={12}
+          onClick={open}
+          withBorder
+        >
+          <Button variant="subtle" radius="xl" onClick={open} size="md">
+            <FontAwesomeIcon size="xl" icon={faCartShopping} />
+          </Button>
+        </Indicator>
+      ) : (
         <Button variant="subtle" radius="xl" onClick={open} size="auto">
           <FontAwesomeIcon size="xl" icon={faCartShopping} />
         </Button>
-      </Indicator>
+      )}
     </>
   );
 };

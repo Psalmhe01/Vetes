@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { routes } from "../../routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { faSun, faMoon, faM, faUser, faBagShopping, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import {
   Menu,
   Image,
@@ -16,12 +16,13 @@ import {
   Title,
   Overlay,
   Burger,
+  Divider,
 } from "@mantine/core";
 import {
   NAVBAR_HEIGHT,
   NAVBAR_HEIGHT_NUMBER,
 } from "../../constants/theme-constants";
-import { NavLink, NavLinkProps, useLocation } from "react-router-dom";
+import { NavLink, NavLinkProps, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { UserDto } from "../../constants/types";
 import { useAuth } from "../../authentication/use-auth";
@@ -62,13 +63,6 @@ const navigation: NavigationItem[] = [
     hide: false,
     nav: {
       to: routes.home,
-    },
-  },
-  {
-    text: "User",
-    hide: false,
-    nav: {
-      to: routes.user,
     },
   },
   {
@@ -208,6 +202,7 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
   const isMobile = useMediaQuery("(max-width: 50em)");
   const [opened, { open, close }] = useDisclosure(false);
   const dark = colorScheme === "dark";
+  const navigate = useNavigate();
   return (
     <Title order={4}>
       <Container px={20} fluid>
@@ -231,11 +226,15 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
           <Group>
             {user && !isMobile && <DesktopNavigation />}
           </Group>
-          <Group>
+          <Group maw={250} justify="space-around" gap="md">
+            {isMobile && <BurgerNavigation />}
+                <Button onClick={() => toggleColorScheme()} variant="subtle" radius="xl" size="auto">
+                  {dark ? <FontAwesomeIcon icon={faSun}/> : <FontAwesomeIcon icon={faMoon}/>}
+                </Button>
+                {user && <SideCart />}
             {user && (
               <Menu>
-                {isMobile && <BurgerNavigation />}
-                <SideCart />
+                
                 <Menu.Target>
                   <Avatar className={classes.pointer}>
                     {user.firstName.substring(0, 1)}
@@ -243,10 +242,23 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
                   </Avatar>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item onClick={() => toggleColorScheme()}>
-                    {dark ? "Light mode" : "Dark mode"}
+                  <Menu.Item 
+                    onClick={() => navigate(routes.user)} 
+                    leftSection={<FontAwesomeIcon icon={faUser} />} >
+                      My Profile
                   </Menu.Item>
-                  <Menu.Item onClick={() => logout()}>Sign Out</Menu.Item>
+                  <Menu.Item 
+                    leftSection={<FontAwesomeIcon icon={faBagShopping} />} >
+                      My Orders
+                  </Menu.Item>
+                  <Divider />
+                  <Menu.Item 
+                    onClick={() => logout()}
+                    color="red"
+                    leftSection={<FontAwesomeIcon icon={faArrowRightFromBracket} />}
+                  >
+                    Sign Out
+                  </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
             )}
