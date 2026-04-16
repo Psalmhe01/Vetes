@@ -4,7 +4,9 @@ import {
   ApiResponse,
   CartCreateDto,
   CartGetDto,
+  CartProductCreateDto,
   CartProductGetDto,
+  ProductSizeGetDto,
 } from "../constants/types";
 import { showNotification } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +25,18 @@ type CartState = {
     cartId: number,
   ) => Promise<void>;
   createCart: () => Promise<void>;
+  findProduct: (
+    cartProduct: CartProductGetDto | null,
+  ) => Promise<number | undefined>;
+  findProductSizeId: (
+    productId: number,
+    sizeId: number,
+  ) => Promise<number | undefined>;
+  addToCart: (
+    productSizeId: number,
+    cartId: number,
+    quantity: number,
+  ) => Promise<void>;
 };
 
 const INITIAL_STATE: CartState = {
@@ -32,6 +46,9 @@ const INITIAL_STATE: CartState = {
   deleteCartProduct: undefined as any,
   updateCartProduct: undefined as any,
   createCart: undefined as any,
+  findProduct: undefined as any,
+  findProductSizeId: undefined as any,
+  addToCart: undefined as any,
 };
 
 export const CartContext = createContext<CartState>(INITIAL_STATE);
@@ -113,6 +130,7 @@ export const CartProvider = (props: any) => {
           message: "Error updating this cart item",
           color: "red",
         });
+        
         return;
       }
 
@@ -153,6 +171,78 @@ export const CartProvider = (props: any) => {
     }
   }
 
+  async function findProductSizeId(
+    productId: number, sizeId: number
+  ){
+    try {
+      const response = await api.get<ApiResponse<ProductSizeGetDto>>(`/api/productsize/${productId}&${sizeId}`);
+      if (response.data.hasErrors) {
+        showNotification({ message: "Error fetching product size.", color: "red" });
+        return;
+      }
+
+      if (response.data.data) {
+        const foundId = response.data.data.id;
+        return foundId;
+      }
+    } catch (error) {
+      showNotification({ message: "Error creating cart.", color: "red" });
+    }
+  }
+
+  async function addToCart(
+    productSizeId: number,
+    cartId: number,
+    quantity: number
+  ){
+    try {
+      const response = await api.post<ApiResponse<CartProductCreateDto>>(`/api/cartproducts`, {
+        productSizeId,
+        cartId,
+        quantity
+      });
+      if (response.data.hasErrors) {
+        showNotification({ message: "Error adding product to cart.", color: "red" });
+        navigate("/home");
+      }
+
+      //const createdItem = await api.get<ApiResponse<CartProductGetDto>>(`/api/cartproducts/${response.data.data.id}`,);
+      
+
+      if (response.data.data) {
+        showNotification({ message: "Item added to cart!", color: "green" });
+        
+      }
+    } catch (error) {
+      showNotification({ message: "Error creating cart.", color: "red" });
+    }
+  }
+
+  async function findProduct (
+    cartProduct: CartProductGetDto | null,
+  ) {
+    
+    try {
+      const response = await api.get<ApiResponse<ProductSizeGetDto>>(
+        `/api/productsize/${cartProduct?.productSizeId}`,
+      );
+      if (response.data.hasErrors) {
+        showNotification({
+          message: "Error updating this cart item",
+          color: "red",
+        });
+        
+      }
+
+      if (response.data.data) {
+        return response.data.data.productId;
+      }
+    } catch (error) {
+      showNotification({ message: "Error finding product", color: "red" });
+      return 1;
+    }
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -162,6 +252,9 @@ export const CartProvider = (props: any) => {
         deleteCartProduct,
         updateCartProduct: updateCartProductImpl,
         createCart,
+        findProduct,
+        findProductSizeId,
+        addToCart,
       }}
     >
       {props.children}

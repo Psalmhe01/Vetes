@@ -39,6 +39,16 @@ export type ProductSizeForProductGetDto = {
   measurements: ProductSizeMeasurementForSizeGetDto[];
 };
 
+export type ProductSizeGetDto = {
+  id: number;
+  stock: number;
+  sizeId: number;
+  productId: number;
+  sizeName: number;
+  productName: string;
+  productPrice: number;
+};
+
 export type ProductGetDto = {
   id: number;
   name: string;
@@ -54,7 +64,6 @@ export type CategoryGetDto = {
   products: ProductGetDto[];
 };
 
-
 export type CartProductGetDto = {
   id: number;
   productSizeId: number;
@@ -62,7 +71,13 @@ export type CartProductGetDto = {
   price: number;
   size: string;
   quantity: number;
-}
+};
+
+export type CartProductCreateDto = {
+  productSizeId: number;
+  sizeId: number;
+  quantity: number;
+};
 
 export type UserCreateUpdateDto = {
   firstname: string;
@@ -72,7 +87,6 @@ export type UserCreateUpdateDto = {
   confirmpass: string;
   email: string;
   phone: string;
-
 };
 
 export type CartGetDto = {
@@ -85,7 +99,7 @@ export type CartGetDto = {
 export type CartCreateDto = {
   userId: number;
   updatedAt: Date;
-}
+};
 
 export type CartProductCreateUpdateDto = {
   cartId: number;

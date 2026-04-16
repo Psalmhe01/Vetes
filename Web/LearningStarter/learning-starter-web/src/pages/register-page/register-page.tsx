@@ -1,7 +1,5 @@
 import {
   Container,
-  Checkbox,
-  Input,
   TextInput,
   PasswordInput,
   Group,
@@ -17,8 +15,6 @@ import {
   UserDto,
 } from "../../constants/types";
 import api from "../../config/axios";
-import { useCart } from "../../cart/cart-context";
-//import { IMaskInput } from 'react-imask';
 
 export const RegisterPage = ({
   fetchCurrentUser,
@@ -52,7 +48,6 @@ export const RegisterPage = ({
     },
   });
 
-  const userCart = useCart();
   const submitUser = async (values: UserCreateUpdateDto) => {
     const response = await api.post<ApiResponse<UserDto>>(`/api/users`, values);
 

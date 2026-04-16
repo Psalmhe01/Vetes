@@ -36,11 +36,11 @@ import {
   CartGetDto,
   UserDto,
   CartProductGetDto,
+  ProductSizeGetDto,
 } from "../../constants/types";
 import { useUser } from "../../authentication/use-auth";
 import { routes } from "../../routes";
 import { useCart } from "../../cart/cart-context";
-
 
 export const SideCart = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -54,6 +54,16 @@ export const SideCart = () => {
   const totalItems =
     cartel.cart?.products.reduce((total, val) => total + val.quantity, 0) ?? 0;
 
+  const handleNavigate = async (cartProduct: CartProductGetDto) => {
+    const productFoundId = await cartel.findProduct(cartProduct);
+    
+    if (productFoundId) {
+      navigate(`/products/${productFoundId}`);
+    }
+    else {
+      showNotification({message: "Error finding product", color:"red"})
+    }
+  };
 
   const CartItem = ({
     product,
@@ -79,11 +89,7 @@ export const SideCart = () => {
             w={80}
             h="auto"
             style={{ cursor: "pointer" }}
-            onClick={() =>
-              navigate(`/products/${product.id}`, {
-                state: { from: "category" },
-              })
-            }
+            onClick={() => handleNavigate(product)}
           >
             <Text c="dimmed" size="sm">
               Image
@@ -216,7 +222,11 @@ export const SideCart = () => {
         {cartel.cart && (
           <Stack>
             {cartel.cart.products.map((product) => (
-              <CartItem key={product.id} product={product} cartId={cartel.cart!.id} />
+              <CartItem
+                key={product.id}
+                product={product}
+                cartId={cartel.cart!.id}
+              />
             ))}
           </Stack>
         )}

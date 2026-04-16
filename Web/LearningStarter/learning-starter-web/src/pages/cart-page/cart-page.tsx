@@ -1,12 +1,3 @@
-import { showNotification } from "@mantine/notifications";
-import { useEffect, useState } from "react";
-import {
-  ApiResponse,
-  CartGetDto,
-  CartProductGetDto,
-  CartProductCreateUpdateDto,
-} from "../../constants/types";
-import api from "../../config/axios";
 import {
   Container,
   ActionIcon,
@@ -20,9 +11,7 @@ import {
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../routes";
-import { useUser } from "../../authentication/use-auth";
 import { useCart } from "../../cart/cart-context";
-import { useError } from "react-use";
 
 export const CartPage = () => {
   const navigate = useNavigate();
@@ -42,9 +31,6 @@ export const CartPage = () => {
       <Title order={2}>Cart</Title>
       <Space h="md" />
       
-      <Button color="red" onClick={() => userCart.createCart() }>
-        Create cart
-      </Button>
 
       {userCart.loading && <Text>Loading cart...</Text>}
 

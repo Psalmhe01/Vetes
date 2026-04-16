@@ -31,6 +31,8 @@ public class ProductSizesController : ControllerBase
                 Id = product.Id,
                 ProductName = product.Product.Name,
                 ProductPrice = product.Product.Price,
+                ProductId = product.Product.Id,
+                SizeId = product.Size.Id,
                 SizeName = product.Size.Name,
                 Stock = product.Stock
             }).ToList();
@@ -51,9 +53,42 @@ public class ProductSizesController : ControllerBase
                 Id = product.Id,
                 ProductName = product.Product.Name,
                 ProductPrice = product.Product.Price,
+                ProductId = product.Product.Id,
+                SizeId = product.Size.Id,
                 SizeName = product.Size.Name,
                 Stock = product.Stock
             }).FirstOrDefault(x => x.Id == id);
+        if (data == null)
+        {
+            response.AddError("id", "Product not found");
+        }
+
+        if (response.HasErrors)
+        {
+            return BadRequest(response);
+        }
+
+        response.Data = data;
+        return Ok(response);
+    }
+    
+    [HttpGet("{productId}&{sizeId}")]
+    public IActionResult GetById(int productId, int sizeId)
+    {
+        var response = new Response();
+
+        var data = _dataContext
+            .Set<ProductSize>()
+            .Select(product => new ProductSizeGetDto
+            {
+                Id = product.Id,
+                ProductName = product.Product.Name,
+                ProductPrice = product.Product.Price,
+                ProductId = product.Product.Id,
+                SizeId = product.SizeId,
+                SizeName = product.Size.Name,
+                Stock = product.Stock
+            }).FirstOrDefault(x => (x.ProductId == productId && x.SizeId == sizeId));
         if (data == null)
         {
             response.AddError("id", "Product not found");
