@@ -105,9 +105,31 @@ public class SizeController : ControllerBase
         
         var size = _dataContext.Set<Size>()
             .FirstOrDefault(x => x.Id == sizeId);
+        if (size == null)
+        {
+            response.AddError("sizeId", "Size not found");
+        }
+        
         var product = _dataContext.Set<Product>()
             .FirstOrDefault(x => x.Id == productId);
+        if (product == null)
+        {
+            response.AddError("productId", "Product not found");
+        }
+        
+        var alreadyExists = _dataContext.Set<ProductSize>()
+            .Any(x => x.SizeId == sizeId && x.ProductId == productId);
 
+        if (alreadyExists)
+        {
+            response.AddError("sizeId", "This size already exists for this product");
+        }
+
+        if (response.HasErrors)
+        {
+            return BadRequest(response);
+        }
+        
         var productSize = new ProductSize
         {
             Product = product,
