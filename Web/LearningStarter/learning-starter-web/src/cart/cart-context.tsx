@@ -1,5 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { ApiError, ApiResponse, CartGetDto, CartProductGetDto } from "../constants/types";
+import {
+  ApiError,
+  ApiResponse,
+  CartCreateDto,
+  CartGetDto,
+  CartProductGetDto,
+} from "../constants/types";
 import { showNotification } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../authentication/use-auth";
@@ -10,7 +16,13 @@ type CartState = {
   setCart: (cart: CartGetDto | null) => void;
   loading: boolean;
   deleteCartProduct: (prodId: number) => Promise<void>;
-  updateCartProduct: (id: number, quantity: number, productSizeId: number, cartId: number) => Promise<void>;
+  updateCartProduct: (
+    id: number,
+    quantity: number,
+    productSizeId: number,
+    cartId: number,
+  ) => Promise<void>;
+  createCart: () => Promise<void>;
 };
 
 const INITIAL_STATE: CartState = {
@@ -19,6 +31,7 @@ const INITIAL_STATE: CartState = {
   loading: true,
   deleteCartProduct: undefined as any,
   updateCartProduct: undefined as any,
+  createCart: undefined as any,
 };
 
 export const CartContext = createContext<CartState>(INITIAL_STATE);
@@ -40,6 +53,10 @@ export const CartProvider = (props: any) => {
         if (response.data.hasErrors) {
           showNotification({ message: "Error fetching cart.", color: "red" });
           navigate("/home");
+        }
+
+        if (response.data.data == null) {
+          await createCart();
         }
 
         if (response.data.data) {
@@ -78,7 +95,7 @@ export const CartProvider = (props: any) => {
       showNotification({ message: "Error deleting cart item", color: "red" });
     }
   }
-  
+
   async function updateCartProductImpl(
     id: number,
     quantity: number,
@@ -114,6 +131,28 @@ export const CartProvider = (props: any) => {
     }
   }
 
+  async function createCart() {
+    const date = new Date();
+    const updatedAt = date.toISOString();
+
+    try {
+      const response = await api.post<ApiResponse<CartCreateDto>>(`/api/cart`, {
+        userId: id,
+        updatedAt,
+      });
+      if (response.data.hasErrors) {
+        showNotification({ message: "Error fetching cart.", color: "red" });
+        navigate("/home");
+      }
+
+      if (response.data.data) {
+        showNotification({ message: "Cart created", color: "green" });
+      }
+    } catch (error) {
+      showNotification({ message: "Error creating cart.", color: "red" });
+    }
+  }
+
   return (
     <CartContext.Provider
       value={{
@@ -122,6 +161,7 @@ export const CartProvider = (props: any) => {
         loading,
         deleteCartProduct,
         updateCartProduct: updateCartProductImpl,
+        createCart,
       }}
     >
       {props.children}

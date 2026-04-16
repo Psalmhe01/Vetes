@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../routes";
 import { useUser } from "../../authentication/use-auth";
 import { useCart } from "../../cart/cart-context";
+import { useError } from "react-use";
 
 export const CartPage = () => {
   const navigate = useNavigate();
@@ -40,6 +41,10 @@ export const CartPage = () => {
     <Container>
       <Title order={2}>Cart</Title>
       <Space h="md" />
+      
+      <Button color="red" onClick={() => userCart.createCart() }>
+        Create cart
+      </Button>
 
       {userCart.loading && <Text>Loading cart...</Text>}
 

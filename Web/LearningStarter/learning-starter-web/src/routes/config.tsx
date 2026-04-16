@@ -29,7 +29,7 @@ export const Routes = () => {
         <Switch>
           {/* When path === / render LandingPage */}
           <Route path={routes.home} element={<LandingPage />} />
-          {/* When path === /iser render UserPage */}
+          {/* When path === /user render UserPage */}
           <Route path={routes.user} element={<UserPage />} />
           <Route path={routes.updateUser} element={<UpdateUserPage />} />
           <Route path={routes.categoryListing} element={<CategoryListing />} />
