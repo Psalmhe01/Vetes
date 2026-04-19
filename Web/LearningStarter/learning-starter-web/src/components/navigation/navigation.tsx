@@ -19,6 +19,7 @@ import {
   Divider,
 } from "@mantine/core";
 import {
+  colors,
   NAVBAR_HEIGHT,
   NAVBAR_HEIGHT_NUMBER,
 } from "../../constants/theme-constants";
@@ -92,7 +93,7 @@ const DesktopNavigation = () => {
 
   return (
     <>
-      <Container px={0} className={classes.desktopNav}>
+      <Container px={0}>
         <Flex direction="row" align="center" className={classes.fullHeight}>
           {navigation
             .filter((x) => !x.hide)
@@ -204,8 +205,8 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
   const dark = colorScheme === "dark";
   const navigate = useNavigate();
   return (
-    <Title order={4}>
-      <Container px={20} fluid>
+    <Title order={4}  className={classes.desktopNav}>
+      <Container px={20} fluid >
         <Flex direction="row" justify="space-between" align="center">
           <Group>
             <Flex direction="row" align="center">
@@ -233,28 +234,31 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
                 </Button>
                 {user && <SideCart />}
             {user && (
-              <Menu>
-                
+              <Menu >
                 <Menu.Target>
                   <Avatar className={classes.pointer}>
                     {user.firstName.substring(0, 1)}
                     {user.lastName.substring(0, 1)}
                   </Avatar>
                 </Menu.Target>
-                <Menu.Dropdown>
+                <Menu.Dropdown className={classes.menu}>
                   <Menu.Item 
                     onClick={() => navigate(routes.user)} 
-                    leftSection={<FontAwesomeIcon icon={faUser} />} >
+                    leftSection={<FontAwesomeIcon icon={faUser} />} 
+                    className={classes.menuItem}
+                  >
                       My Profile
                   </Menu.Item>
                   <Menu.Item 
-                    leftSection={<FontAwesomeIcon icon={faBagShopping} />} >
+                    leftSection={<FontAwesomeIcon icon={faBagShopping} />} 
+                    className={classes.menuItem}
+                  >
                       My Orders
                   </Menu.Item>
                   <Divider />
                   <Menu.Item 
                     onClick={() => logout()}
-                    color="red"
+                    className={classes.menuItem}
                     leftSection={<FontAwesomeIcon icon={faArrowRightFromBracket} />}
                   >
                     Sign Out
@@ -299,9 +303,31 @@ const useStyles = createStyles((theme) => {
     },
     desktopNav: {
       height: NAVBAR_HEIGHT,
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      zIndex: 1,
+      backgroundColor: colors.background3,
+      alignContent: "center",
+      
     },
     fullHeight: {
       height: "100%",
     },
+
+    menu: {
+      backgroundColor: colors.background1,
+      borderRadius: 0,
+    },
+
+    menuItem: {
+      color: colors.text,
+      borderRadius: 0,
+      ":hover": {
+        color: colors.button2HoverText,
+        background: colors.button2Hover,
+      }
+    }
   };
 });

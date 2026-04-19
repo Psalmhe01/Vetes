@@ -130,7 +130,7 @@ export const CartProvider = (props: any) => {
           message: "Error updating this cart item",
           color: "red",
         });
-        
+
         return;
       }
 
@@ -171,13 +171,16 @@ export const CartProvider = (props: any) => {
     }
   }
 
-  async function findProductSizeId(
-    productId: number, sizeId: number
-  ){
+  async function findProductSizeId(productId: number, sizeId: number) {
     try {
-      const response = await api.get<ApiResponse<ProductSizeGetDto>>(`/api/productsize/${productId}&${sizeId}`);
+      const response = await api.get<ApiResponse<ProductSizeGetDto>>(
+        `/api/productsize/${productId}&${sizeId}`,
+      );
       if (response.data.hasErrors) {
-        showNotification({ message: "Error fetching product size.", color: "red" });
+        showNotification({
+          message: "Error fetching product size.",
+          color: "red",
+        });
         return;
       }
 
@@ -193,35 +196,52 @@ export const CartProvider = (props: any) => {
   async function addToCart(
     productSizeId: number,
     cartId: number,
-    quantity: number
-  ){
+    quantity: number,
+  ) {
     try {
-      const response = await api.post<ApiResponse<CartProductCreateDto>>(`/api/cartproducts`, {
-        productSizeId,
-        cartId,
-        quantity
-      });
-      if (response.data.hasErrors) {
-        showNotification({ message: "Error adding product to cart.", color: "red" });
-        navigate("/home");
+      const initialCart = await api.get<ApiResponse<CartGetDto>>(
+        `/api/cart/${id}`,
+      );
+      const findItem = initialCart.data.data.products.filter(
+        (product) => product.productSizeId == productSizeId,
+      );
+
+      if (findItem[0] == null) {
+        const response = await api.post<ApiResponse<CartProductCreateDto>>(
+          `/api/cartproducts`,
+          {
+            productSizeId,
+            cartId,
+            quantity,
+          },
+        );
+        if (response.data.hasErrors) {
+          showNotification({
+            message: "Error adding item to cart.",
+            color: "red",
+          });
+          navigate("/home");
+        }
+
+        if (response.data.data) {
+          showNotification({ message: "Item added to cart!", color: "green" });
+          const finalCart = await api.get<ApiResponse<CartGetDto>>(
+            `/api/cart/${id}`,
+          );
+          setCart(finalCart.data.data);
+        }
       }
 
-      //const createdItem = await api.get<ApiResponse<CartProductGetDto>>(`/api/cartproducts/${response.data.data.id}`,);
-      
-
-      if (response.data.data) {
-        showNotification({ message: "Item added to cart!", color: "green" });
-        
+      else {
+        updateCartProductImpl(findItem[0].id, (findItem[0].quantity + quantity), findItem[0].productSizeId, initialCart.data.data.id);
       }
+
     } catch (error) {
-      showNotification({ message: "Error creating cart.", color: "red" });
+      showNotification({ message: "Error adding item to cart.", color: "red" });
     }
   }
 
-  async function findProduct (
-    cartProduct: CartProductGetDto | null,
-  ) {
-    
+  async function findProduct(cartProduct: CartProductGetDto | null) {
     try {
       const response = await api.get<ApiResponse<ProductSizeGetDto>>(
         `/api/productsize/${cartProduct?.productSizeId}`,
@@ -231,7 +251,6 @@ export const CartProvider = (props: any) => {
           message: "Error updating this cart item",
           color: "red",
         });
-        
       }
 
       if (response.data.data) {
@@ -241,7 +260,7 @@ export const CartProvider = (props: any) => {
       showNotification({ message: "Error finding product", color: "red" });
       return 1;
     }
-  };
+  }
 
   return (
     <CartContext.Provider

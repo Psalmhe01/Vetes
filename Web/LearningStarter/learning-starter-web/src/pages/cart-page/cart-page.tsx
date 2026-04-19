@@ -69,8 +69,13 @@ export const CartPage = () => {
                       <Group gap="xs">
                         <ActionIcon
                           variant="light"
-                          onClick={() =>
-                            userCart.updateCartProduct(item.id, item.quantity - 1, item.productSizeId, cart.id)
+                          onClick={() =>{
+                              const newQuantity = item.quantity - 1;
+                              if (newQuantity== 0) {
+                                userCart.deleteCartProduct(item.id)
+                              }
+                              else userCart.updateCartProduct(item.id, newQuantity, item.productSizeId, cart.id)
+                            }
                           }
                         >
                           <IconMinus size={16} />

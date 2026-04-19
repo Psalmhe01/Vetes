@@ -46,9 +46,7 @@ export const Routes = () => {
             If the path has no match, show page not found */}
           <Route path="*" element={<NotFoundPage />} />
         </Switch>
-        <Container>
-          <Footer />
-        </Container>
+        
       </PageWrapper>
     </>
   );
