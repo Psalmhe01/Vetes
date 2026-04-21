@@ -28,7 +28,7 @@ useEffect (() => {
 
 if (loading) {
     return (
-      <PageWrapper>
+      
         <Container>
           <Skeleton height={28} width={200} mb={4} />
           <Skeleton height={16} width={280} mb="xl" />
@@ -38,7 +38,7 @@ if (loading) {
             ))}
           </SimpleGrid>
         </Container>
-      </PageWrapper>
+      
     );
   }
 
