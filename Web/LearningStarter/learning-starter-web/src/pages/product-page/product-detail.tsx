@@ -196,8 +196,8 @@ export const ProductDetail = () => {
 
   const [quantity, setQuantity] = useState(1);
 
-  const [itemSize, setItemSize] = useState(product?.sizes[0].sizeId) ?? 1;
-  
+  const [itemSize, setItemSize] = useState(product?.sizes[0]?.sizeId) ?? 1;
+
   const handlersRef = useRef<NumberInputHandlers>(null);
 
   if (loading) {
@@ -292,66 +292,71 @@ export const ProductDetail = () => {
             <Text c="dimmed">No sizes available for this product.</Text>
           ) : (
             product.sizes.map((size) => (
-              <Radio.Group value={String(itemSize)} onChange={() => setItemSize(size.sizeId)}>
-              <Card key={size.id} withBorder radius="md" padding="md" mb="sm">
-                <Radio.Card value={String(size.sizeId)} withBorder={false}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "8px",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                    }}
-                  >
-                    <Radio.Indicator/>
-                    <Text fw={500}>{size.sizeName}</Text>
-                    <Button
-                      size="xs"
-                      variant="subtle"
-                      onClick={() => openAddMeasurement(size.id)}
+              <Radio.Group
+                value={String(itemSize)}
+                onChange={() => setItemSize(size.sizeId)}
+              >
+                <Card key={size.id} withBorder radius="md" padding="md" mb="sm">
+                  <Radio.Card value={String(size.sizeId)} withBorder={false}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "8px",
+                      }}
                     >
-                      +
-                    </Button>
-                  </div>
-                  <Badge
-                    variant="light"
-                    color={size.stock > 0 ? "green" : "red"}
-                  >
-                    {size.stock > 0 ? `${size.stock} in stock` : "Out of stock"}
-                  </Badge>
-                </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <Radio.Indicator />
+                        <Text fw={500}>{size.sizeName}</Text>
+                        <Button
+                          size="xs"
+                          variant="subtle"
+                          onClick={() => openAddMeasurement(size.id)}
+                        >
+                          +
+                        </Button>
+                      </div>
+                      <Badge
+                        variant="light"
+                        color={size.stock > 0 ? "green" : "red"}
+                      >
+                        {size.stock > 0
+                          ? `${size.stock} in stock`
+                          : "Out of stock"}
+                      </Badge>
+                    </div>
 
-                {size.measurements.length > 0 && (
-                  <Table fz="xs">
-                    <Table.Thead>
-                      <Table.Tr>
-                        <Table.Th c="dimmed">Measurement</Table.Th>
-                        <Table.Th c="dimmed">Value</Table.Th>
-                      </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>
-                      {size.measurements.map((m) => (
-                        <Table.Tr key={m.id}>
-                          <Table.Td c="dimmed">
-                            {m.measurementTypeName}
-                          </Table.Td>
-                          <Table.Td>
-                            {m.value} {m.measurementTypeUnit}
-                          </Table.Td>
-                        </Table.Tr>
-                      ))}
-                    </Table.Tbody>
-                  </Table>
-                )}
-                </Radio.Card>
-              </Card>
+                    {size.measurements.length > 0 && (
+                      <Table fz="xs">
+                        <Table.Thead>
+                          <Table.Tr>
+                            <Table.Th c="dimmed">Measurement</Table.Th>
+                            <Table.Th c="dimmed">Value</Table.Th>
+                          </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody>
+                          {size.measurements.map((m) => (
+                            <Table.Tr key={m.id}>
+                              <Table.Td c="dimmed">
+                                {m.measurementTypeName}
+                              </Table.Td>
+                              <Table.Td>
+                                {m.value} {m.measurementTypeUnit}
+                              </Table.Td>
+                            </Table.Tr>
+                          ))}
+                        </Table.Tbody>
+                      </Table>
+                    )}
+                  </Radio.Card>
+                </Card>
               </Radio.Group>
             ))
           )}
@@ -359,7 +364,11 @@ export const ProductDetail = () => {
             gap={0}
             align="center"
             justify="space-between"
-            style={{ border: "solid white 1px", width: "200px", marginBottom: "10px" }}
+            style={{
+              border: "solid white 1px",
+              width: "200px",
+              marginBottom: "10px",
+            }}
           >
             <ActionIcon
               onClick={() => {
@@ -406,9 +415,7 @@ export const ProductDetail = () => {
             </ActionIcon>
           </Group>
           <Button
-            onClick={() =>
-              addToCart(product.id, (itemSize ?? 1), quantity)
-            }
+            onClick={() => addToCart(product.id, itemSize ?? 1, quantity)}
             fullWidth
           >
             Add to cart

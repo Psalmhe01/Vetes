@@ -1,6 +1,6 @@
 export const NAVBAR_HEIGHT_NUMBER = 80;
 export const NAVBAR_HEIGHT = `${NAVBAR_HEIGHT_NUMBER}px`;
-export const FOOTER_HEIGHT_NUMBER = 300;
+export const FOOTER_HEIGHT_NUMBER = 350;
 export const FOOTER_HEIGHT = `${FOOTER_HEIGHT_NUMBER}px`;
 
 export const colors = {

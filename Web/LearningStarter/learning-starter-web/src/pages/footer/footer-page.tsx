@@ -21,15 +21,16 @@ export const Footer = () => {
       <Group justify="space-between" className={classes.groups}>
         <Container className={classes.groups}>
           <Image className={classes.logo} fit="contain" src={logo} />
-          <Space h="l" />
+          <Space h="xl" />
           <Text>555-555-5555</Text>
+          <Space h="m" />
           <Text>testmail@abc.com</Text>
           <Space h="m" />
           <Text>
             1600 Pennsylvania Ave NW, <br />
             Washington, DC 20500
           </Text>
-          <Space h="m" />
+          <Space h="xl" />
           <Group>
             <IconBrandFacebook />
             <IconBrandInstagram />
@@ -79,7 +80,7 @@ const useStyles = createStyles((theme) => {
           cursor: "pointer",
           marginRight: "5px",
           paddingTop: "5px",
-          height: (FOOTER_HEIGHT_NUMBER/2),
+          height: (FOOTER_HEIGHT_NUMBER/3),
         },
 
     fullHeight: {
