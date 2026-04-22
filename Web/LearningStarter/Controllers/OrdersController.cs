@@ -60,8 +60,8 @@ public class OrdersController: ControllerBase
                 UserId = orders.UserId,
                 Status = orders.Status,
                 CreatedAt = orders.CreatedAt,
-                ShippingAddressId = orders.ShippingAddressId
-                Payments = orders.Payments.Select(payment => PaymentGetDto {
+                ShippingAddressId = orders.ShippingAddressId,
+                Payments = orders.Payments.Select(payment => new PaymentGetDto {
                     Id = payment.Id,
                     OrderId = payment.OrderId,
                     PaymentMethodId = payment.PaymentMethodId,

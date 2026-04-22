@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityModel;
@@ -167,12 +168,17 @@ public class Startup
             return;
         }
 
-        var seededCategory1 = new Category
+        var cate = new List<Category>
         {
-            Name = "Shirts",
+            new Category{ Name = "Shirts"},
+            new Category{ Name = "Dresses"},
+            new Category{ Name = "Skirts"},
+            new Category{ Name = "Pants"},
+            new Category{ Name = "Blouses"},
+            new Category{ Name = "Shorts"}
         };
         
-        dataContext.Set<Category>().Add(seededCategory1);
+        dataContext.Set<Category>().AddRange(cate);
         dataContext.SaveChanges();
     }
     
@@ -188,10 +194,28 @@ public class Startup
             Name = "Red shirt",
             Description = "It is a shirt that is red",
             Price = 20,
-            CategoryId = dataContext.Set<Category>().First().Id,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Shirts").Id,
+        };
+
+        var seededProduct2 = new Product
+        {
+            Name = "Floral Dress",
+            Description = "A mid length dress with flowers on it",
+            Price = 50,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Dresses").Id,
+        };
+
+        var seededProduct3 = new Product
+        {
+            Name = "Khaki Pant",
+            Description = "Classic, straight cut khaki pants",
+            Price = 30,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Pants").Id,
         };
         
         dataContext.Set<Product>().Add(seededProduct1);
+        dataContext.Set<Product>().Add(seededProduct2);
+        dataContext.Set<Product>().Add(seededProduct3);
         dataContext.SaveChanges();
     }
 
@@ -206,8 +230,18 @@ public class Startup
         {
             Name = "Small",
         };
+        var seededSize2 = new Size
+        {
+            Name = "Medium",
+        };
+        var seededSize3 = new Size
+        {
+            Name = "Large",
+        };
         
         dataContext.Set<Size>().Add(seededSize1);
+        dataContext.Set<Size>().Add(seededSize2);
+        dataContext.Set<Size>().Add(seededSize3);
         dataContext.SaveChanges();
     }
 
@@ -218,13 +252,17 @@ public class Startup
             return;
         }
 
-        var seededMeasurementType = new MeasurementType
+        var types = new List<MeasurementType>
         {
-            Name = "Chest Width",
-            Unit = "inches",
+            new MeasurementType{ Name = "Chest/Bust Width", Unit = "inches"},
+            new MeasurementType{ Name = "Inseam", Unit = "inches" },
+            new MeasurementType{ Name = "Waist Width", Unit = "inches"},
+            new MeasurementType{ Name = "Sleeve Length", Unit = "inches"},
+            new MeasurementType{ Name = "Shoulder Width", Unit = "inches" },
+            new MeasurementType{ Name = "Total Length", Unit = "inches"}
         };
-        
-        dataContext.Set<MeasurementType>().Add(seededMeasurementType);
+
+        dataContext.Set<MeasurementType>().AddRange(types);
         dataContext.SaveChanges();
     }
 
@@ -235,13 +273,43 @@ public class Startup
             return;
         }
 
-        var seededMeasurementCategory = new MeasurementCategory
+        var shirtId = dataContext.Set<Category>().First(x => x.Name == "Shirts").Id;
+        var dressId = dataContext.Set<Category>().First(x => x.Name == "Dresses").Id;
+        var skirtId = dataContext.Set<Category>().First(x => x.Name == "Skirts").Id;
+        var pantId = dataContext.Set<Category>().First(x => x.Name == "Pants").Id;
+        var blouseId = dataContext.Set<Category>().First(x => x.Name == "Blouses").Id;
+        var shortId = dataContext.Set<Category>().First(x => x.Name == "Shorts").Id;
+        
+        var chestId = dataContext.Set<MeasurementType>().First(x => x.Name == "Chest/Bust Width").Id;
+        var inseamId = dataContext.Set<MeasurementType>().First(x => x.Name == "Inseam").Id;
+        var waistId = dataContext.Set<MeasurementType>().First(x => x.Name == "Waist Width").Id;
+        var sleeveId = dataContext.Set<MeasurementType>().First(x => x.Name == "Sleeve Length").Id;
+        var shoulderId = dataContext.Set<MeasurementType>().First(x => x.Name == "Shoulder Width").Id;
+        var lengthId = dataContext.Set<MeasurementType>().First(x => x.Name == "Total Length").Id;
+
+        var links = new List<MeasurementCategory>
         {
-            CategoryId = dataContext.Set<Category>().First().Id,
-            MeasurementTypeId = dataContext.Set<MeasurementType>().First().Id,
+            new MeasurementCategory { CategoryId = shirtId, MeasurementTypeId = chestId },
+            new MeasurementCategory { CategoryId = shirtId, MeasurementTypeId = sleeveId },
+            new MeasurementCategory { CategoryId = shirtId, MeasurementTypeId = shoulderId },
+            new MeasurementCategory { CategoryId = blouseId, MeasurementTypeId = chestId},
+            new MeasurementCategory{ CategoryId = blouseId, MeasurementTypeId = sleeveId},
+            new MeasurementCategory{ CategoryId = blouseId, MeasurementTypeId = shoulderId},
+            
+            new MeasurementCategory{ CategoryId = pantId, MeasurementTypeId = waistId},
+            new MeasurementCategory{ CategoryId = pantId, MeasurementTypeId = inseamId},
+            new MeasurementCategory{ CategoryId = shortId, MeasurementTypeId = waistId},
+            new MeasurementCategory{ CategoryId = shortId, MeasurementTypeId = inseamId},
+            
+            new MeasurementCategory{ CategoryId = dressId, MeasurementTypeId = chestId},
+            new MeasurementCategory{ CategoryId = dressId, MeasurementTypeId = waistId },
+            new MeasurementCategory{ CategoryId = dressId, MeasurementTypeId = lengthId },
+            
+            new MeasurementCategory{ CategoryId = skirtId, MeasurementTypeId = waistId},
+            new MeasurementCategory{ CategoryId = skirtId, MeasurementTypeId = lengthId}
         };
         
-        dataContext.Set<MeasurementCategory>().Add(seededMeasurementCategory);
+        dataContext.Set<MeasurementCategory>().AddRange(links);
         dataContext.SaveChanges();
     }
 
@@ -252,14 +320,30 @@ public class Startup
             return;
         }
 
-        var seededProductSize = new ProductSize
+        var smallId = dataContext.Set<Size>().First(x => x.Name == "Small").Id;
+        var mediumId = dataContext.Set<Size>().First(x => x.Name == "Medium").Id;
+        var largeId = dataContext.Set<Size>().First(x => x.Name == "Large").Id;
+        
+        var shirtId = dataContext.Set<Product>().First(x => x.Name == "Red shirt").Id;
+        var dressId = dataContext.Set<Product>().First(x => x.Name == "Floral Dress").Id;
+        var pantId = dataContext.Set<Product>().First(x => x.Name == "Khaki Pant").Id;
+
+        var productSizesToAdd = new List<ProductSize>
         {
-            Stock = 3,
-            SizeId = dataContext.Set<Size>().First().Id,
-            ProductId = dataContext.Set<Product>().First().Id,
-        };
+            new ProductSize { ProductId = shirtId, SizeId = smallId, Stock = 10 },
+            new ProductSize{ ProductId = shirtId, SizeId = mediumId, Stock = 15 },
+            new ProductSize{ ProductId = shirtId, SizeId = largeId, Stock = 5},
             
-            dataContext.Set<ProductSize>().Add(seededProductSize);
+            new ProductSize{ ProductId = dressId, SizeId = smallId, Stock = 2},
+            new ProductSize { ProductId = dressId, SizeId = mediumId, Stock = 8},
+            new ProductSize { ProductId = dressId, SizeId = largeId, Stock = 12},
+            
+            new ProductSize{ ProductId = pantId, SizeId = smallId, Stock = 5},
+            new ProductSize{ProductId = pantId, SizeId = mediumId, Stock = 10},
+            new ProductSize{ProductId = pantId, SizeId = largeId, Stock = 8}
+        };
+
+        dataContext.Set<ProductSize>().AddRange(productSizesToAdd);
             dataContext.SaveChanges();
     }
 
