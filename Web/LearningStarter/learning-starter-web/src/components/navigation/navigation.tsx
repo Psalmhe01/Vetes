@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { routes } from "../../routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { faSun, faMoon, faM, faUser, faBagShopping, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import {
   Menu,
   Image,
@@ -16,12 +16,14 @@ import {
   Title,
   Overlay,
   Burger,
+  Divider,
 } from "@mantine/core";
 import {
+  colors,
   NAVBAR_HEIGHT,
   NAVBAR_HEIGHT_NUMBER,
 } from "../../constants/theme-constants";
-import { NavLink, NavLinkProps, useLocation } from "react-router-dom";
+import { NavLink, NavLinkProps, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { UserDto } from "../../constants/types";
 import { useAuth } from "../../authentication/use-auth";
@@ -65,13 +67,6 @@ const navigation: NavigationItem[] = [
     },
   },
   {
-    text: "User",
-    hide: false,
-    nav: {
-      to: routes.user,
-    },
-  },
-  {
     text: "Categories",
     hide: false,
     nav: {
@@ -98,7 +93,7 @@ const DesktopNavigation = () => {
 
   return (
     <>
-      <Container px={0} className={classes.desktopNav}>
+      <Container px={0}>
         <Flex direction="row" align="center" className={classes.fullHeight}>
           {navigation
             .filter((x) => !x.hide)
@@ -208,9 +203,10 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
   const isMobile = useMediaQuery("(max-width: 50em)");
   const [opened, { open, close }] = useDisclosure(false);
   const dark = colorScheme === "dark";
+  const navigate = useNavigate();
   return (
-    <Title order={4}>
-      <Container px={20} fluid>
+    <Title order={4}  className={classes.desktopNav}>
+      <Container px={20} fluid >
         <Flex direction="row" justify="space-between" align="center">
           <Group>
             <Flex direction="row" align="center">
@@ -231,22 +227,42 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
           <Group>
             {user && !isMobile && <DesktopNavigation />}
           </Group>
-          <Group>
+          <Group maw={250} justify="space-around" gap="md">
+            {isMobile && <BurgerNavigation />}
+                <Button onClick={() => toggleColorScheme()} variant="subtle" radius="xl" size="auto">
+                  {dark ? <FontAwesomeIcon icon={faSun}/> : <FontAwesomeIcon icon={faMoon}/>}
+                </Button>
+                {user && <SideCart />}
             {user && (
-              <Menu>
-                {isMobile && <BurgerNavigation />}
-                <SideCart />
+              <Menu >
                 <Menu.Target>
                   <Avatar className={classes.pointer}>
                     {user.firstName.substring(0, 1)}
                     {user.lastName.substring(0, 1)}
                   </Avatar>
                 </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item onClick={() => toggleColorScheme()}>
-                    {dark ? "Light mode" : "Dark mode"}
+                <Menu.Dropdown className={classes.menu}>
+                  <Menu.Item 
+                    onClick={() => navigate(routes.user)} 
+                    leftSection={<FontAwesomeIcon icon={faUser} />} 
+                    className={classes.menuItem}
+                  >
+                      My Profile
                   </Menu.Item>
-                  <Menu.Item onClick={() => logout()}>Sign Out</Menu.Item>
+                  <Menu.Item 
+                    leftSection={<FontAwesomeIcon icon={faBagShopping} />} 
+                    className={classes.menuItem}
+                  >
+                      My Orders
+                  </Menu.Item>
+                  <Divider />
+                  <Menu.Item 
+                    onClick={() => logout()}
+                    className={classes.menuItem}
+                    leftSection={<FontAwesomeIcon icon={faArrowRightFromBracket} />}
+                  >
+                    Sign Out
+                  </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
             )}
@@ -287,9 +303,31 @@ const useStyles = createStyles((theme) => {
     },
     desktopNav: {
       height: NAVBAR_HEIGHT,
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      zIndex: 1,
+      backgroundColor: colors.background3,
+      alignContent: "center",
+      
     },
     fullHeight: {
       height: "100%",
     },
+
+    menu: {
+      backgroundColor: colors.background1,
+      borderRadius: 0,
+    },
+
+    menuItem: {
+      color: colors.text,
+      borderRadius: 0,
+      ":hover": {
+        color: colors.button2HoverText,
+        background: colors.button2Hover,
+      }
+    }
   };
 });

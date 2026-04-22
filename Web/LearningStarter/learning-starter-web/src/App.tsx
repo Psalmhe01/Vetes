@@ -10,6 +10,7 @@ import { MantineEmotionProvider } from "@mantine/emotion";
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/dates/styles.css';
+import { CartProvider } from "./cart/cart-context";
 
 const theme = createTheme({
 });
@@ -22,7 +23,9 @@ function App() {
         <Notifications  position="top-right" autoClose={3000} limit={5} />
           <Container fluid px={0} className="App">
             <AuthProvider>
-              <Routes />
+              <CartProvider>
+                <Routes />
+              </CartProvider>
             </AuthProvider>
           </Container>
           </MantineEmotionProvider>
