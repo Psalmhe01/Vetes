@@ -12,6 +12,13 @@ public class ProductSizeMeasurement
     public MeasurementType MeasurementType { get; set; }
     public decimal Value { get; set; }
 }
+public class ProductSizeMeasurementForSizeGetDto
+{
+    public int Id { get; set; }
+    public string MeasurementTypeName { get; set; }
+    public string MeasurementTypeUnit { get; set; }
+    public decimal Value { get; set; }
+}
 
 public class ProductSizeMeasurementGetDto
 {
@@ -42,7 +49,7 @@ public class ProductSizeMeasurementEntityTypeConfiguration : IEntityTypeConfigur
         builder.ToTable("ProductSizeMeasurements");
 
         builder.HasOne(p => p.ProductSize)
-            .WithMany();
+            .WithMany(x => x.Measurements);
         
         builder.HasOne(p => p.MeasurementType)
             .WithMany();

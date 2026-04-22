@@ -93,12 +93,20 @@ export const AuthProvider = (props: any) => {
   //Brings unauthenticated users to the login page.
   //This can be made to bring them to a different part of the app eventually
   if (!user && !fetchCurrentUser.loading) {
-    if (showRegister)
-    {
-      return <RegisterPage fetchCurrentUser={fetchCurrentUser.retry} onBackToLogin = {() => setShowRegister(false)}/>;
-    }
-    else{
-      return <LoginPage fetchCurrentUser={fetchCurrentUser.retry} onRegisterClick = {() => setShowRegister(true)}/>;
+    if (showRegister) {
+      return (
+        <RegisterPage
+          fetchCurrentUser={fetchCurrentUser.retry}
+          onBackToLogin={() => setShowRegister(false)}
+        />
+      );
+    } else {
+      return (
+        <LoginPage
+          fetchCurrentUser={fetchCurrentUser.retry}
+          onRegisterClick={() => setShowRegister(true)}
+        />
+      );
     }
   }
 
