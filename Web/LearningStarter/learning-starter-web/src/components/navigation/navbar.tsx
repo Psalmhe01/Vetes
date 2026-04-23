@@ -37,18 +37,26 @@ export const Navbar = () => {
       <Container className={classes.inner}>
         
         {/* Left: Logo / Brand */}
-        <Button variant="subtle" onClick={() => navigate("/products")}>
-            ALL
-          </Button>
+        <Group className={classes.section}>
+          {/* Add icons/buttons here later */}
+        </Group>
 
         {/* Center: Future nav links */}
         <Group className={classes.section}>
+          <Button variant="subtle" onClick={() => navigate("/products")}>
+            ALL
+          </Button>
+
           <Button variant="subtle" onClick={() => navigate("/categories")}>
             Tops
           </Button>
 
           <Button variant="subtle" onClick={() => navigate("/categories")}>
             Bottoms
+          </Button>
+
+          <Button variant="subtle" onClick={() => navigate("/categories")}>
+            Dresses
           </Button>
 
           <Button variant="subtle" onClick={() => navigate("/categories")}>
