@@ -54,6 +54,16 @@ public class PaymentStatus {
   public string Status { get; set; }
 }
 
+public class CreatePaymentRequest
+{
+  public int OrderId { get; set; }
+  public int PaymentMethodId { get; set; }
+  public int PaymentStatusId { get; set; }
+  public decimal Amount { get; set; }
+}
+
+
+
 public class PaymentEntityConfiguration : IEntityTypeConfiguration<Payment> {
   public void Configure(EntityTypeBuilder<Payment> builder) {
     builder.ToTable("Payments");

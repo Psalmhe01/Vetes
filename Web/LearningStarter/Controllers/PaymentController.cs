@@ -23,54 +23,65 @@ public class PaymentController : ControllerBase
     public IActionResult GetAll()
     {
         var response = new Response();
-        var data = _dataContext
-            .Set<Payment>()
-            .Select(payment => new PaymentGetDto
+        response.Data = _dataContext.Set<Payment>()
+            .Include(p => p.Order)
+            .Include(p => p.PaymentMethod)
+            .Include(p => p.PaymentStatus)
+            .Select(p => new
             {
-                Id = payment.Id,
-                OrderId = payment.OrderId,
-                PaymentMethodId = payment.PaymentMethodId,
-                PaymentStatusId = payment.PaymentStatusId,
-                Amount = payment.Amount,
-                PaidAt = payment.PaidAt,
-            }).ToList();
-        
-        response.Data = data;
+                p.Id,
+                p.OrderId,
+                PaymentMethod = p.PaymentMethod.Type,
+                Provider = p.PaymentMethod.Provider,
+                Status = p.PaymentStatus.Status,
+                p.Amount,
+                p.PaidAt
+            })
+            .ToList();
+
         return Ok(response);
-        
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
         var response = new Response();
+
         var data = _dataContext
-            .Set<Payment>()
-            .Select(payment => new PaymentGetDto
+            .Set<Orders>()
+            .Select(orders => new OrdersGetDto
             {
-                Id = payment.Id,
-                OrderId = payment.OrderId,
-                PaymentMethodId = payment.PaymentMethodId,
-                PaymentStatusId = payment.PaymentStatusId,
-                Amount = payment.Amount,
-                PaidAt = payment.PaidAt,
-            }).FirstOrDefault(payment => payment.Id == id);
-        
+                Id = orders.Id,
+                UserId = orders.UserId,
+                Status = orders.Status,
+                CreatedAt = orders.CreatedAt,
+                ShippingAddressId = orders.ShippingAddressId,
+                Payments = orders.Payments.Select(payment => new PaymentGetDto
+                {
+                    Id = payment.Id,
+                    OrderId = payment.OrderId,
+                    PaymentMethodId = payment.PaymentMethodId,
+                    PaymentStatusId = payment.PaymentStatusId,
+                    Amount = payment.Amount,
+                    PaidAt = payment.PaidAt
+                }).ToList()
+            })
+            .FirstOrDefault(orders => orders.Id == id);
+        if (data == null)
+        {
+            response.AddError("id", "Order not found");
+            return NotFound(response);
+        }
+
         response.Data = data;
         return Ok(response);
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] PaymentCreateDto request)
+    public IActionResult Create(CreatePaymentRequest request)
     {
         var response = new Response();
-
-        if (response.HasErrors)
-        {
-            return BadRequest(response);
-        }
-        
-        var payment = new Payment
+        var paymentToCreate = new Payment
         {
             OrderId = request.OrderId,
             PaymentMethodId = request.PaymentMethodId,
@@ -78,23 +89,11 @@ public class PaymentController : ControllerBase
             Amount = request.Amount,
             PaidAt = DateTimeOffset.UtcNow
         };
-        
-        _dataContext.Set<Payment>().Add(payment);
+
+        _dataContext.Set<Payment>().Add(paymentToCreate);
         _dataContext.SaveChanges();
 
-        var paymentToReturn = new PaymentGetDto
-        {
-            Id = payment.Id,
-            OrderId = payment.OrderId,
-            PaymentMethodId = payment.PaymentMethodId,
-            PaymentStatusId = payment.PaymentStatusId,
-            Amount = payment.Amount,
-            PaidAt = payment.PaidAt,
-        };
-        
-        response.Data = paymentToReturn;
-        return Ok(response);
-        
-        
+        response.Data = paymentToCreate;
+        return Ok(paymentToCreate);
     }
 }
