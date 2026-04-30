@@ -4,8 +4,6 @@ using LearningStarter.Data;
 using LearningStarter.Entities;
 using Microsoft.AspNetCore.Mvc; 
 namespace LearningStarter.Controllers;
-
-// missing above the class:
 [ApiController]
 [Route("api/cartproducts")]
 
@@ -47,18 +45,19 @@ public class CartProductsController : ControllerBase
             response.AddError(nameof(createDto.Quantity), "Quantity must be greater than 0");
         }
         
-        var productExists = _dataContext.Set<ProductSize>()
-            .Any(c => c.Id == createDto.ProductSizeId);
+        var productSize = _dataContext.Set<ProductSize>()
+            .FirstOrDefault(c => c.Id == createDto.ProductSizeId);
+        var productExists = productSize != null;
         
         var cartExists = _dataContext.Set<Cart>()
                     .Any(c => c.Id == createDto.CartId);
         
-        if (!productExists)
+        if (!productExists || productSize == null)
         {
             response.AddError(
                 nameof(createDto.ProductSizeId), "Product does not exist");
         }
-        
+
         if (!cartExists)
         {
             response.AddError(
@@ -69,6 +68,14 @@ public class CartProductsController : ControllerBase
         {
             return BadRequest(response);
         };
+
+        if (productSize.Stock < createDto.Quantity)
+        {
+            response.AddError(nameof(createDto.Quantity), "Insufficient stock available.");
+            return BadRequest(response);
+        }
+
+        productSize.Stock -= createDto.Quantity;
 
         var cartProductToCreate = new CartProduct
         {
@@ -115,13 +122,14 @@ public class CartProductsController : ControllerBase
             response.AddError(nameof(updateDto.Quantity), "Quantity must be greater than 0");
         }
                 
-        var productExists = _dataContext.Set<ProductSize>()
-            .Any(c => c.Id == updateDto.ProductSizeId);
+        var productSize = _dataContext.Set<ProductSize>()
+            .FirstOrDefault(c => c.Id == updateDto.ProductSizeId);
+        var productExists = productSize != null;
         
         var cartExists = _dataContext.Set<Cart>()
             .Any(c => c.Id == updateDto.CartId);
                 
-        if (!productExists)
+        if (!productExists || productSize == null)
         {
             response.AddError(
                 nameof(updateDto.ProductSizeId), "Product does not exist");
@@ -138,6 +146,15 @@ public class CartProductsController : ControllerBase
             return BadRequest(response);
         };
                 
+        var quantityDelta = updateDto.Quantity - cartProductToUpdate.Quantity;
+
+        if (quantityDelta > 0 && productSize.Stock < quantityDelta)
+        {
+            response.AddError(nameof(updateDto.Quantity), "Insufficient stock for the requested increase.");
+            return BadRequest(response);
+        }
+
+        productSize.Stock -= quantityDelta;
 
         cartProductToUpdate.CartId = updateDto.CartId;
         cartProductToUpdate.ProductSizeId = updateDto.ProductSizeId;
@@ -177,6 +194,14 @@ public class CartProductsController : ControllerBase
         if (response.HasErrors)
         {
             return BadRequest(response);
+        }
+
+        var productSize = _dataContext.Set<ProductSize>()
+            .FirstOrDefault(ps => ps.Id == cartProductToDelete.ProductSizeId);
+
+        if (productSize != null)
+        {
+            productSize.Stock += cartProductToDelete.Quantity;
         }
 
         _dataContext.Set<CartProduct>().Remove(cartProductToDelete);

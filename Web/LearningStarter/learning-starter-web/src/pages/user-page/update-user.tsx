@@ -8,6 +8,9 @@ import {
   Button,
   Fieldset,
   Text,
+  Divider,
+  Title,
+  SimpleGrid,
 } from "@mantine/core";
 import { PageWrapper } from "../../components/page-wrapper/page-wrapper";
 import { FormErrors, useForm } from "@mantine/form";
@@ -21,10 +24,13 @@ import api from "../../config/axios";
 import { useAuth, useUser } from "../../authentication/use-auth";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../routes";
+import { createStyles } from "@mantine/emotion";
 
 export const UpdateUserPage = () => {
+  const { refetchUser } = useAuth();
   const user = useUser();
   const navigate = useNavigate();
+  const { classes } = useStyles();
 
   // For user updates, we use the current user's ID
   const userId = user?.id;
@@ -74,6 +80,7 @@ export const UpdateUserPage = () => {
           message: "User Successfully Updated!",
           color: "green",
         });
+        await refetchUser();
         navigate(routes.user);
       }
     } catch (error: any) {
@@ -86,22 +93,28 @@ export const UpdateUserPage = () => {
 
   return (
     <Container>
-      {!user ? (
-        <Text>Please log in to update your profile.</Text>
-      ) : (
-        <form onSubmit={form.onSubmit(submitUser)}>
+      <Container px={0}>
+        <Title order={3}>Account</Title>
+        <Text>View and edit your personal info below.</Text>
+      </Container>
+
+      <Divider />
+      <form onSubmit={form.onSubmit(submitUser)}>
+        <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl" mt={96}>
           <TextInput
             withAsterisk
             label="First Name"
             placeholder="First Name"
             key={form.key("firstName")}
             {...form.getInputProps("firstName")}
+            radius={0}
           />
           <TextInput
             label="Last Name"
             placeholder="Last Name"
             key={form.key("lastName")}
             {...form.getInputProps("lastName")}
+            radius={0}
           />
           <TextInput
             withAsterisk
@@ -109,12 +122,14 @@ export const UpdateUserPage = () => {
             placeholder="your@email.com"
             key={form.key("email")}
             {...form.getInputProps("email")}
+            radius={0}
           />
           <TextInput
             label="Phone Number"
             placeholder="Your phone"
             key={form.key("phone")}
             {...form.getInputProps("phone")}
+            radius={0}
           />
 
           <TextInput
@@ -123,20 +138,25 @@ export const UpdateUserPage = () => {
             placeholder="Username"
             key={form.key("userName")}
             {...form.getInputProps("userName")}
+            radius={0}
           />
+        </SimpleGrid>
 
-          <Group justify="flex-end" mt="md">
-            <Button
-              onClick={() => navigate(routes.user)}
-              aria-label="cancel"
-              variant="outline"
-            >
-              Cancel
-            </Button>
-            <Button type="submit">Submit</Button>
-          </Group>
-        </form>
-      )}
+        <Group justify="flex-end" mt="md">
+          <Button
+            onClick={() => navigate(routes.user)}
+            aria-label="cancel"
+            variant="outline"
+          >
+            Cancel
+          </Button>
+          <Button type="submit">Submit</Button>
+        </Group>
+      </form>
     </Container>
   );
 };
+
+const useStyles = createStyles(() => {
+  return {};
+});

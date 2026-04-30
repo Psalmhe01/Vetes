@@ -14,21 +14,26 @@ type PageWrapperProps = {
 export const PageWrapper: React.FC<PageWrapperProps> = ({ user, children }) => {
   const { classes } = useStyles();
   return (
-    <div className="content">
+    <div className={classes.body}>
       <PrimaryNavigation user={user} />
       <Container px={0} fluid className={classes.mainContent}>
         {children}
       </Container>
-      <Footer />
+      {user && <Footer />}
     </div>
   );
 };
 
-const useStyles = createStyles(() => {
+const useStyles = createStyles((theme) => {
   return {
+    body: {
+      backgroundColor: theme.colors.brand[0],
+    },
+
     mainContent: {
-      minHeight: "calc(100vh - 60px)",
-      marginTop: "90px",
+      minHeight: "calc(100vh - 80px)",
+      marginTop: "80px",
+      padding: 0,
     },
   };
 });

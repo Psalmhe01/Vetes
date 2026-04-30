@@ -6,6 +6,7 @@ import {
   Alert,
   Button,
   Container,
+  Fieldset,
   Group,
   Input,
   PasswordInput,
@@ -37,7 +38,7 @@ export const LoginPage = ({
   onRegisterClick: () => void;
 }) => {
   const styles = useStyles();
-  const {classes} = styles;
+  const { classes } = styles;
 
   const form = useForm<LoginRequest>({
     initialValues: {
@@ -53,7 +54,6 @@ export const LoginPage = ({
   });
 
   const [, submitLogin] = useAsyncFn(async (values: LoginRequest) => {
-
     const response = await api.post<LoginResponse>(`/api/authenticate`, values);
     if (response.data.hasErrors) {
       const formErrors: FormErrors = response.data.errors.reduce(
@@ -61,7 +61,7 @@ export const LoginPage = ({
           Object.assign(prev, { [curr.property]: curr.message });
           return prev;
         },
-        {} as FormErrors
+        {} as FormErrors,
       );
       form.setErrors(formErrors);
     }
@@ -72,10 +72,9 @@ export const LoginPage = ({
     }
   }, []);
 
-
   return (
-    <PageWrapper >
-      <Container>
+    <PageWrapper>
+      <Container className={classes.root}>
         <Container px={0}>
           {form.errors[""] && (
             <Alert className={classes.generalErrors} color="red">
@@ -83,12 +82,12 @@ export const LoginPage = ({
             </Alert>
           )}
           <form onSubmit={form.onSubmit(submitLogin)}>
-            <Container px={0}>
+            <Fieldset legend="Login" radius={0} className={classes.formBox}>
               <Container className={classes.formField} px={0}>
                 <Container px={0}>
                   <label htmlFor="userName">Username</label>
                 </Container>
-              
+
                 <Input {...form.getInputProps("userName")} />
                 <Text c="red">{form.errors["userName"]}</Text>
               </Container>
@@ -96,15 +95,18 @@ export const LoginPage = ({
                 <Container px={0}>
                   <label htmlFor="password">Password</label>
                 </Container>
-                <PasswordInput type="password" {...form.getInputProps("password")} />
+                <PasswordInput
+                  type="password"
+                  {...form.getInputProps("password")}
+                />
                 <Text c="red">{form.errors["password"]}</Text>
               </Container>
 
               <Container px={0}>
                 <Group justify="flex-end" mt="md" align="center">
-                  <Button 
-                    className={classes.loginButton} 
-                    onClick={onRegisterClick} 
+                  <Button
+                    className={classes.loginButton}
+                    onClick={onRegisterClick}
                     aria-label="New User? Register"
                     variant="outline"
                   >
@@ -115,7 +117,7 @@ export const LoginPage = ({
                   </Button>
                 </Group>
               </Container>
-            </Container>
+            </Fieldset>
           </form>
         </Container>
       </Container>
@@ -123,8 +125,16 @@ export const LoginPage = ({
   );
 };
 
-const useStyles = createStyles(() => {
+const useStyles = createStyles((theme) => {
   return {
+    root: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      minHeight: "80vh",
+    },
+
     generalErrors: {
       marginBottom: "8px",
     },
@@ -135,6 +145,15 @@ const useStyles = createStyles(() => {
 
     formField: {
       marginBottom: "8px",
+    },
+
+    formBox: {
+      maxWidth: "600px",
+      background: "none",
+      border: "solid 1px",
+      borderColor: theme.colors.brand[4],
+      color: theme.colors.brand[4],
+      alignSelf: "center",
     },
   };
 });

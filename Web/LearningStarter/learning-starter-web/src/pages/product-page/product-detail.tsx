@@ -90,7 +90,9 @@ export const ProductDetail = () => {
       return;
     }
 
-    await userCart.addToCart(productSizeId, cartId, quantity);
+
+    await userCart.addToCart(productSizeId, cartId, quantity); 
+    await fetchProduct();
   };
 
   const fetchProduct = async () => {
@@ -297,7 +299,7 @@ export const ProductDetail = () => {
                 onChange={() => setItemSize(size.sizeId)}
               >
                 <Card key={size.id} withBorder radius="md" padding="md" mb="sm">
-                  <Radio.Card value={String(size.sizeId)} withBorder={false}>
+                  <Radio.Card value={String(size.sizeId)} withBorder={false} disabled={size.stock === 0}>
                     <div
                       style={{
                         display: "flex",

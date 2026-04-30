@@ -16,6 +16,7 @@ import {
   SimpleGrid,
   NumberInputHandlers,
   NumberInput,
+  useMantineTheme,
   ActionIcon,
   Skeleton,
 } from "@mantine/core";
@@ -48,7 +49,8 @@ export const SideCart = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [shake, setShake] = useState(false);
   const cartel = useCart();
-  const { classes } = useStyles();
+  const theme = useMantineTheme();
+  const { classes, cx } = useStyles();
   const navigate = useNavigate();
   const cartTotal =
     cartel.cart?.products.reduce(
@@ -309,23 +311,34 @@ export const SideCart = () => {
 
       {totalItems ? (
         <Indicator
-          color="blue"
           inline
           label={totalItems}
           autoContrast
-          position="bottom-end"
+          position="bottom-start"
           size="sm"
-          offset={12}
+          offset={33}
           onClick={open}
-          
-          withBorder
+          className={classes.indicator}
+          color={theme.colors.brand[7]}
         >
-          <Button variant="subtle" radius="xl" onClick={open} size="md">
+          <Button 
+            variant="subtle" 
+            radius="xl" 
+            onClick={open} 
+            size="md"
+            className={cx(classes.cartBtn, { [classes.cartBtnShake]: shake })}
+          >
             <FontAwesomeIcon size="xl" icon={faCartShopping} />
           </Button>
         </Indicator>
       ) : (
-        <Button variant="subtle" radius="xl" onClick={open} size="auto" className={(shake) ? classes.cartBtnShake : classes.cartBtn}>
+        <Button 
+          variant="subtle" 
+          radius="xl" 
+          onClick={open} 
+          size="auto" 
+          className={cx(classes.cartBtn, { [classes.cartBtnShake]: shake })}
+        >
           <FontAwesomeIcon size="xl" icon={faCartShopping} />
         </Button>
       )}
@@ -337,10 +350,23 @@ const useStyles = createStyles((theme) => {
   return {
     
     cartBtn: {
-      color: "white",
+      padding: 0,
+      marginRight: "20px",
+      color: theme.colors.brand[1],
+      background: "none",
+      "&:hover": {
+        color: theme.colors.brand[7],
+        background: "none",
+      }
     },
 
-    
+    indicator: {
+      background: "none",
+      color: theme.colors.brand[1],
+      border: "none",
+      textAlign: "center",
+      fontSize: "small",
+    },
   
 
   '@keyframes shake': {

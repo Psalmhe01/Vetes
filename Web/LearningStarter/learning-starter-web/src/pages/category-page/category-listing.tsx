@@ -3,7 +3,7 @@ import { ApiResponse, CategoryCreateUpdateDto, CategoryGetDto } from "../../cons
 import { showNotification } from "@mantine/notifications";
 import api from "../../config/axios";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Container, Modal, SimpleGrid, Skeleton, Text, TextInput } from "@mantine/core";
+import { Button, Card, Container, Modal, SimpleGrid, Skeleton, Text, TextInput, useMantineTheme } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 export const CategoryListing = () => {
@@ -11,6 +11,7 @@ export const CategoryListing = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [createOpen, setCreateOpen] = useState(false); 
+    const theme = useMantineTheme();
     const createForm = useForm<CategoryCreateUpdateDto>({
       initialValues: { name: ""},
       validate: {
@@ -63,8 +64,15 @@ export const CategoryListing = () => {
   }
 
   return (
-      <Container>
-         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+      <Container py={20}>
+         <div style={
+          { display: "flex", 
+          justifyContent: "space-between", 
+          alignItems: "center", 
+          marginBottom: "4px",
+          color: theme.colors.brand[2], 
+          }}
+        >
           <Text fw={500} size="xl">Shop by category</Text>
           <Button onClick={() => setCreateOpen(true)}>Add category</Button>
         </div>

@@ -22,7 +22,7 @@ export const LandingPage = () => {
   );
 };
 
-const useStyles = createStyles(() => {
+const useStyles = createStyles((theme) => {
   return {
     homePageContainer: {
       display: "flex",

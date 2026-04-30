@@ -229,6 +229,7 @@ export const CartProvider = (props: any) => {
             `/api/cart/${id}`,
           );
           setCart(finalCart.data.data);
+          
         }
       }
 
