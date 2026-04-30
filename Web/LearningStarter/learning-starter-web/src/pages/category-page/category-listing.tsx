@@ -1,118 +1,201 @@
-import { useEffect, useState } from "react"
-import { ApiResponse, CategoryCreateUpdateDto, CategoryGetDto } from "../../constants/types"
+import { useEffect, useState } from "react";
+import {
+  ApiResponse,
+  CategoryCreateUpdateDto,
+  CategoryGetDto,
+} from "../../constants/types";
 import { showNotification } from "@mantine/notifications";
 import api from "../../config/axios";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Container, Modal, SimpleGrid, Skeleton, Text, TextInput, useMantineTheme } from "@mantine/core";
+import {
+  Button,
+  Card,
+  Container,
+  Modal,
+  SimpleGrid,
+  Skeleton,
+  Text,
+  TextInput,
+  useMantineTheme,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { createStyles } from "@mantine/emotion";
 
 export const CategoryListing = () => {
-    const [categories, setCategories] = useState<CategoryGetDto[]>([]);
-    const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
-    const [createOpen, setCreateOpen] = useState(false); 
-    const theme = useMantineTheme();
-    const createForm = useForm<CategoryCreateUpdateDto>({
-      initialValues: { name: ""},
-      validate: {
-        name: (value) => value.length <= 0 ? "Name is required" : null,
-      },
-    });
+  const [categories, setCategories] = useState<CategoryGetDto[]>([]);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [createOpen, setCreateOpen] = useState(false);
+  const theme = useMantineTheme();
+  const { classes } = useStyles();
+  const createForm = useForm<CategoryCreateUpdateDto>({
+    initialValues: { name: "" },
+    validate: {
+      name: (value) => (value.length <= 0 ? "Name is required" : null),
+    },
+  });
 
-    async function fetchCategories() {
-      const response = await api.get<ApiResponse<CategoryGetDto[]>>(`/api/categories`);
+  async function fetchCategories() {
+    const response =
+      await api.get<ApiResponse<CategoryGetDto[]>>(`/api/categories`);
 
-      if (response.data.hasErrors) {
-        showNotification({ message: "Error fetching categories.", color: "red" });
-      }
-
-      if (response.data.data) {
-        setCategories(response.data.data);
-      }
-      
-      setLoading(false);
+    if (response.data.hasErrors) {
+      showNotification({
+        message: "Error fetching categories.",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
     }
 
-    const submitCreate = async (values: CategoryCreateUpdateDto) => {
-      const response = await api.post<ApiResponse<CategoryGetDto>>(`/api/categories`, values);
-      if (response.data.hasErrors) {
-        showNotification({message: "Error creating category.", color: "red"});
-        return;
-      }
-      showNotification({message: "Category Created!", color: "green"});
-      setCreateOpen(false);
-      createForm.reset();
-      fetchCategories();
-    };
+    if (response.data.data) {
+      setCategories(response.data.data);
+    }
 
-    useEffect(() => {
+    setLoading(false);
+  }
+
+  const submitCreate = async (values: CategoryCreateUpdateDto) => {
+    const response = await api.post<ApiResponse<CategoryGetDto>>(
+      `/api/categories`,
+      values,
+    );
+    if (response.data.hasErrors) {
+      showNotification({
+        message: "Error creating category.",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
+      return;
+    }
+    showNotification({
+      message: "Category Created!",
+      color: "green",
+      position: "top-center",
+      style: { backgroundColor: "#D4E9CF" },
+    });
+    setCreateOpen(false);
+    createForm.reset();
     fetchCategories();
-}, []);
-    
-        if (loading) {
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  if (loading) {
     return (
-        <Container>
-          <Skeleton height={28} width={200} mb={4} />
-          <Skeleton height={16} width={280} mb="xl" />
-          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
-            {[...Array(6)].map((_, i) => (
-              <Skeleton key={i} height={140} radius="md" />
-            ))}
-          </SimpleGrid>
-        </Container>
+      <Container>
+        <Skeleton height={28} width={200} mb={4} />
+        <Skeleton height={16} width={280} mb="xl" />
+        <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
+          {[...Array(6)].map((_, i) => (
+            <Skeleton key={i} height={140} radius="md" />
+          ))}
+        </SimpleGrid>
+      </Container>
     );
   }
 
   return (
-      <Container py={20}>
-         <div style={
-          { display: "flex", 
-          justifyContent: "space-between", 
-          alignItems: "center", 
+    <Container fluid className={classes.categoryRoot}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
           marginBottom: "4px",
-          color: theme.colors.brand[2], 
-          }}
-        >
-          <Text fw={500} size="xl">Shop by category</Text>
-          <Button onClick={() => setCreateOpen(true)}>Add category</Button>
-        </div>
-        <Text size="sm" c="dimmed" mb="lg">Select a category to browse available products</Text>
+          color: theme.colors.brand[2],
+        }}
+      >
+        <Text fw={500} size="xl">
+          Shop by category
+        </Text>
+        <Button onClick={() => setCreateOpen(true)} className={classes.catButton}>Add category</Button>
+      </div>
+      <Text size="sm" c="dimmed" mb="lg">
+        Select a category to browse available products
+      </Text>
 
-        {categories.length === 0 ? (
-          <Text c="dimmed">No categories available.</Text>
-        ) : (
-          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
-            {categories.map((category) => (
-              <Card
-                key={category.id}
-                withBorder
-                radius="md"
-                padding="lg"
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate(`/categories/${category.id}`)}
-              >
-                <Text fw={500} mb={4}>{category.name}</Text>
-                <Text size="xs" c="dimmed">{category.products.length} products</Text>
-              </Card>
-            ))}
-          </SimpleGrid>
-        )}
-        <Modal
-          opened={createOpen}
-          onClose={() => { setCreateOpen(false); createForm.reset(); }}
-          title="Create category"
-        >
-          <form onSubmit={createForm.onSubmit(submitCreate)}>
-            <TextInput
-              withAsterisk
-              label="Name"
-              placeholder="Category name"
-              key={createForm.key("name")}
-              {...createForm.getInputProps("name")}
-            />
-            <Button type="submit" mt="md" fullWidth>Create</Button>
-          </form>
-        </Modal>
-      </Container>
+      {categories.length === 0 ? (
+        <Text c="dimmed">No categories available.</Text>
+      ) : (
+        <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
+          {categories.map((category) => (
+            <Card
+              key={category.id}
+              withBorder
+              radius="md"
+              padding="lg"
+              className={classes.categoryCard}
+              onClick={() => navigate(`/categories/${category.id}`)}
+            >
+              <Text fw={500} mb={4}>
+                {category.name}
+              </Text>
+              <Text size="xs" c="dimmed">
+                {category.products.length} products
+              </Text>
+            </Card>
+          ))}
+        </SimpleGrid>
+      )}
+      <Modal
+        opened={createOpen}
+        onClose={() => {
+          setCreateOpen(false);
+          createForm.reset();
+        }}
+        title="Create category"
+      >
+        <form onSubmit={createForm.onSubmit(submitCreate)}>
+          <TextInput
+            withAsterisk
+            label="Name"
+            placeholder="Category name"
+            key={createForm.key("name")}
+            {...createForm.getInputProps("name")}
+          />
+          <Button type="submit" mt="md" fullWidth>
+            Create
+          </Button>
+        </form>
+      </Modal>
+    </Container>
   );
 };
+
+const useStyles = createStyles((theme) => {
+  return {
+    categoryRoot: {
+      background: `radial-gradient(circle at 2.8857421875% 97.55208333333333%, #F4F3E8 0%, 17.5%, rgba(244,243,232,0) 35%), 
+        radial-gradient(circle at 42.369791666666664% 100%, #F4F3E8 0%, 17.5%, rgba(244,243,232,0) 35%), 
+        radial-gradient(circle at 91.689453125% 19.5703125%, #D4E9CF 0%, 28%, rgba(212,233,207,0) 56%), 
+        radial-gradient(circle at 97.41536458333333% 100%, #F4F3E8 0%, 28.419999999999998%, rgba(244,243,232,0) 58%), 
+        radial-gradient(circle at 0% 0%, rgba(221,248,50,0.5) 0%, 48%, rgba(221,248,50,0) 80%), 
+        radial-gradient(circle at 48.9013671875% 49.521484375%, #FFFFFF 0%, 100%, rgba(255,255,255,0) 100%)`,
+      width: "100%",
+      height: "100vh",
+      color: theme.colors.brand[4],
+      padding: "30px",
+    },
+
+    categoryCard: {
+      backgroundColor: theme.colors.brand[0],
+      color: theme.colors.brand[4],
+      border: `solid 1px ${theme.colors.brand[2]}`,
+      cursor: "pointer",
+      fontWeight: "lighter",
+      borderRadius: 0,
+    },
+
+    catButton: {
+      "&:hover": {
+        background: "none",
+        borderColor: theme.colors.brand[4],
+        color: theme.colors.brand[4],
+      },
+    }
+  };
+});

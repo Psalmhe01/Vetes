@@ -26,7 +26,7 @@ export const Footer = () => {
   const { classes } = useStyles();
 
   return (
-    <Container className={classes.footerPg} w="100vw">
+    <Container fluid className={classes.footerPg} w="100vw" my={0}>
       <Group justify="space-between" className={classes.groups}>
         <Container className={classes.groups}>
           <Image className={classes.logo} fit="contain" src={logo} />
@@ -80,13 +80,14 @@ const useStyles = createStyles((theme) => {
       maxWidth: "100%",
       objectFit: "contain",
       padding: 0,
+      marginTop: 0,
       backgroundColor: colors.background3,
       color: theme.colors.brand[0],
     },
 
     groups: {
       justifyContent: "flex-start",
-      marginTop: "10px",
+      
       marginBottom: "10px",
       color: theme.colors.brand[0],
     },

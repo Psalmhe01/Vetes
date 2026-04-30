@@ -17,6 +17,7 @@ import {
   Group,
   NumberInputHandlers,
   Radio,
+  useMantineTheme,
 } from "@mantine/core";
 import { PageWrapper } from "../../components/page-wrapper/page-wrapper";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -35,6 +36,7 @@ import { useCart } from "../../cart/cart-context";
 import { useForm } from "@mantine/form";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { createStyles } from "@mantine/emotion";
 
 export const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -86,12 +88,13 @@ export const ProductDetail = () => {
       showNotification({
         message: "Could not successfully add to cart",
         color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
       });
       return;
     }
 
-
-    await userCart.addToCart(productSizeId, cartId, quantity); 
+    await userCart.addToCart(productSizeId, cartId, quantity);
     await fetchProduct();
   };
 
@@ -104,7 +107,12 @@ export const ProductDetail = () => {
       ]);
 
       if (productRes.data.hasErrors) {
-        showNotification({ message: "Error fetching product.", color: "red" });
+        showNotification({
+          message: "Error fetching product.",
+          color: "red",
+          position: "top-center",
+          style: { backgroundColor: "#E9CFCF" },
+        });
         if (from === "category") {
           navigate(-1);
         } else if (from === "listing") {
@@ -125,7 +133,12 @@ export const ProductDetail = () => {
         setMeasurementTypes(measurementTypesRes.data.data);
       }
     } catch (error) {
-      showNotification({ message: "Error fetching product.", color: "red" });
+      showNotification({
+        message: "Error fetching product.",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
       navigate("/");
     } finally {
       setLoading(false);
@@ -147,15 +160,27 @@ export const ProductDetail = () => {
         showNotification({
           message: response.data.errors?.[0]?.message ?? "Error adding size.",
           color: "red",
+          position: "top-center",
+          style: { backgroundColor: "#E9CFCF" },
         });
         return;
       }
-      showNotification({ message: "Size added!", color: "green" });
+      showNotification({
+        message: "Size added!",
+        color: "green",
+        position: "top-center",
+        style: { backgroundColor: "#D4E9CF" },
+      });
       setAddSizeOpen(false);
       addSizeForm.reset();
       fetchProduct();
     } catch (error) {
-      showNotification({ message: "Error adding size.", color: "red" });
+      showNotification({
+        message: "Error adding size.",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
     }
   };
 
@@ -184,15 +209,27 @@ export const ProductDetail = () => {
           message:
             response.data.errors?.[0]?.message ?? "Error adding measurement.",
           color: "red",
+          position: "top-center",
+          style: { backgroundColor: "#E9CFCF" },
         });
         return;
       }
-      showNotification({ message: "Measurement added!", color: "green" });
+      showNotification({
+        message: "Measurement added!",
+        color: "green",
+        position: "top-center",
+        style: { backgroundColor: "#D4E9CF" },
+      });
       setAddMeasurementOpen(false);
       addMeasurementForm.reset();
       fetchProduct();
     } catch (error) {
-      showNotification({ message: "Error adding measurement.", color: "red" });
+      showNotification({
+        message: "Error adding measurement.",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
     }
   };
 
@@ -200,11 +237,15 @@ export const ProductDetail = () => {
 
   const [itemSize, setItemSize] = useState(product?.sizes[0]?.sizeId) ?? 1;
 
+  const { classes } = useStyles();
+
+  const theme = useMantineTheme();
+
   const handlersRef = useRef<NumberInputHandlers>(null);
 
   if (loading) {
     return (
-      <Container>
+      <Container fluid className={classes.root}>
         <Skeleton height={20} width={220} mb="md" />
         <Grid gutter="xl">
           <Grid.Col span={{ base: 12, sm: 5 }}>
@@ -226,8 +267,8 @@ export const ProductDetail = () => {
   if (!product) return null;
 
   return (
-    <Container>
-      <Breadcrumbs mb="md">
+    <Container fluid className={classes.root}>
+      <Breadcrumbs mb="xl">
         <Anchor
           onClick={() => navigate("/categories")}
           style={{ cursor: "pointer" }}
@@ -240,7 +281,7 @@ export const ProductDetail = () => {
         >
           Category
         </Anchor>
-        <Text>{product.name}</Text>
+        <Text className={classes.breadcrumbColor}>{product.name}</Text>
       </Breadcrumbs>
 
       <Grid gutter="xl">
@@ -297,15 +338,21 @@ export const ProductDetail = () => {
               <Radio.Group
                 value={String(itemSize)}
                 onChange={() => setItemSize(size.sizeId)}
+                key={size.id}
               >
-                <Card key={size.id} withBorder radius="md" padding="md" mb="sm">
-                  <Radio.Card value={String(size.sizeId)} withBorder={false} disabled={size.stock === 0}>
+                <Card key={size.id} withBorder radius="md" padding="md" mb="sm" className={classes.radioGroup}>
+                  <Radio.Card
+                    value={String(size.sizeId)}
+                    withBorder={false}
+                    disabled={size.stock === 0}
+                  >
                     <div
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
                         marginBottom: "8px",
+                        
                       }}
                     >
                       <div
@@ -315,7 +362,7 @@ export const ProductDetail = () => {
                           gap: "8px",
                         }}
                       >
-                        <Radio.Indicator />
+                        <Radio.Indicator variant="outline" style={{cursor: size.stock === 0 ? "not-allowed" : "pointer"}}/>
                         <Text fw={500}>{size.sizeName}</Text>
                         <Button
                           size="xs"
@@ -362,14 +409,16 @@ export const ProductDetail = () => {
               </Radio.Group>
             ))
           )}
+          <Text fw={500}>Quantity</Text>
           <Group
             gap={0}
             align="center"
             justify="space-between"
             style={{
-              border: "solid white 1px",
+              border: `solid ${theme.colors.brand[2]} 1px`,
               width: "200px",
               marginBottom: "10px",
+              backgroundColor: `${theme.colors.brand[0]}`,
             }}
           >
             <ActionIcon
@@ -418,7 +467,9 @@ export const ProductDetail = () => {
           </Group>
           <Button
             onClick={() => addToCart(product.id, itemSize ?? 1, quantity)}
+            className={classes.addToCartBtn}
             fullWidth
+            radius="xl"
           >
             Add to cart
           </Button>
@@ -495,3 +546,47 @@ export const ProductDetail = () => {
     </Container>
   );
 };
+
+const useStyles = createStyles((theme) => {
+  return {
+    root: {
+      backgroundColor: theme.colors.brand[14],
+      width: "100%",
+      height: "100vh",
+      color: theme.colors.brand[2],
+      paddingTop: "30px",
+      paddingBottom: "30px",
+      paddingLeft: "60px",
+      paddingRight: "60px",
+    },
+
+    categoryCard: {
+      backgroundColor: theme.colors.brand[0],
+      color: theme.colors.brand[4],
+      border: `solid 1px ${theme.colors.brand[2]}`,
+      cursor: "pointer",
+      fontWeight: "lighter",
+      borderRadius: 0,
+    },
+
+    addToCartBtn: {
+      backgroundColor: theme.colors.brand[2],
+      color: theme.colors.brand[7],
+      "&:hover": {
+        color: theme.colors.brand[4],
+        cursor: "pointer",
+      },
+    },
+
+    breadcrumbColor: {
+      color: theme.colors.brand[2],
+    },
+
+    radioGroup: {
+      backgroundColor: theme.colors.brand[0],
+      border: `solid 1px ${theme.colors.brand[2]}`,
+      borderRadius: 0,
+      color: theme.colors.brand[2],
+    }
+  };
+});

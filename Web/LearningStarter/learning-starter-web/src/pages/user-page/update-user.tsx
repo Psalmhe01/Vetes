@@ -79,6 +79,8 @@ export const UpdateUserPage = () => {
         showNotification({
           message: "User Successfully Updated!",
           color: "green",
+          position: "top-center",
+          style: { backgroundColor: "#D4E9CF" },
         });
         await refetchUser();
         navigate(routes.user);
@@ -87,6 +89,8 @@ export const UpdateUserPage = () => {
       showNotification({
         message: "Failed to update user. Please try again.",
         color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
       });
     }
   };

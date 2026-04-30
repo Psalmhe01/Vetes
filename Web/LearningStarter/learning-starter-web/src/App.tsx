@@ -31,10 +31,12 @@ const theme = createTheme({
       colors.button2Text,
       colors.button2Hover,
       colors.button2HoverText,
+      colors.background4,
     ],
   },
   primaryColor: "brand",
   defaultRadius: 0,
+  
 });
 
 function App() {

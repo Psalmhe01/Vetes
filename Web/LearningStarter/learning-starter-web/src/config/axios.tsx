@@ -31,6 +31,8 @@ const errorHandlers = {
     showNotification({
       message: "You are not authorized to perform this action",
       color: "red",
+      position: "top-center",
+      style: { backgroundColor: "#E9CFCF" },
     });
   },
   404: (response: AxiosResponse<unknown, any>) => {
@@ -46,6 +48,8 @@ const errorHandlers = {
     showNotification({
       message: "We've encountered a problem.",
       color: "red",
+      position: "top-center",
+      style: { backgroundColor: "#E9CFCF" },
     });
     return Promise.resolve(response);
   },

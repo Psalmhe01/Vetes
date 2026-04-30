@@ -67,7 +67,12 @@ export const LoginPage = ({
     }
 
     if (response.data.data) {
-      showNotification({ message: "Successfully Logged In!", color: "green" });
+      showNotification({
+        message: "Successfully Logged In!",
+        color: "green",
+        position: "top-center",
+        style: { backgroundColor: "#D4E9CF" },
+      });
       fetchCurrentUser();
     }
   }, []);
@@ -149,11 +154,12 @@ const useStyles = createStyles((theme) => {
 
     formBox: {
       maxWidth: "600px",
+      width: "60vw",
+
+      height: "100%",
       background: "none",
-      border: "solid 1px",
       borderColor: theme.colors.brand[4],
       color: theme.colors.brand[4],
-      alignSelf: "center",
     },
   };
 });

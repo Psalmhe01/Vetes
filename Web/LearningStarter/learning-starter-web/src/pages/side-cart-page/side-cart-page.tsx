@@ -43,7 +43,7 @@ import { useUser } from "../../authentication/use-auth";
 import { routes } from "../../routes";
 import { useCart } from "../../cart/cart-context";
 import { createStyles } from "@mantine/emotion";
-
+import { IconLock, IconLockFilled } from "@tabler/icons-react";
 
 export const SideCart = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -61,25 +61,24 @@ export const SideCart = () => {
     cartel.cart?.products.reduce((total, val) => total + val.quantity, 0) ?? 0;
 
   useEffect(() => {
-  if (totalItems > 0) {
-    setShake(true);
+    if (totalItems > 0) {
+      setShake(true);
 
-    const timer = setTimeout(() => {
-      setShake(false);
-    }, 500);
+      const timer = setTimeout(() => {
+        setShake(false);
+      }, 500);
 
-    return () => clearTimeout(timer);
-  }
-}, [totalItems]);
+      return () => clearTimeout(timer);
+    }
+  }, [totalItems]);
 
   const handleNavigate = async (cartProduct: CartProductGetDto) => {
     const productFoundId = await cartel.findProduct(cartProduct);
-    
+
     if (productFoundId) {
       navigate(`/products/${productFoundId}`);
-    }
-    else {
-      showNotification({message: "Error finding product", color:"red"})
+    } else {
+      showNotification({ message: "Error finding product", color: "red" });
     }
   };
 
@@ -100,8 +99,12 @@ export const SideCart = () => {
 
     return (
       <Container>
-        <Divider my="md" />
-        <Group dir={"row"} justify="space-between">
+        <Divider my="xs" color={theme.colors.brand[4]} />
+        <Group
+          dir={"row"}
+          justify="space-between"
+          className={classes.sideCartItem}
+        >
           <Card
             withBorder
             w={80}
@@ -114,15 +117,15 @@ export const SideCart = () => {
             </Text>
           </Card>
 
-          <Stack>
+          <Stack gap="xs">
             <Text fw={500} size="sm" mb={4}>
               {product.name}
             </Text>
             <Text fw={500} size="sm" mb={4}>
-              {product.size}
+              Size: {product.size}
             </Text>
             <Text fw={500}>${product.price.toFixed(2)}</Text>
-            <Group gap={0} align="center" style={{ border: "solid white 1px" }}>
+            <Group gap={0} align="center" style={{ border: `solid ${theme.colors.brand[4]} 1px` }}>
               <ActionIcon
                 onClick={() => {
                   const newQuantity = quantity - 1;
@@ -236,9 +239,9 @@ export const SideCart = () => {
       return <Text c="dimmed">No products in this cart yet.</Text>;
     }
     return (
-      <Container>
+      <Container fluid>
         {cartel.cart && (
-          <Stack>
+          <Stack gap={0}>
             {cartel.cart.products.map((product) => (
               <CartItem
                 key={product.id}
@@ -271,6 +274,10 @@ export const SideCart = () => {
         position="right"
         transitionProps={{ transition: "fade-left", duration: 200 }}
         overlayProps={{ backgroundOpacity: 0.5, blur: 2 }}
+        classNames={{
+          content: classes.sideCartRoot,
+          header: classes.sideCartRoot,
+        }}
       >
         <ScrollArea type="hover" h="60vh" offsetScrollbars>
           <Content />
@@ -302,9 +309,12 @@ export const SideCart = () => {
             >
               View Cart
             </Button>
-            <Text size="m" ta="center">
-              Secure Checkout
-            </Text>
+            <Group align="center" justify="center" gap="xs" p={0} m={0}>
+              <IconLockFilled />
+              <Text size="m" ta="center">
+                Secure Checkout
+              </Text>
+            </Group>
           </Stack>
         </Container>
       </Drawer>
@@ -321,10 +331,10 @@ export const SideCart = () => {
           className={classes.indicator}
           color={theme.colors.brand[7]}
         >
-          <Button 
-            variant="subtle" 
-            radius="xl" 
-            onClick={open} 
+          <Button
+            variant="subtle"
+            radius="xl"
+            onClick={open}
             size="md"
             className={cx(classes.cartBtn, { [classes.cartBtnShake]: shake })}
           >
@@ -332,11 +342,11 @@ export const SideCart = () => {
           </Button>
         </Indicator>
       ) : (
-        <Button 
-          variant="subtle" 
-          radius="xl" 
-          onClick={open} 
-          size="auto" 
+        <Button
+          variant="subtle"
+          radius="xl"
+          onClick={open}
+          size="auto"
           className={cx(classes.cartBtn, { [classes.cartBtnShake]: shake })}
         >
           <FontAwesomeIcon size="xl" icon={faCartShopping} />
@@ -348,7 +358,6 @@ export const SideCart = () => {
 
 const useStyles = createStyles((theme) => {
   return {
-    
     cartBtn: {
       padding: 0,
       marginRight: "20px",
@@ -357,7 +366,7 @@ const useStyles = createStyles((theme) => {
       "&:hover": {
         color: theme.colors.brand[7],
         background: "none",
-      }
+      },
     },
 
     indicator: {
@@ -367,25 +376,34 @@ const useStyles = createStyles((theme) => {
       textAlign: "center",
       fontSize: "small",
     },
-  
 
-  '@keyframes shake': {
-    '0%': { transform: 'translate(1px, 1px) rotate(0deg)' },
-    '10%': { transform: 'translate(-1px, -2px) rotate(-1deg)' },
-    '20%': { transform: 'translate(-3px, 0px) rotate(1deg)' },
-    '30%': { transform: 'translate(3px, 2px) rotate(0deg)' },
-    '40%': { transform: 'translate(1px, -1px) rotate(1deg)' },
-    '50%': { transform: 'translate(-1px, 2px) rotate(-1deg)' },
-    '60%': { transform: 'translate(-3px, 1px) rotate(0deg)' },
-    '70%': { transform: 'translate(3px, 1px) rotate(-1deg)' },
-    '80%': { transform: 'translate(-1px, -1px) rotate(1deg)' },
-    '90%': { transform: 'translate(1px, 2px) rotate(0deg)' },
-    '100%': { transform: 'translate(1px, -2px) rotate(-1deg)' },
-  },
+    sideCartRoot: {
+      backgroundColor: theme.colors.brand[0],
+      color: theme.colors.brand[4],
+    },
 
-  cartBtnShake: {
+    sideCartItem: {
+      height: "150px",
+      objectFit: "fill",
+      marginTop: 0,
+    },
+
+    "@keyframes shake": {
+      "0%": { transform: "translate(1px, 1px) rotate(0deg)" },
+      "10%": { transform: "translate(-1px, -2px) rotate(-1deg)" },
+      "20%": { transform: "translate(-3px, 0px) rotate(1deg)" },
+      "30%": { transform: "translate(3px, 2px) rotate(0deg)" },
+      "40%": { transform: "translate(1px, -1px) rotate(1deg)" },
+      "50%": { transform: "translate(-1px, 2px) rotate(-1deg)" },
+      "60%": { transform: "translate(-3px, 1px) rotate(0deg)" },
+      "70%": { transform: "translate(3px, 1px) rotate(-1deg)" },
+      "80%": { transform: "translate(-1px, -1px) rotate(1deg)" },
+      "90%": { transform: "translate(1px, 2px) rotate(0deg)" },
+      "100%": { transform: "translate(1px, -2px) rotate(-1deg)" },
+    },
+
+    cartBtnShake: {
       animation: "shake 0.5s",
-      },
-  
-}
+    },
+  };
 });

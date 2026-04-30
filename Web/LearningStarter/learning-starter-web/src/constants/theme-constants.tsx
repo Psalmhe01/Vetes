@@ -18,4 +18,5 @@ export const colors = {
     button2Text: "#24582A",
     button2Hover: "#24582A",
     button2HoverText: "#DDF832",
+    background4: "#BEC5C3"
 };
