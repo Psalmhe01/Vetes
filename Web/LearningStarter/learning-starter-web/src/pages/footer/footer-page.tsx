@@ -82,14 +82,21 @@ const useStyles = createStyles((theme) => {
       padding: 0,
       marginTop: 0,
       backgroundColor: colors.background3,
-      color: theme.colors.brand[0],
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#0D1B2A",
+        color: "#D4E9CF",
+      },
+      color: colors.background1,
     },
 
     groups: {
       justifyContent: "flex-start",
       
       marginBottom: "10px",
-      color: theme.colors.brand[0],
+      color: colors.background1,
+      '[data-mantine-color-scheme="dark"] &': {
+        color: "#D4E9CF",
+      },
     },
 
     logo: {

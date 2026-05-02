@@ -3,7 +3,11 @@ import { UserDto } from "../../constants/types";
 import { PrimaryNavigation } from "../navigation/navigation";
 import { Container } from "@mantine/core";
 import { Footer } from "../../pages/footer/footer-page";
-import { colors, NAVBAR_HEIGHT, NAVBAR_HEIGHT_NUMBER } from "../../constants/theme-constants";
+import {
+  colors,
+  NAVBAR_HEIGHT,
+  NAVBAR_HEIGHT_NUMBER,
+} from "../../constants/theme-constants";
 
 type PageWrapperProps = {
   user?: UserDto;
@@ -27,7 +31,12 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({ user, children }) => {
 const useStyles = createStyles((theme) => {
   return {
     body: {
-      backgroundColor: theme.colors.brand[0],
+      backgroundColor: colors.background1,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#1A1B1E",
+        color: "#C1C2C5",
+      },
+      color: colors.text,
     },
 
     mainContent: {

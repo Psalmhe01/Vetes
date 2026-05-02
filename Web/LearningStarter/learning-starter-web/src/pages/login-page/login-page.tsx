@@ -17,6 +17,7 @@ import { showNotification } from "@mantine/notifications";
 import { createStyles } from "@mantine/emotion";
 import { Navigate } from "react-router-dom";
 import { routes } from "../../routes";
+import { colors } from "../../constants/theme-constants";
 import { redirect } from "react-router-dom";
 import { useState } from "react";
 
@@ -158,8 +159,12 @@ const useStyles = createStyles((theme) => {
 
       height: "100%",
       background: "none",
-      borderColor: theme.colors.brand[4],
-      color: theme.colors.brand[4],
+      borderColor: colors.text,
+      color: colors.text,
+      '[data-mantine-color-scheme="dark"] &': {
+        borderColor: "#D4E9CF",
+        color: "#C1C2C5",
+      },
     },
   };
 });

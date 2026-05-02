@@ -17,6 +17,7 @@ import { Footer } from "../footer/footer-page";
 import { Navbar } from "../../components/navigation/navbar";
 import { ProductCard } from "../../components/product-card/product-card";
 import { showNotification } from "@mantine/notifications";
+import { colors } from "../../constants/theme-constants";
 import api from "../../config/axios";
 import homeImage from "../../assets/home.png";
 import { ProductGetDto, ApiResponse } from "../../constants/types";
@@ -95,8 +96,8 @@ export const LandingPage = () => {
         <Button
           radius="xl"
           style={{
-            color: theme.colors.brand[2],
-            backgroundColor: theme.colors.brand[7],
+            color: colors.background3,
+            backgroundColor: colors.buttonText,
             fontWeight: "lighter",
             marginTop: "30px",
           }}
@@ -109,7 +110,7 @@ export const LandingPage = () => {
         <Title order={1} fw={700} ta="left" w="100%">
           Explore our Featured Products
         </Title>
-        <Divider h={30} color={theme.colors.brand[2]} />
+        <Divider h={30} color={colors.background3} />
         <SimpleGrid cols={3} spacing="lg" mt="md">
           {products.slice(0, 3).map((product) => (
             <ProductCard
@@ -138,13 +139,17 @@ const useStyles = createStyles((theme) => {
       backgroundPosition: "center",
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
-      color: theme.colors.brand[1],
+      color: colors.background2,
     },
 
     homePageContainer: {
       width: "100vw",
       height: "100%",
-      color: theme.colors.brand[2],
+      color: colors.background3,
+      '[data-mantine-color-scheme="dark"] &': {
+        color: "#C1C2C5",
+        backgroundColor: "#1A1B1E",
+      },
       padding: 0,
     },
     featuredProductsContainer: {
@@ -154,12 +159,15 @@ const useStyles = createStyles((theme) => {
       gap: "20px",
       width: "100%",
       padding: "50px",
-      backgroundColor: theme.colors.brand[14],
+      backgroundColor: colors.background4,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#2C2E33",
+      },
     },
 
     productCard: {
       background: "none",
-      color: theme.colors.brand[4],
+      color: colors.text,
       border: "none",
     },
   };

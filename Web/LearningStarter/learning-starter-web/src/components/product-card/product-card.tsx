@@ -1,6 +1,6 @@
-import { ClassNames } from "@emotion/react";
-import { Card, Text, useMantineTheme } from "@mantine/core";
+import { Card, Text } from "@mantine/core";
 import { createStyles } from "@mantine/emotion";
+import { colors } from "../../constants/theme-constants";
 
 type ProductCardProps = {
   name: string;
@@ -16,7 +16,6 @@ export const ProductCard = ({
   onClick,
 }: ProductCardProps) => {
   const { classes } = useStyles();
-  const theme = useMantineTheme();
 
   return (
     <Card
@@ -34,7 +33,7 @@ export const ProductCard = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: `${theme.colors.brand[1]}`,
+            backgroundColor: colors.background2,
           }}
         >
           <Text c="dimmed" size="sm">
@@ -48,7 +47,7 @@ export const ProductCard = ({
       </Text>
 
       {description && (
-        <Text c="dimmed" size="sm" mt="xs">
+        <Text c="dimmed" size="sm" mt="xs" lineClamp={3} truncate="end">
           {description}
         </Text>
       )}
@@ -63,10 +62,15 @@ export const ProductCard = ({
 const useStyles = createStyles((theme) => {
   return {
     card: {
-      color: theme.colors.brand[4],
+      color: colors.text,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#2C2E33",
+        borderColor: "#373A40",
+        color: "#C1C2C5",
+      },
       background: "none",
       borderRadius: 0,
-      border: `solid 1px ${theme.colors.brand[2]}}`,
+      border: `solid 1px ${colors.background3}`,
       cursor: "pointer",
       fontWeight: "lighter",
     },

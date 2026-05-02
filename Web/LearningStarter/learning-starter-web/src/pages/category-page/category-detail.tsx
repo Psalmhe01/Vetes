@@ -23,6 +23,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { createStyles } from "@mantine/emotion";
+import { colors } from "../../constants/theme-constants";
 import { ProductCard } from "../../components/product-card/product-card";
 
 export const CategoryDetail = () => {
@@ -86,7 +87,7 @@ export const CategoryDetail = () => {
 
   if (loading) {
     return (
-      <Container>
+      <Container fluid className={classes.root}>
         <Skeleton height={20} width={180} mb="md" />
         <Skeleton height={28} width={140} mb={4} />
         <Skeleton height={16} width={80} mb="xl" />
@@ -106,7 +107,7 @@ export const CategoryDetail = () => {
       <Breadcrumbs mb="md">
         <Anchor
           onClick={() => navigate("/categories")}
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", color: colors.text }}
         >
           Categories
         </Anchor>
@@ -176,26 +177,35 @@ export const CategoryDetail = () => {
 const useStyles = createStyles((theme) => {
   return {
     root: {
-      backgroundColor: theme.colors.brand[14],
+      backgroundColor: colors.background4,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#1A1B1E",
+        color: "#C1C2C5",
+      },
       width: "100%",
-      height: "100vh",
-      color: theme.colors.brand[4],
+      minHeight: "100vh",
+      color: colors.text,
       padding: "30px",
     },
 
     categoryCard: {
-      backgroundColor: theme.colors.brand[0],
-      color: theme.colors.brand[4],
-      border: `solid 1px ${theme.colors.brand[2]}`,
+      backgroundColor: colors.background1,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#2C2E33",
+        borderColor: "#373A40",
+      },
+      color: colors.text,
+      border: `solid 1px ${colors.background3}`,
       cursor: "pointer",
       fontWeight: "lighter",
       borderRadius: 0,
     },
 
-    
-
     breadcrumbColor: {
-      color: theme.colors.brand[2],
+      color: colors.background3,
+      '[data-mantine-color-scheme="dark"] &': {
+        color: "#D4E9CF",
+      },
     },
   };
 });

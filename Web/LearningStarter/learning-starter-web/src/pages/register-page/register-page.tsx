@@ -16,6 +16,7 @@ import {
 } from "../../constants/types";
 import api from "../../config/axios";
 import { createStyles } from "@mantine/emotion";
+import { colors } from "../../constants/theme-constants";
 
 export const RegisterPage = ({
   fetchCurrentUser,
@@ -50,7 +51,6 @@ export const RegisterPage = ({
   });
 
   const { classes } = useStyles();
-
 
   const submitUser = async (values: UserCreateUpdateDto) => {
     const response = await api.post<ApiResponse<UserDto>>(`/api/users`, values);
@@ -150,7 +150,6 @@ export const RegisterPage = ({
   );
 };
 
-
 const useStyles = createStyles((theme) => {
   return {
     root: {
@@ -169,11 +168,15 @@ const useStyles = createStyles((theme) => {
     formBox: {
       maxWidth: "600px",
       width: "60vw",
-      
+
       height: "100%",
       background: "none",
-      borderColor: theme.colors.brand[4],
-      color: theme.colors.brand[4],
+      borderColor: colors.text,
+      color: colors.text,
+      '[data-mantine-color-scheme="dark"] &': {
+        borderColor: "#D4E9CF",
+        color: "#C1C2C5",
+      },
     },
   };
 });

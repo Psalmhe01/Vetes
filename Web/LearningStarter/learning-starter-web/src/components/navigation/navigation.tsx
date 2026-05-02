@@ -26,7 +26,7 @@ import {
   Burger,
   Divider,
 } from "@mantine/core";
-import { NAVBAR_HEIGHT } from "../../constants/theme-constants";
+import { colors, NAVBAR_HEIGHT } from "../../constants/theme-constants";
 import {
   NavLink,
   NavLinkProps,
@@ -311,21 +311,21 @@ const useStyles = createStyles((theme) => {
     },
     paddedMenuItem: {
       margin: "0px 5px 0px 5px",
-      color: theme.colors.brand[0],
+      color: colors.background1,
       backgroundColor: "none",
       "&:hover": {
-        color: theme.colors.brand[7],
+        color: colors.buttonText,
         background: "none",
       }
     },
     menuIcons: {
-      color: theme.colors.brand[1],
+      color: colors.background2,
     },
     linkActive: {
       "&, &:hover": {
           color: theme.variantColorResolver({
           theme: theme,
-          color: theme.colors.brand[7],
+          color: colors.buttonText,
           variant: "light",
         }).color,
       },
@@ -339,7 +339,10 @@ const useStyles = createStyles((theme) => {
       left: 0,
       width: "100%",
       zIndex: 1,
-      backgroundColor: theme.colors.brand[2],
+      backgroundColor: colors.background3,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#0D1B2A",
+      },
       alignContent: "center",
     },
 
@@ -348,16 +351,22 @@ const useStyles = createStyles((theme) => {
     },
 
     menu: {
-      backgroundColor: theme.colors.brand[0],
+      backgroundColor: colors.background1,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#2C2E33",
+      },
       borderRadius: 0,
     },
 
     menuItem: {
-      color: theme.colors.brand[4],
+      color: colors.text,
       borderRadius: 0,
       "&:hover": {
-        color: theme.colors.brand[13],
-        background: theme.colors.brand[12],
+        color: colors.button2HoverText,
+        background: colors.button2Hover,
+        '[data-mantine-color-scheme="dark"] &': {
+          background: "#373A40",
+        },
       },
     },
   };

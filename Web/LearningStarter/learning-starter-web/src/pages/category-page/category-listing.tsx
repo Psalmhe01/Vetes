@@ -20,6 +20,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { createStyles } from "@mantine/emotion";
+import { colors } from "../../constants/theme-constants";
 
 export const CategoryListing = () => {
   const [categories, setCategories] = useState<CategoryGetDto[]>([]);
@@ -86,7 +87,7 @@ export const CategoryListing = () => {
 
   if (loading) {
     return (
-      <Container>
+      <Container fluid className={classes.categoryRoot}>
         <Skeleton height={28} width={200} mb={4} />
         <Skeleton height={16} width={280} mb="xl" />
         <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
@@ -106,13 +107,18 @@ export const CategoryListing = () => {
           justifyContent: "space-between",
           alignItems: "center",
           marginBottom: "4px",
-          color: theme.colors.brand[2],
+          color: colors.text,
         }}
       >
         <Text fw={500} size="xl">
           Shop by category
         </Text>
-        <Button onClick={() => setCreateOpen(true)} className={classes.catButton}>Add category</Button>
+        <Button
+          onClick={() => setCreateOpen(true)}
+          className={classes.catButton}
+        >
+          Add category
+        </Button>
       </div>
       <Text size="sm" c="dimmed" mb="lg">
         Select a category to browse available products
@@ -175,16 +181,28 @@ const useStyles = createStyles((theme) => {
         radial-gradient(circle at 97.41536458333333% 100%, #F4F3E8 0%, 28.419999999999998%, rgba(244,243,232,0) 58%), 
         radial-gradient(circle at 0% 0%, rgba(221,248,50,0.5) 0%, 48%, rgba(221,248,50,0) 80%), 
         radial-gradient(circle at 48.9013671875% 49.521484375%, #FFFFFF 0%, 100%, rgba(255,255,255,0) 100%)`,
+      '[data-mantine-color-scheme="dark"] &': {
+        background: `radial-gradient(circle at 2.8% 97%, #1A1B1E 0%, 35%, transparent 70%), 
+          radial-gradient(circle at 42% 100%, #132e16 0%, 35%, transparent 70%), 
+          radial-gradient(circle at 91% 19%, #0D1B2A 0%, 56%, transparent 100%), 
+          radial-gradient(circle at 97% 100%, #1A1B1E 0%, 58%, transparent 100%), 
+          radial-gradient(circle at 48% 49%, #101113 0%, 100%, transparent 100%)`,
+        color: "#C1C2C5",
+      },
       width: "100%",
-      height: "100vh",
-      color: theme.colors.brand[4],
+      minHeight: "100vh",
+      color: colors.text,
       padding: "30px",
     },
 
     categoryCard: {
-      backgroundColor: theme.colors.brand[0],
-      color: theme.colors.brand[4],
-      border: `solid 1px ${theme.colors.brand[2]}`,
+      backgroundColor: colors.background1,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#2C2E33",
+        borderColor: "#373A40",
+      },
+      color: colors.text,
+      border: `solid 1px ${colors.background3}`,
       cursor: "pointer",
       fontWeight: "lighter",
       borderRadius: 0,
@@ -193,9 +211,9 @@ const useStyles = createStyles((theme) => {
     catButton: {
       "&:hover": {
         background: "none",
-        borderColor: theme.colors.brand[4],
-        color: theme.colors.brand[4],
+        borderColor: colors.text,
+        color: colors.text,
       },
-    }
+    },
   };
 });

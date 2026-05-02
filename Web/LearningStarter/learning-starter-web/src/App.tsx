@@ -11,32 +11,30 @@ import { CartProvider } from "./cart/cart-context";
 import { colors } from "./constants/theme-constants";
 
 const theme = createTheme({
+  black: colors.text,
   fontFamily: "Questrial, sans-serif",
   headings: {
     fontFamily: "Questrial",
   },
   colors: {
+    // Mantine requires exactly 10 shades (0-9).
+    // It is best to use a single base color and generate shades for it.
     brand: [
-      colors.background1,
-      colors.background2,
-      colors.background3,
-      colors.lineDivider,
-      colors.text,
-      colors.text2,
-      colors.button,
-      colors.buttonText,
-      colors.buttonHover,
-      colors.buttonHoverText,
-      colors.button2,
-      colors.button2Text,
-      colors.button2Hover,
-      colors.button2HoverText,
-      colors.background4,
+      "#f2fcf1", // 0
+      "#e6f6e3", // 1
+      "#c9ecc2", // 2
+      "#abe1a0", // 3
+      "#90d881", // 4
+      "#7ed26d", // 5
+      "#75cf62", // 6
+      "#24582A", // 7 (Primary Brand Green)
+      "#1c4a23", // 8
+      "#132e16", // 9
     ],
+    "button-hover": Array(10).fill(colors.buttonHoverText) as any,
   },
   primaryColor: "brand",
   defaultRadius: 0,
-  
 });
 
 function App() {

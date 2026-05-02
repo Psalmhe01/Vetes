@@ -42,7 +42,8 @@ import {
 import { useUser } from "../../authentication/use-auth";
 import { routes } from "../../routes";
 import { useCart } from "../../cart/cart-context";
-import { createStyles } from "@mantine/emotion";
+import { colors } from "../../constants/theme-constants";
+import { createStyles, keyframes } from "@mantine/emotion";
 import { IconLock, IconLockFilled } from "@tabler/icons-react";
 
 export const SideCart = () => {
@@ -99,7 +100,7 @@ export const SideCart = () => {
 
     return (
       <Container>
-        <Divider my="xs" color={theme.colors.brand[4]} />
+        <Divider my="xs" color={colors.text} />
         <Group
           dir={"row"}
           justify="space-between"
@@ -125,7 +126,7 @@ export const SideCart = () => {
               Size: {product.size}
             </Text>
             <Text fw={500}>${product.price.toFixed(2)}</Text>
-            <Group gap={0} align="center" style={{ border: `solid ${theme.colors.brand[4]} 1px` }}>
+            <Group gap={0} align="center" style={{ border: `solid ${colors.text} 1px` }}>
               <ActionIcon
                 onClick={() => {
                   const newQuantity = quantity - 1;
@@ -329,7 +330,7 @@ export const SideCart = () => {
           offset={33}
           onClick={open}
           className={classes.indicator}
-          color={theme.colors.brand[7]}
+          color={colors.buttonText}
         >
           <Button
             variant="subtle"
@@ -356,30 +357,57 @@ export const SideCart = () => {
   );
 };
 
+const shake = keyframes({
+  "0%": { transform: "translate(1px, 1px) rotate(0deg)" },
+  "10%": { transform: "translate(-1px, -2px) rotate(-1deg)" },
+  "20%": { transform: "translate(-3px, 0px) rotate(1deg)" },
+  "30%": { transform: "translate(3px, 2px) rotate(0deg)" },
+  "40%": { transform: "translate(1px, -1px) rotate(1deg)" },
+  "50%": { transform: "translate(-1px, 2px) rotate(-1deg)" },
+  "60%": { transform: "translate(-3px, 1px) rotate(0deg)" },
+  "70%": { transform: "translate(3px, 1px) rotate(-1deg)" },
+  "80%": { transform: "translate(-1px, -1px) rotate(1deg)" },
+  "90%": { transform: "translate(1px, 2px) rotate(0deg)" },
+  "100%": { transform: "translate(1px, -2px) rotate(-1deg)" },
+});
+
 const useStyles = createStyles((theme) => {
   return {
     cartBtn: {
       padding: 0,
       marginRight: "20px",
-      color: theme.colors.brand[1],
+      color: colors.background2,
       background: "none",
       "&:hover": {
-        color: theme.colors.brand[7],
+        color: colors.buttonText,
         background: "none",
+      },
+      '[data-mantine-color-scheme="dark"] &': {
+        color: "#C1C2C5",
+        "&:hover": {
+          color: "#D4E9CF",
+        },
       },
     },
 
     indicator: {
       background: "none",
-      color: theme.colors.brand[1],
+      color: colors.background2,
       border: "none",
       textAlign: "center",
       fontSize: "small",
+      '[data-mantine-color-scheme="dark"] &': {
+        color: "#C1C2C5",
+      },
     },
 
     sideCartRoot: {
-      backgroundColor: theme.colors.brand[0],
-      color: theme.colors.brand[4],
+      backgroundColor: colors.background1,
+      color: colors.text,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#1A1B1E",
+        color: "#C1C2C5",
+      },
     },
 
     sideCartItem: {
@@ -388,22 +416,8 @@ const useStyles = createStyles((theme) => {
       marginTop: 0,
     },
 
-    "@keyframes shake": {
-      "0%": { transform: "translate(1px, 1px) rotate(0deg)" },
-      "10%": { transform: "translate(-1px, -2px) rotate(-1deg)" },
-      "20%": { transform: "translate(-3px, 0px) rotate(1deg)" },
-      "30%": { transform: "translate(3px, 2px) rotate(0deg)" },
-      "40%": { transform: "translate(1px, -1px) rotate(1deg)" },
-      "50%": { transform: "translate(-1px, 2px) rotate(-1deg)" },
-      "60%": { transform: "translate(-3px, 1px) rotate(0deg)" },
-      "70%": { transform: "translate(3px, 1px) rotate(-1deg)" },
-      "80%": { transform: "translate(-1px, -1px) rotate(1deg)" },
-      "90%": { transform: "translate(1px, 2px) rotate(0deg)" },
-      "100%": { transform: "translate(1px, -2px) rotate(-1deg)" },
-    },
-
     cartBtnShake: {
-      animation: "shake 0.5s",
+      animation: `${shake} 0.5s`,
     },
   };
 });

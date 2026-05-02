@@ -25,6 +25,7 @@ import { PageWrapper } from "../../components/page-wrapper/page-wrapper";
 import { useForm } from "@mantine/form";
 import { createStyles } from "@mantine/emotion";
 import { ProductCard } from "../../components/product-card/product-card";
+import { colors } from "../../constants/theme-constants";
 
 export const ProductListing = () => {
   const navigate = useNavigate();
@@ -126,7 +127,7 @@ export const ProductListing = () => {
 
   if (loading) {
     return (
-      <Container>
+      <Container  fluid className={classes.root}>
         <Skeleton height={28} width={200} mb={4} />
         <Skeleton height={16} width={280} mb="xl" />
         <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="md">
@@ -188,9 +189,9 @@ export const ProductListing = () => {
           createForm.reset();
         }}
         title="Create product"
-        style={{
-          color: `${theme.colors.brand[4]}`,
-          backgroundColor: `${theme.colors.brand[1]}`,
+        styles={{
+          title: { color: colors.text },
+          content: { backgroundColor: colors.background2 }
         }}
       >
         <form onSubmit={createForm.onSubmit(submitCreate)}>
@@ -253,17 +254,17 @@ export const ProductListing = () => {
 const useStyles = createStyles((theme) => {
   return {
     root: {
-      backgroundColor: theme.colors.brand[14],
+      backgroundColor: colors.background4,
       width: "100%",
-      height: "100vh",
-      color: theme.colors.brand[4],
+      minHeight: "100vh",
+      color: colors.text,
       padding: "30px",
     },
 
     categoryCard: {
-      backgroundColor: theme.colors.brand[0],
-      color: theme.colors.brand[4],
-      border: `solid 1px ${theme.colors.brand[2]}`,
+      backgroundColor: colors.background1,
+      color: colors.text,
+      border: `solid 1px ${colors.background3}`,
       cursor: "pointer",
       fontWeight: "lighter",
       borderRadius: 0,
@@ -272,8 +273,8 @@ const useStyles = createStyles((theme) => {
     prodButton: {
       "&:hover": {
         background: "none",
-        borderColor: theme.colors.brand[4],
-        color: theme.colors.brand[4],
+        borderColor: colors.text,
+        color: colors.text,
       },
     },
   };

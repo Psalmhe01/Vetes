@@ -37,6 +37,7 @@ import { useForm } from "@mantine/form";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createStyles } from "@mantine/emotion";
+import { colors } from "../../constants/theme-constants";
 
 export const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -271,13 +272,13 @@ export const ProductDetail = () => {
       <Breadcrumbs mb="xl">
         <Anchor
           onClick={() => navigate("/categories")}
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", color: colors.text }}
         >
           Categories
         </Anchor>
         <Anchor
           onClick={() => navigate(`/categories/${product.categoryId}`)}
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", color: colors.text }}
         >
           Category
         </Anchor>
@@ -340,7 +341,14 @@ export const ProductDetail = () => {
                 onChange={() => setItemSize(size.sizeId)}
                 key={size.id}
               >
-                <Card key={size.id} withBorder radius="md" padding="md" mb="sm" className={classes.radioGroup}>
+                <Card
+                  key={size.id}
+                  withBorder
+                  radius="md"
+                  padding="md"
+                  mb="sm"
+                  className={classes.radioGroup}
+                >
                   <Radio.Card
                     value={String(size.sizeId)}
                     withBorder={false}
@@ -352,7 +360,6 @@ export const ProductDetail = () => {
                         justifyContent: "space-between",
                         alignItems: "center",
                         marginBottom: "8px",
-                        
                       }}
                     >
                       <div
@@ -362,7 +369,13 @@ export const ProductDetail = () => {
                           gap: "8px",
                         }}
                       >
-                        <Radio.Indicator variant="outline" style={{cursor: size.stock === 0 ? "not-allowed" : "pointer"}}/>
+                        <Radio.Indicator
+                          variant="outline"
+                          style={{
+                            cursor:
+                              size.stock === 0 ? "not-allowed" : "pointer",
+                          }}
+                        />
                         <Text fw={500}>{size.sizeName}</Text>
                         <Button
                           size="xs"
@@ -415,10 +428,10 @@ export const ProductDetail = () => {
             align="center"
             justify="space-between"
             style={{
-              border: `solid ${theme.colors.brand[2]} 1px`,
+              border: `solid ${colors.background3} 1px`,
               width: "200px",
               marginBottom: "10px",
-              backgroundColor: `${theme.colors.brand[0]}`,
+              backgroundColor: `${colors.background1}`,
             }}
           >
             <ActionIcon
@@ -502,7 +515,12 @@ export const ProductDetail = () => {
             key={addSizeForm.key("stock")}
             {...addSizeForm.getInputProps("stock")}
           />
-          <Button type="submit" mt="md" fullWidth>
+          <Button
+            type="submit"
+            mt="md"
+            fullWidth
+            className={classes.addToCartBtn}
+          >
             Add size
           </Button>
         </form>
@@ -538,7 +556,12 @@ export const ProductDetail = () => {
             key={addMeasurementForm.key("value")}
             {...addMeasurementForm.getInputProps("value")}
           />
-          <Button type="submit" mt="md" fullWidth>
+          <Button
+            type="submit"
+            mt="md"
+            fullWidth
+            className={classes.addToCartBtn}
+          >
             Add measurement
           </Button>
         </form>
@@ -550,10 +573,14 @@ export const ProductDetail = () => {
 const useStyles = createStyles((theme) => {
   return {
     root: {
-      backgroundColor: theme.colors.brand[14],
+      backgroundColor: colors.background4,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#1A1B1E",
+        color: "#C1C2C5",
+      },
       width: "100%",
-      height: "100vh",
-      color: theme.colors.brand[2],
+      minHeight: "100vh",
+      color: colors.background3,
       paddingTop: "30px",
       paddingBottom: "30px",
       paddingLeft: "60px",
@@ -561,32 +588,37 @@ const useStyles = createStyles((theme) => {
     },
 
     categoryCard: {
-      backgroundColor: theme.colors.brand[0],
-      color: theme.colors.brand[4],
-      border: `solid 1px ${theme.colors.brand[2]}`,
+      backgroundColor: colors.background1,
+      color: colors.text,
+      border: `solid 1px ${colors.background3}`,
       cursor: "pointer",
       fontWeight: "lighter",
       borderRadius: 0,
     },
 
     addToCartBtn: {
-      backgroundColor: theme.colors.brand[2],
-      color: theme.colors.brand[7],
-      "&:hover": {
-        color: theme.colors.brand[4],
-        cursor: "pointer",
-      },
+      backgroundColor: colors.background3,
+      color: colors.buttonText,
+      
     },
 
     breadcrumbColor: {
-      color: theme.colors.brand[2],
+      color: colors.background3,
+      '[data-mantine-color-scheme="dark"] &': {
+        color: "#D4E9CF",
+      },
     },
 
     radioGroup: {
-      backgroundColor: theme.colors.brand[0],
-      border: `solid 1px ${theme.colors.brand[2]}`,
+      backgroundColor: colors.background1,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#2C2E33",
+        borderColor: "#373A40",
+        color: "#C1C2C5",
+      },
+      border: `solid 1px ${colors.background3}`,
       borderRadius: 0,
-      color: theme.colors.brand[2],
-    }
+      color: colors.background3,
+    },
   };
 });
