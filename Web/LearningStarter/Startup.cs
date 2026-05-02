@@ -192,7 +192,7 @@ public class Startup
         var seededProduct1 = new Product
         {
             Name = "Red shirt",
-            Description = "It is a shirt that is red",
+            Description = "This vibrant red crewneck tee is a wardrobe essential, crafted from soft, breathable fabric for all-day comfort. Its classic tailored fit and durable construction make it the perfect versatile staple for layering or wearing on its own.",
             Price = 20,
             CategoryId = dataContext.Set<Category>().First(x => x.Name == "Shirts").Id,
         };
@@ -200,7 +200,7 @@ public class Startup
         var seededProduct2 = new Product
         {
             Name = "Floral Dress",
-            Description = "A mid length dress with flowers on it",
+            Description = "Embrace a cottagecore aesthetic with this floral midi dress, featuring a charming blue-and-white botanical print and whimsical butterfly accents. The sweetheart neckline and puffed sleeves pair with a ruched bodice to create a feminine, timeless silhouette perfect for garden parties or weekend brunches.",
             Price = 50,
             CategoryId = dataContext.Set<Category>().First(x => x.Name == "Dresses").Id,
         };
@@ -208,14 +208,102 @@ public class Startup
         var seededProduct3 = new Product
         {
             Name = "Khaki Pant",
-            Description = "Classic, straight cut khaki pants",
+            Description = "These durable khaki work pants offer a classic straight-leg fit designed for both comfort and utility. Featuring reinforced stitching and deep pockets, they provide a clean, professional look that stands up to the demands of the workday.",
             Price = 30,
             CategoryId = dataContext.Set<Category>().First(x => x.Name == "Pants").Id,
+        };
+
+        var seededProduct4 = new Product
+        {
+            Name = "Silk Blouse",
+            Description = "This elegant champagne silk blouse features a sophisticated pointed collar and a hidden button placket for a seamless, polished look. Its unique empire-waist pleating creates a graceful, flowy drape that adds effortless movement and luxury to any outfit.",
+            Price = 50,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Blouses").Id
+        };
+
+        var seededProduct5 = new Product
+        {
+            Name = "Sheer Black Blouse",
+            Description =
+                "This sophisticated mock-neck blouse features a built-in camisole lining and sheer, dramatic lantern sleeves for a layered look in one piece. Finished with smocked cuffs and a relaxed silhouette, it offers an effortless transition from professional settings to evening events.",
+            Price = 35,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Blouses").Id
+        };
+
+        var seededProduct6 = new Product
+        {
+            Name = "Pink Lace Pants",
+            Description =
+                "These romantic lace wide-leg pants feature an intricate floral pattern and a delicate eyelash lace hem for a touch of bohemian luxury. Designed with a comfortable drawstring waistband, they offer a relaxed yet elevated silhouette that transitions beautifully from lounge to special occasions.",
+            Price = 40,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Pants").Id,
+        };
+
+        var seededProduct7 = new Product
+        {
+            Name = "Asymmetrical Mini Dress",
+            Description =
+                "This vibrant floral mini dress features a delicate camisole neckline and a playful, asymmetrical handkerchief hemline. Its whimsical wildflower print and draped silhouette make it an ideal choice for sun-drenched afternoons or casual summer celebrations.",
+            Price = 40,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Dresses").Id,
+        };
+
+        var seededProduct8 = new Product
+        {
+            Name = "Green Polo",
+            Description =
+                "This printed performance polo features an eye-catching, organic maze pattern in vibrant shades of green. Crafted from a moisture-wicking stretch fabric with a classic three-button placket, it’s designed to provide both bold style and breathable comfort on the golf course or at the weekend BBQ.",
+            Price = 30,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Shirts").Id,
+        };
+
+        var seededProduct9 = new Product
+        {
+            Name = "Boho Maxi Skirt",
+            Description =
+                "This tiered maxi skirt features a classic blue-and-white botanical print that radiates effortless bohemian charm. Designed with a comfortable smocked drawstring waist and a flowy, multi-tiered silhouette, it’s the perfect breezy staple for sunny days and seaside strolls.",
+            Price = 30,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Skirts").Id,
+        };
+
+        var seededProduct10 = new Product
+        {
+            Name = "Skater Skirt",
+            Description =
+                "This vibrant red skater skirt features a structured, high-waisted fit and voluminous box pleats for a dramatic flared silhouette. Crafted from a smooth, mid-weight fabric, it’s a bold statement piece that adds a touch of modern retro charm to any look.",
+            Price = 25,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Skirts").Id,
+        };
+
+        var seededProduct11 = new Product
+        {
+            Name = "Ruffled Short",
+            Description =
+                "These lavender pinstripe shorts feature a charming ruffled hem and a comfortable elastic waistband for an easy, breezy fit. Crafted from a lightweight seersucker-style fabric, they are the perfect playful choice for lounging or warm weather outings.",
+            Price = 20,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Shorts").Id,
+        };
+
+        var seededProduct12 = new Product
+        {
+            Name = "Navy Short",
+            Description = "These navy drawstring shorts are crafted from a lightweight, textured fabric perfect for warm-weather versatility. Featuring a comfortable elastic waistband and a clean, straight-leg fit, they offer an effortless blend of casual comfort and classic style.",
+            Price = 25,
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Shorts").Id,
         };
         
         dataContext.Set<Product>().Add(seededProduct1);
         dataContext.Set<Product>().Add(seededProduct2);
         dataContext.Set<Product>().Add(seededProduct3);
+        dataContext.Set<Product>().Add(seededProduct4);
+        dataContext.Set<Product>().Add(seededProduct5);
+        dataContext.Set<Product>().Add(seededProduct6);
+        dataContext.Set<Product>().Add(seededProduct7);
+        dataContext.Set<Product>().Add(seededProduct8);
+        dataContext.Set<Product>().Add(seededProduct9);
+        dataContext.Set<Product>().Add(seededProduct10);
+        dataContext.Set<Product>().Add(seededProduct11);
+        dataContext.Set<Product>().Add(seededProduct12);
         dataContext.SaveChanges();
     }
 
@@ -327,20 +415,67 @@ public class Startup
         var shirtId = dataContext.Set<Product>().First(x => x.Name == "Red shirt").Id;
         var dressId = dataContext.Set<Product>().First(x => x.Name == "Floral Dress").Id;
         var pantId = dataContext.Set<Product>().First(x => x.Name == "Khaki Pant").Id;
+        var blouseId = dataContext.Set<Product>().First(x => x.Name == "Silk Blouse").Id;
+        var sheerbId = dataContext.Set<Product>().First(x => x.Name == "Sheer Black Blouse").Id;
+        var plpId = dataContext.Set<Product>().First(x => x.Name == "Pink Lace Pants").Id;
+        var asymId = dataContext.Set<Product>().First(x => x.Name == "Asymmetrical Mini Dress").Id;
+        var poloId = dataContext.Set<Product>().First(x => x.Name == "Green Polo").Id;
+        var maxiId = dataContext.Set<Product>().First(x => x.Name == "Boho Maxi Skirt").Id;
+        var skaterId = dataContext.Set<Product>().First(x => x.Name == "Skater Skirt").Id;
+        var ruffId = dataContext.Set<Product>().First(x => x.Name == "Ruffled Short").Id;
+        var navyId = dataContext.Set<Product>().First(x => x.Name == "Navy Short").Id;
+
 
         var productSizesToAdd = new List<ProductSize>
         {
-            new ProductSize { ProductId = shirtId, SizeId = smallId, Stock = 10 },
-            new ProductSize{ ProductId = shirtId, SizeId = mediumId, Stock = 15 },
-            new ProductSize{ ProductId = shirtId, SizeId = largeId, Stock = 5},
+            new ProductSize {ProductId = shirtId, SizeId = smallId, Stock = 10 },
+            new ProductSize{ProductId = shirtId, SizeId = mediumId, Stock = 15 },
+            new ProductSize{ProductId = shirtId, SizeId = largeId, Stock = 5},
             
-            new ProductSize{ ProductId = dressId, SizeId = smallId, Stock = 2},
-            new ProductSize { ProductId = dressId, SizeId = mediumId, Stock = 8},
-            new ProductSize { ProductId = dressId, SizeId = largeId, Stock = 12},
+            new ProductSize{ProductId = dressId, SizeId = smallId, Stock = 2},
+            new ProductSize {ProductId = dressId, SizeId = mediumId, Stock = 8},
+            new ProductSize {ProductId = dressId, SizeId = largeId, Stock = 12},
             
-            new ProductSize{ ProductId = pantId, SizeId = smallId, Stock = 5},
+            new ProductSize{ProductId = pantId, SizeId = smallId, Stock = 5},
             new ProductSize{ProductId = pantId, SizeId = mediumId, Stock = 10},
-            new ProductSize{ProductId = pantId, SizeId = largeId, Stock = 8}
+            new ProductSize{ProductId = pantId, SizeId = largeId, Stock = 8},
+            
+            new ProductSize{ProductId = blouseId, SizeId = smallId, Stock = 10},
+            new ProductSize{ProductId = blouseId, SizeId = mediumId, Stock = 8},
+            new ProductSize{ProductId = blouseId, SizeId = largeId, Stock = 15},
+            
+            new ProductSize{ProductId = sheerbId, SizeId = smallId, Stock = 15},
+            new ProductSize{ProductId = sheerbId, SizeId = mediumId, Stock = 20},
+            new ProductSize{ProductId = sheerbId, SizeId = largeId, Stock = 8},
+            
+            new ProductSize{ProductId = plpId, SizeId = smallId, Stock = 6},
+            new ProductSize{ProductId = plpId, SizeId = mediumId, Stock = 12},
+            new ProductSize{ProductId = plpId, SizeId = largeId, Stock = 20},
+            
+            new ProductSize{ProductId = asymId, SizeId = smallId, Stock = 20},
+            new ProductSize{ProductId = asymId, SizeId = mediumId, Stock = 8},
+            new ProductSize{ProductId = asymId, SizeId = largeId, Stock = 11},
+            
+            new ProductSize{ProductId = poloId, SizeId = smallId, Stock = 18},
+            new ProductSize{ProductId = poloId, SizeId = mediumId, Stock = 20},
+            new ProductSize{ProductId = poloId, SizeId = largeId, Stock = 25},
+            
+            new ProductSize{ProductId = maxiId, SizeId = smallId, Stock = 5},
+            new ProductSize{ProductId = maxiId, SizeId = mediumId, Stock = 12},
+            new ProductSize{ProductId = maxiId, SizeId = largeId, Stock = 8},
+            
+            new ProductSize{ProductId = skaterId, SizeId = smallId, Stock = 20},
+            new ProductSize{ProductId = skaterId, SizeId = mediumId, Stock = 8},
+            new ProductSize{ProductId = skaterId, SizeId = largeId, Stock = 12},
+            
+            new ProductSize{ProductId = ruffId, SizeId = smallId, Stock = 18},
+            new ProductSize{ProductId = ruffId, SizeId = mediumId, Stock = 10},
+            new ProductSize{ProductId = ruffId, SizeId = largeId, Stock = 9},
+            
+            new ProductSize{ProductId = navyId, SizeId = smallId, Stock = 10},
+            new ProductSize{ProductId = navyId, SizeId = mediumId, Stock = 18},
+            new ProductSize{ProductId = navyId, SizeId = largeId, Stock = 20}
+
         };
 
         dataContext.Set<ProductSize>().AddRange(productSizesToAdd);
