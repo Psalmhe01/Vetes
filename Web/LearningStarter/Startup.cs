@@ -44,7 +44,8 @@ public class Startup
 
         services.AddDbContext<DataContext>(options =>
         {
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                sqlServerOptions => sqlServerOptions.CommandTimeout(120));
         });
 
         services.AddIdentity<User, Role>(
@@ -218,7 +219,7 @@ public class Startup
             Name = "Silk Blouse",
             Description = "This elegant champagne silk blouse features a sophisticated pointed collar and a hidden button placket for a seamless, polished look. Its unique empire-waist pleating creates a graceful, flowy drape that adds effortless movement and luxury to any outfit.",
             Price = 50,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Blouse").Id
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Blouses").Id
         };
 
         var seededProduct5 = new Product
@@ -227,7 +228,7 @@ public class Startup
             Description =
                 "This sophisticated mock-neck blouse features a built-in camisole lining and sheer, dramatic lantern sleeves for a layered look in one piece. Finished with smocked cuffs and a relaxed silhouette, it offers an effortless transition from professional settings to evening events.",
             Price = 35,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Blouse").Id
+            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Blouses").Id
         };
 
         var seededProduct6 = new Product
