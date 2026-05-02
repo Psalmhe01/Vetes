@@ -15,6 +15,8 @@ import {
   UserDto,
 } from "../../constants/types";
 import api from "../../config/axios";
+import { createStyles } from "@mantine/emotion";
+import { colors } from "../../constants/theme-constants";
 
 export const RegisterPage = ({
   fetchCurrentUser,
@@ -48,6 +50,8 @@ export const RegisterPage = ({
     },
   });
 
+  const { classes } = useStyles();
+
   const submitUser = async (values: UserCreateUpdateDto) => {
     const response = await api.post<ApiResponse<UserDto>>(`/api/users`, values);
 
@@ -74,9 +78,9 @@ export const RegisterPage = ({
 
   return (
     <PageWrapper>
-      <Container>
+      <Container className={classes.root}>
         <form onSubmit={form.onSubmit(submitUser)}>
-          <Fieldset legend="Personal Information">
+          <Fieldset legend="Personal Information" className={classes.formBox}>
             <TextInput
               withAsterisk
               label="First Name"
@@ -104,7 +108,7 @@ export const RegisterPage = ({
               {...form.getInputProps("phone")}
             />
           </Fieldset>
-          <Fieldset legend="Account Information">
+          <Fieldset legend="Account Information" className={classes.formBox}>
             <TextInput
               withAsterisk
               label="Username"
@@ -145,3 +149,34 @@ export const RegisterPage = ({
     </PageWrapper>
   );
 };
+
+const useStyles = createStyles((theme) => {
+  return {
+    root: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      minHeight: "80vh",
+      justifySelf: "center",
+    },
+
+    formField: {
+      marginBottom: "8px",
+    },
+
+    formBox: {
+      maxWidth: "600px",
+      width: "60vw",
+
+      height: "100%",
+      background: "none",
+      borderColor: colors.text,
+      color: colors.text,
+      '[data-mantine-color-scheme="dark"] &': {
+        borderColor: "#D4E9CF",
+        color: "#C1C2C5",
+      },
+    },
+  };
+});

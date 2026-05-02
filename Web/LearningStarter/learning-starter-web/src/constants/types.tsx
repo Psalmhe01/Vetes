@@ -58,6 +58,14 @@ export type ProductGetDto = {
   sizes: ProductSizeForProductGetDto[];
 };
 
+export type ProductCreateDto = {
+  name: string;
+  description: string;
+  price: number;
+  categoryId: number;
+};
+
+
 export type SizeGetDto = {
   id: number;
   name: string;
