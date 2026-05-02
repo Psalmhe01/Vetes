@@ -118,11 +118,12 @@ export const LandingPage = () => {
               name={product.name}
               price={product.price}
               description={product.description}
-              onClick={() =>
+              onClick={() => {
                 navigate(`/products/${product.id}`, {
                   state: { from: "home" },
-                })
-              }
+                });
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
             />
           ))}
         </SimpleGrid>
