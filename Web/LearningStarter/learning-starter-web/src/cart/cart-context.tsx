@@ -68,7 +68,12 @@ export const CartProvider = (props: any) => {
           `/api/cart/${id}`,
         );
         if (response.data.hasErrors) {
-          showNotification({ message: "Error fetching cart.", color: "red" });
+          showNotification({
+            message: "Error fetching cart.",
+            color: "red",
+            position: "top-center",
+            style: { backgroundColor: "#E9CFCF" },
+          });
           navigate("/home");
         }
 
@@ -80,7 +85,12 @@ export const CartProvider = (props: any) => {
           setCart(response.data.data);
         }
       } catch (error) {
-        showNotification({ message: "Error fetching cart.", color: "red" });
+        showNotification({
+          message: "Error fetching cart.",
+          color: "red",
+          position: "top-center",
+          style: { backgroundColor: "#E9CFCF" },
+        });
         navigate("/home");
       } finally {
         setLoading(false);
@@ -95,7 +105,12 @@ export const CartProvider = (props: any) => {
       );
 
       if (response.data.hasErrors) {
-        showNotification({ message: "Error deleting cart item", color: "red" });
+        showNotification({
+          message: "Error deleting cart item",
+          color: "red",
+          position: "top-center",
+          style: { backgroundColor: "#E9CFCF" },
+        });
         return;
       }
 
@@ -107,9 +122,19 @@ export const CartProvider = (props: any) => {
         };
       });
 
-      showNotification({ message: "Item removed from cart", color: "green" });
+      showNotification({
+        message: "Item removed from cart",
+        color: "green",
+        position: "top-center",
+        style: { backgroundColor: "#D4E9CF" },
+      });
     } catch (error) {
-      showNotification({ message: "Error deleting cart item", color: "red" });
+      showNotification({
+        message: "Error deleting cart item",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
     }
   }
 
@@ -129,6 +154,8 @@ export const CartProvider = (props: any) => {
         showNotification({
           message: "Error updating this cart item",
           color: "red",
+          position: "top-center",
+          style: { backgroundColor: "#E9CFCF" },
         });
 
         return;
@@ -145,7 +172,12 @@ export const CartProvider = (props: any) => {
         };
       });
     } catch (error) {
-      showNotification({ message: "Error updating cart item", color: "red" });
+      showNotification({
+        message: "Error updating cart item",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
     }
   }
 
@@ -159,15 +191,30 @@ export const CartProvider = (props: any) => {
         updatedAt,
       });
       if (response.data.hasErrors) {
-        showNotification({ message: "Error fetching cart.", color: "red" });
+        showNotification({
+          message: "Error fetching cart.",
+          color: "red",
+          position: "top-center",
+          style: { backgroundColor: "#E9CFCF" },
+        });
         navigate("/home");
       }
 
       if (response.data.data) {
-        showNotification({ message: "Cart created", color: "green" });
+        showNotification({
+          message: "Cart created",
+          color: "green",
+          position: "top-center",
+          style: { backgroundColor: "#D4E9CF" },
+        });
       }
     } catch (error) {
-      showNotification({ message: "Error creating cart.", color: "red" });
+      showNotification({
+        message: "Error creating cart.",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
     }
   }
 
@@ -180,6 +227,8 @@ export const CartProvider = (props: any) => {
         showNotification({
           message: "Error fetching product size.",
           color: "red",
+          position: "top-center",
+          style: { backgroundColor: "#E9CFCF" },
         });
         return;
       }
@@ -189,7 +238,12 @@ export const CartProvider = (props: any) => {
         return foundId;
       }
     } catch (error) {
-      showNotification({ message: "Error creating cart.", color: "red" });
+      showNotification({
+        message: "Error creating cart.",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
     }
   }
 
@@ -219,25 +273,39 @@ export const CartProvider = (props: any) => {
           showNotification({
             message: "Error adding item to cart.",
             color: "red",
+            position: "top-center",
+            style: { backgroundColor: "#E9CFCF" },
           });
           navigate("/home");
         }
 
         if (response.data.data) {
-          showNotification({ message: "Item added to cart!", color: "green" });
+          showNotification({
+            message: "Item added to cart!",
+            color: "green",
+            position: "top-center",
+            style: { backgroundColor: "#D4E9CF" },
+          });
           const finalCart = await api.get<ApiResponse<CartGetDto>>(
             `/api/cart/${id}`,
           );
           setCart(finalCart.data.data);
         }
+      } else {
+        updateCartProductImpl(
+          findItem[0].id,
+          findItem[0].quantity + quantity,
+          findItem[0].productSizeId,
+          initialCart.data.data.id,
+        );
       }
-
-      else {
-        updateCartProductImpl(findItem[0].id, (findItem[0].quantity + quantity), findItem[0].productSizeId, initialCart.data.data.id);
-      }
-
     } catch (error) {
-      showNotification({ message: "Error adding item to cart.", color: "red" });
+      showNotification({
+        message: "Error adding item to cart.",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
     }
   }
 
@@ -250,6 +318,8 @@ export const CartProvider = (props: any) => {
         showNotification({
           message: "Error updating this cart item",
           color: "red",
+          position: "top-center",
+          style: { backgroundColor: "#E9CFCF" },
         });
       }
 
@@ -257,7 +327,12 @@ export const CartProvider = (props: any) => {
         return response.data.data.productId;
       }
     } catch (error) {
-      showNotification({ message: "Error finding product", color: "red" });
+      showNotification({
+        message: "Error finding product",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
       return 1;
     }
   }

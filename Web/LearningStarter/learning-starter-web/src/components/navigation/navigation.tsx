@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { routes } from "../../routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faSun, faMoon, faM, faUser, faBagShopping, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSun,
+  faMoon,
+  faM,
+  faUser,
+  faBagShopping,
+  faArrowRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Menu,
   Image,
@@ -11,6 +18,7 @@ import {
   useMantineColorScheme,
   Button,
   Flex,
+  Box,
   Text,
   Avatar,
   Title,
@@ -18,12 +26,13 @@ import {
   Burger,
   Divider,
 } from "@mantine/core";
+import { colors, NAVBAR_HEIGHT } from "../../constants/theme-constants";
 import {
-  colors,
-  NAVBAR_HEIGHT,
-  NAVBAR_HEIGHT_NUMBER,
-} from "../../constants/theme-constants";
-import { NavLink, NavLinkProps, useLocation, useNavigate } from "react-router-dom";
+  NavLink,
+  NavLinkProps,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { UserDto } from "../../constants/types";
 import { useAuth } from "../../authentication/use-auth";
@@ -158,40 +167,46 @@ const DesktopNavigation = () => {
 const BurgerNavigation = () => {
   const burgerItems = navigation.filter(
     (item): item is NavigationItem & { nav: NavLinkProps } =>
-      !item.hide && item.nav !== undefined
+      !item.hide && item.nav !== undefined,
   );
   const [opened, { toggle, close }] = useDisclosure();
 
   return (
     <>
-    {opened && <Overlay onClick={close} />}
-    <Menu
-      opened={opened}
-      onChange={(o) => (o ? toggle() : close())}
-      trigger="click"
-      radius={0}
-      position="bottom"
-      offset={15}
-      transitionProps={{ transition: 'fade-down', duration: 150 }}
-      width="100vw"
-    >
-      <Menu.Target>
-        <Burger opened={opened} onClick={toggle} />
-      </Menu.Target>
+      {opened && <Overlay onClick={close} />}
+      <Menu
+        opened={opened}
+        onChange={(o) => (o ? toggle() : close())}
+        trigger="click"
+        radius={0}
+        position="bottom"
+        offset={15}
+        transitionProps={{ transition: "fade-down", duration: 150 }}
+        width="100vw"
+      >
+        <Menu.Target>
+          <Burger opened={opened} onClick={toggle} />
+        </Menu.Target>
 
-      <Menu.Dropdown style={{ left: 0 }}>
-        {burgerItems.map((x) => {
-          return (
-            <Menu.Item key={`${x.text}`} to={x.nav.to} component={NavLink} onClick={close}>
-              <Text size="sm" ta="center">
-                {x.icon && <FontAwesomeIcon icon={x.icon} />} {x.text}
-              </Text>
-            </Menu.Item>
-          );
-        })}
-      </Menu.Dropdown>
-    </Menu>
-  </>);
+        <Menu.Dropdown style={{ left: 0 }}>
+          {burgerItems.map((x) => {
+            return (
+              <Menu.Item
+                key={`${x.text}`}
+                to={x.nav.to}
+                component={NavLink}
+                onClick={close}
+              >
+                <Text size="sm" ta="center">
+                  {x.icon && <FontAwesomeIcon icon={x.icon} />} {x.text}
+                </Text>
+              </Menu.Item>
+            );
+          })}
+        </Menu.Dropdown>
+      </Menu>
+    </>
+  );
 };
 
 export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
@@ -204,9 +219,10 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
   const [opened, { open, close }] = useDisclosure(false);
   const dark = colorScheme === "dark";
   const navigate = useNavigate();
+
   return (
-    <Title order={4}  className={classes.desktopNav}>
-      <Container px={20} fluid >
+    <Box component="header" className={classes.desktopNav}>
+      <Container px={20} fluid>
         <Flex direction="row" justify="space-between" align="center">
           <Group>
             <Flex direction="row" align="center">
@@ -221,20 +237,27 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
                   alt="logo"
                 />
               </NavLink>
-              
             </Flex>
           </Group>
-          <Group>
-            {user && !isMobile && <DesktopNavigation />}
-          </Group>
+          <Group>{user && !isMobile && <DesktopNavigation />}</Group>
           <Group maw={250} justify="space-around" gap="md">
             {isMobile && <BurgerNavigation />}
-                <Button onClick={() => toggleColorScheme()} variant="subtle" radius="xl" size="auto">
-                  {dark ? <FontAwesomeIcon icon={faSun}/> : <FontAwesomeIcon icon={faMoon}/>}
-                </Button>
-                {user && <SideCart />}
+            <Button
+              onClick={() => toggleColorScheme()}
+              variant="subtle"
+              radius="xl"
+              size="auto"
+              className={classes.paddedMenuItem}
+            >
+              {dark ? (
+                <FontAwesomeIcon icon={faSun} />
+              ) : (
+                <FontAwesomeIcon icon={faMoon} />
+              )}
+            </Button>
+            {user && <SideCart />}
             {user && (
-              <Menu >
+              <Menu>
                 <Menu.Target>
                   <Avatar className={classes.pointer}>
                     {user.firstName.substring(0, 1)}
@@ -242,24 +265,26 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
                   </Avatar>
                 </Menu.Target>
                 <Menu.Dropdown className={classes.menu}>
-                  <Menu.Item 
-                    onClick={() => navigate(routes.user)} 
-                    leftSection={<FontAwesomeIcon icon={faUser} />} 
+                  <Menu.Item
+                    onClick={() => navigate(routes.user)}
+                    leftSection={<FontAwesomeIcon icon={faUser} />}
                     className={classes.menuItem}
                   >
-                      My Profile
+                    My Profile
                   </Menu.Item>
-                  <Menu.Item 
-                    leftSection={<FontAwesomeIcon icon={faBagShopping} />} 
+                  <Menu.Item
+                    leftSection={<FontAwesomeIcon icon={faBagShopping} />}
                     className={classes.menuItem}
                   >
-                      My Orders
+                    My Orders
                   </Menu.Item>
                   <Divider />
-                  <Menu.Item 
+                  <Menu.Item
                     onClick={() => logout()}
                     className={classes.menuItem}
-                    leftSection={<FontAwesomeIcon icon={faArrowRightFromBracket} />}
+                    leftSection={
+                      <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                    }
                   >
                     Sign Out
                   </Menu.Item>
@@ -269,7 +294,7 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
           </Group>
         </Flex>
       </Container>
-    </Title>
+    </Box>
   );
 };
 
@@ -286,21 +311,27 @@ const useStyles = createStyles((theme) => {
     },
     paddedMenuItem: {
       margin: "0px 5px 0px 5px",
+      color: colors.background1,
+      backgroundColor: "none",
+      "&:hover": {
+        color: colors.buttonText,
+        background: "none",
+      }
+    },
+    menuIcons: {
+      color: colors.background2,
     },
     linkActive: {
       "&, &:hover": {
-        backgroundColor: theme.variantColorResolver({
+          color: theme.variantColorResolver({
           theme: theme,
-          color: theme.primaryColor,
-          variant: "light",
-        }).background,
-        color: theme.variantColorResolver({
-          theme: theme,
-          color: theme.primaryColor,
+          color: colors.buttonText,
           variant: "light",
         }).color,
       },
+      background: "none",
     },
+
     desktopNav: {
       height: NAVBAR_HEIGHT,
       position: "fixed",
@@ -309,25 +340,34 @@ const useStyles = createStyles((theme) => {
       width: "100%",
       zIndex: 1,
       backgroundColor: colors.background3,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#0D1B2A",
+      },
       alignContent: "center",
-      
     },
+
     fullHeight: {
       height: "100%",
     },
 
     menu: {
       backgroundColor: colors.background1,
+      '[data-mantine-color-scheme="dark"] &': {
+        backgroundColor: "#2C2E33",
+      },
       borderRadius: 0,
     },
 
     menuItem: {
       color: colors.text,
       borderRadius: 0,
-      ":hover": {
+      "&:hover": {
         color: colors.button2HoverText,
         background: colors.button2Hover,
-      }
-    }
+        '[data-mantine-color-scheme="dark"] &': {
+          background: "#373A40",
+        },
+      },
+    },
   };
 });
