@@ -47,25 +47,25 @@ export const CartPage = () => {
       {!userCart.loading && cart && cart.products.length > 0 && (
         <>
           <Table withTableBorder striped>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Name</Table.Th>
+                <Table.Th>Size</Table.Th>
+                <Table.Th>Price</Table.Th>
+                <Table.Th>Quantity</Table.Th>
+                <Table.Th>Subtotal</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
               {cart.products.map((item) => {
                 return (
-                  <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.size}</td>
-                    <td>{item.price.toFixed(2)}</td>
-                    <td>{item.quantity}</td>
-                    <td>{(item.price * item.quantity).toFixed(2)}</td>
-                    <td>
+                  <Table.Tr key={item.id}>
+                    <Table.Td>{item.name}</Table.Td>
+                    <Table.Td>{item.size}</Table.Td>
+                    <Table.Td>{item.price.toFixed(2)}</Table.Td>
+                    <Table.Td>{item.quantity}</Table.Td>
+                    <Table.Td>{(item.price * item.quantity).toFixed(2)}</Table.Td>
+                    <Table.Td>
                       <Group gap="xs">
                         <ActionIcon
                           variant="light"
@@ -98,11 +98,11 @@ export const CartPage = () => {
                           <IconTrash size={16} />
                         </ActionIcon>
                       </Group>
-                    </td>
-                  </tr>
+                    </Table.Td>
+                  </Table.Tr>
                 );
               })}
-            </tbody>
+            </Table.Tbody>
           </Table>
 
           <Space h="md" />
