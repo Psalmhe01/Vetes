@@ -137,7 +137,10 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseEndpoints(x => x.MapControllers());
+        app.UseEndpoints(x =>
+        {
+            x.MapControllers();
+        });
 
         app.UseSpa(spa =>
         {

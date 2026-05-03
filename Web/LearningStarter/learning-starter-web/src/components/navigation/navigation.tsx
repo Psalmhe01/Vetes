@@ -273,6 +273,7 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
                     My Profile
                   </Menu.Item>
                   <Menu.Item
+                    onClick = {() => navigate(routes.orderPage)}
                     leftSection={<FontAwesomeIcon icon={faBagShopping} />}
                     className={classes.menuItem}
                   >

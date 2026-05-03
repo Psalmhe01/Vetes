@@ -138,3 +138,11 @@ export type CartProductCreateUpdateDto = {
   productSizeId: number;
   quantity: number;
 };
+
+export type OrdersGetDto = {
+  id: number;
+  userId: number;
+  status: string;
+  createdAt: string;
+  shippingAddressId: number;
+};
