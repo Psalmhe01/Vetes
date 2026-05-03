@@ -224,82 +224,70 @@ export const CartPage = () => {
       )}
 
       {!userCart.loading && cart && cart.products.length > 0 && (
-        <>
-          <Table withTableBorder striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Name</Table.Th>
-                <Table.Th>Size</Table.Th>
-                <Table.Th>Price</Table.Th>
-                <Table.Th>Quantity</Table.Th>
-                <Table.Th>Subtotal</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {cart.products.map((item) => {
-                return (
-                  <Table.Tr key={item.id}>
-                    <Table.Td>{item.name}</Table.Td>
-                    <Table.Td>{item.size}</Table.Td>
-                    <Table.Td>{item.price.toFixed(2)}</Table.Td>
-                    <Table.Td>{item.quantity}</Table.Td>
-                    <Table.Td>{(item.price * item.quantity).toFixed(2)}</Table.Td>
-                    <Table.Td>
-                      <Group gap="xs">
-                        <ActionIcon
-                          variant="light"
-                          onClick={() =>{
-                              const newQuantity = item.quantity - 1;
-                              if (newQuantity== 0) {
-                                userCart.deleteCartProduct(item.id)
-                              }
-                              else userCart.updateCartProduct(item.id, newQuantity, item.productSizeId, cart.id)
-                            }
-                          }
-                        >
-                          <IconMinus size={16} />
-                        </ActionIcon>
+        <Flex
+          direction={{ base: "column", lg: "row" }}
+          gap="xl"
+          align="flex-start"
+        >
+          <Stack style={{ flex: 1 }} gap={0}>
+            <Title order={2} mb="md">
+              Cart
+            </Title>
+            {cart.products.map((product) => (
+              <CartItem
+                key={product.id}
+                product={product}
+                cartId={cart.id}
+                userCart={userCart}
+                handleNavigate={handleNavigate}
+              />
+            ))}
+          </Stack>
 
-                        <ActionIcon
-                          variant="light"
-                          onClick={() =>
-                            userCart.updateCartProduct(item.id, item.quantity + 1, item.productSizeId, cart.id)
-                          }
-                        >
-                          <IconPlus size={16} />
-                        </ActionIcon>
-
-                        <ActionIcon
-                          color="red"
-                          variant="light"
-                          onClick={() => userCart.deleteCartProduct(item.id)}
-                        >
-                          <IconTrash size={16} />
-                        </ActionIcon>
-                      </Group>
-                    </Table.Td>
-                  </Table.Tr>
-                );
-              })}
-            </Table.Tbody>
-          </Table>
-
-          <Space h="md" />
-
-          <Text fw={700}>Total: ${total.toFixed(2)}</Text>
-
-          <Space h="md" />
-
-          <Group>
-            <Button onClick={() => navigate(routes.productListing)}>
-              Continue Shopping
-            </Button>
-
-            <Button color="green" onClick={() => navigate(routes.checkoutPage)}>
-              Checkout
-            </Button>
-          </Group>
-        </>
+          <Stack style={{ flex: 1 }} gap={0}>
+            <Title order={3} mb="md">
+              Order Summary
+            </Title>
+            <Divider my="md" color="brand.9" />
+            <Group justify="space-between" mb="xs">
+              <Text size="lg">Subtotal ({totalItems} items)</Text>
+              <Text size="lg" fw={700}>
+                ${total.toFixed(2)}
+              </Text>
+            </Group>
+            <Group justify="space-between" mb="xs">
+              <Text size="lg">Delivery Fee</Text>
+              <Text size="lg" fw={700}>
+                FREE
+              </Text>
+            </Group>
+            <Divider my="md" />
+            <Group justify="space-between" mb="xs">
+              <Title order={3} >Total</Title>
+              <Title order={3}  fw={700}>
+                ${total.toFixed(2)}
+              </Title>
+            </Group>
+            <Divider my="md" />
+            <Stack>
+              <Button
+                color="green.9"
+                fullWidth
+                onClick={() => navigate(routes.checkoutPage)}
+              >
+                Checkout
+              </Button>
+              <Button
+                variant="outline"
+                color="brand.9"
+                fullWidth
+                onClick={() => navigate(routes.productListing)}
+              >
+                Continue Shopping
+              </Button>
+            </Stack>
+          </Stack>
+        </Flex>
       )}
     </Container>
   );
