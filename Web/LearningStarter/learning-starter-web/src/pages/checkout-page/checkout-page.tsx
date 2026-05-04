@@ -44,10 +44,14 @@ export const CheckoutPage = () => {
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     "new",
   );
+  const [selectedIds] = useState<number[]>(() => {
+    const saved = localStorage.getItem("selected-cart-items");
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  const total =
-    cart?.products.reduce((sum, item) => sum + item.price * item.quantity, 0) ??
-    0;
+  const selectedProducts = cart?.products.filter((p) => selectedIds.includes(p.id)) ?? [];
+
+  const total = selectedProducts.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const [form, setForm] = useState({
     addressLine1: "",
@@ -169,28 +173,26 @@ export const CheckoutPage = () => {
 
       const orderId = orderResponse.data.data.id;
 
-      if (cart) {
-        for (const item of cart.products) {
-          const orderProductResponse = await api.post<ApiResponse<any>>(
-            "/api/order-products",
-            {
-              orderId,
-              productSizeId: item.productSizeId,
-              quantity: item.quantity,
-              price: item.price,
-            },
-          );
+      for (const item of selectedProducts) {
+        const orderProductResponse = await api.post<ApiResponse<any>>(
+          "/api/order-products",
+          {
+            orderId,
+            productSizeId: item.productSizeId,
+            quantity: item.quantity,
+            price: item.price,
+          },
+        );
 
-          if (orderProductResponse.data.hasErrors) {
-            showNotification({
-              message: `Error adding ${item.name} to order.`,
-              color: "red",
-              position: "top-center",
-              style: { backgroundColor: "#E9CFCF" },
-            });
-            setLoading(false);
-            return;
-          }
+        if (orderProductResponse.data.hasErrors) {
+          showNotification({
+            message: `Error adding ${item.name} to order.`,
+            color: "red",
+            position: "top-center",
+            style: { backgroundColor: "#E9CFCF" },
+          });
+          setLoading(false);
+          return;
         }
       }
 
@@ -240,7 +242,11 @@ export const CheckoutPage = () => {
         return;
       }
 
-      await userCart.clearCart();
+      for (const id of selectedIds) {
+        await userCart.deleteCartProduct(id);
+      }
+
+      localStorage.removeItem("selected-cart-items");
 
       showNotification({
         message: "Order placed successfully",
@@ -284,15 +290,16 @@ export const CheckoutPage = () => {
       <Space h="md" />
       <Title order={4}>Order summary</Title>
       <Space h="sm" />
-      {cart && cart.products.length > 0 ? (
+      {selectedProducts.length > 0 ? (
         <>
-          {cart.products.map((item) => (
+          {selectedProducts.map((item) => (
             <CartItem
               key={item.id}
               product={item}
-              cartId={cart.id}
+              cartId={cart!.id}
               userCart={userCart}
               handleNavigate={handleNavigate}
+              hideCheckbox
             />
           ))}
 
