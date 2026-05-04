@@ -44,7 +44,8 @@ public class Startup
 
         services.AddDbContext<DataContext>(options =>
         {
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                sqlServerOptions => sqlServerOptions.CommandTimeout(120));
         });
 
         services.AddIdentity<User, Role>(
@@ -136,7 +137,10 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseEndpoints(x => x.MapControllers());
+        app.UseEndpoints(x =>
+        {
+            x.MapControllers();
+        });
 
         app.UseSpa(spa =>
         {
