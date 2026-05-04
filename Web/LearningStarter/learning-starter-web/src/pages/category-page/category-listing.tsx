@@ -135,7 +135,10 @@ export const CategoryListing = () => {
               radius="md"
               padding="lg"
               className={classes.categoryCard}
-              onClick={() => navigate(`/categories/${category.id}`)}
+              onClick={() => {
+                navigate(`/categories/${category.id}`);
+                window.scrollTo(0, 0);
+              }}
             >
               <Text fw={500} mb={4}>
                 {category.name}

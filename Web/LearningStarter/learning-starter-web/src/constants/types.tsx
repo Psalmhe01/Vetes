@@ -65,7 +65,6 @@ export type ProductCreateDto = {
   categoryId: number;
 };
 
-
 export type SizeGetDto = {
   id: number;
   name: string;
@@ -109,7 +108,7 @@ export type CartProductCreateDto = {
 
 export type CategoryCreateUpdateDto = {
   name: string;
-}
+};
 
 export type UserCreateUpdateDto = {
   firstname: string;
@@ -145,4 +144,15 @@ export type OrdersGetDto = {
   status: string;
   createdAt: string;
   shippingAddressId: number;
+};
+
+export type ShippingAddressesGetDto = {
+  id: number;
+  userId: number;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
 };
