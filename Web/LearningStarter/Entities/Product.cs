@@ -15,6 +15,7 @@ public class Product
     public Category Category { get; set; }
     public List<ProductSize> Sizes { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
+    public List<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 }
 
 public class ProductGetDto
@@ -25,6 +26,7 @@ public class ProductGetDto
     public decimal Price { get; set; }
     public int CategoryId { get; set; }
     public List<ProductSizeForProductGetDto> Sizes { get; set; }
+    public List<ProductImagesGetDto> ProductImages { get; set; }
 }
 
 public class ProductCreateDto

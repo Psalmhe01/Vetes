@@ -173,6 +173,10 @@ export const ProductListing = () => {
               name={product.name}
               price={product.price}
               description={product.description}
+              imageUrl = {product.productImages && product.productImages.length > 0
+                ? product.productImages[0].imageUrl : ""
+              }
+              onClick={() =>
               onClick={() => {
                 navigate(`/products/${product.id}`, {
                   state: { from: "home" },

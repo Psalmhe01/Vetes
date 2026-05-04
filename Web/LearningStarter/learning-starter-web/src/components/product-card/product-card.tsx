@@ -1,4 +1,4 @@
-import { Card, Text } from "@mantine/core";
+import { Card, Text, Image } from "@mantine/core";
 import { createStyles } from "@mantine/emotion";
 import { colors } from "../../constants/theme-constants";
 
@@ -6,6 +6,7 @@ type ProductCardProps = {
   name: string;
   price: number;
   description?: string;
+  imageUrl?: string;
   onClick?: () => void | Promise<void>;
 };
 
@@ -13,6 +14,7 @@ export const ProductCard = ({
   name,
   price,
   description,
+  imageUrl,
   onClick,
 }: ProductCardProps) => {
   const { classes } = useStyles();
@@ -34,11 +36,16 @@ export const ProductCard = ({
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: colors.background2,
+            overflow: "hidden"
           }}
         >
-          <Text c="dimmed" size="sm">
-            Image coming soon
-          </Text>
+        <Image
+          src = {imageUrl || "https://placehold.co/400x400?text=No+Image"}
+          alt = {name}
+          height = {180}
+          fit = "contain"
+        />
+        
         </div>
       </Card.Section>
 

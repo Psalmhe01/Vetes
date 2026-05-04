@@ -163,6 +163,7 @@ public class Startup
         SeedMeasurementTypes(dataContext);
         SeedMeasurementCategories(dataContext); 
         SeedProductSizes(dataContext);
+        SeedProductImages(dataContext);
         SeedPaymentStatuses(dataContext);
 
     }
@@ -504,6 +505,47 @@ public class Startup
     
         dataContext.Set<PaymentStatus>().AddRange(statuses);
         dataContext.SaveChanges();
+    }
+    
+    public static void SeedProductImages(DataContext dataContext)
+    {
+        if (dataContext.Set<ProductImage>().Any())
+        {
+            return;
+        }
+        
+        var shirtId = dataContext.Set<Product>().First(x => x.Name == "Red shirt").Id;
+        var dressId = dataContext.Set<Product>().First(x => x.Name == "Floral Dress").Id;
+        var pantId = dataContext.Set<Product>().First(x => x.Name == "Khaki Pant").Id;
+        var blouseId = dataContext.Set<Product>().First(x => x.Name == "Silk Blouse").Id;
+        var sheerbId = dataContext.Set<Product>().First(x => x.Name == "Sheer Black Blouse").Id;
+        var plpId = dataContext.Set<Product>().First(x => x.Name == "Pink Lace Pants").Id;
+        var asymId = dataContext.Set<Product>().First(x => x.Name == "Asymmetrical Mini Dress").Id;
+        var poloId = dataContext.Set<Product>().First(x => x.Name == "Green Polo").Id;
+        var maxiId = dataContext.Set<Product>().First(x => x.Name == "Boho Maxi Skirt").Id;
+        var skaterId = dataContext.Set<Product>().First(x => x.Name == "Skater Skirt").Id;
+        var ruffId = dataContext.Set<Product>().First(x => x.Name == "Ruffled Short").Id;
+        var navyId = dataContext.Set<Product>().First(x => x.Name == "Navy Short").Id;
+
+        var ProductImagestoAdd = new List<ProductImage>
+        {
+            new ProductImage{ProductId = sheerbId, ImageUrl = "https://www.lehistorique.com/cdn/shop/files/blacksheerchiffonblousewithballoonsleevesandsmockedcuffs_00.jpg" },
+            new ProductImage{ProductId = dressId, ImageUrl = "https://img01.ztat.net/article/spp-media-p1/9f347d0b9a464558a2e01190d5b93658/37ec4e9a4ac64835a7b10ebaf7c0a060.jpg"},
+            new ProductImage{ProductId = maxiId, ImageUrl = "https://karmaeast.com.au/cdn/shop/files/Maxi-Skirt-Isha-Front.jpg"},
+            new ProductImage{ProductId = poloId, ImageUrl = "https://images-na.ssl-images-amazon.com/images/I/81CP8XMC7-L._AC_UL600_SR600,600_.jpg"},
+            new ProductImage{ProductId = pantId, ImageUrl = "https://beckersafety.com/cdn/shop/files/LAKELAND-FR-Men_s-FR-Light-Weight-Pants_-Khaki_-LAKELAND-2191324.jpg"},
+            new ProductImage{ProductId = navyId, ImageUrl = "https://www.fairharborclothing.com/cdn/shop/files/ONL8_412_Classic-Navy_01.webp"},
+            new ProductImage{ProductId = plpId, ImageUrl = "https://flannelamerica.com/cdn/shop/files/TILLY_PANT_ROUGE.jpg" },
+            new ProductImage{ProductId = ruffId, ImageUrl = "https://overthemoon.com/cdn/shop/files/SP25purpshorts_BW1_5595be0c-ecfa-4c54-8676-aa30ed84fda7_1024x1024.png"},
+            new ProductImage{ProductId = shirtId, ImageUrl = "https://media.istockphoto.com/id/518044561/photo/red-t-shirt-isolated-on-white-background.jpg"},
+            new ProductImage{ProductId = skaterId, ImageUrl = "https://st3.depositphotos.com/1239654/17302/i/450/depositphotos_173025798-stock-photo-red-skirt-white-background.jpg"},
+            new ProductImage{ProductId = asymId, ImageUrl = "https://img104.urbanic.com/goods-pic/1a59efc64caf40769371042e07c9f5bb_w540_h720_q85.webp"},
+            new ProductImage{ProductId = blouseId, ImageUrl = "https://thumbs.dreamstime.com/b/women-s-silk-beige-blouse-isolated-white-women-s-silk-beige-blouse-isolated-white-background-126170331.jpg"}
+        };
+
+        dataContext.Set<ProductImage>().AddRange(ProductImagestoAdd);
+        dataContext.SaveChanges();
+        
     }
 
     private static async Task SeedUsers(DataContext dataContext, UserManager<User> userManager)

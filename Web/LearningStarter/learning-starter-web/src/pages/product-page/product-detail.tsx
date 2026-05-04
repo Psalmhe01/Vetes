@@ -18,6 +18,8 @@ import {
   NumberInputHandlers,
   Radio,
   useMantineTheme,
+  Image,
+  Center
 } from "@mantine/core";
 import { PageWrapper } from "../../components/page-wrapper/page-wrapper";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -290,16 +292,29 @@ export const ProductDetail = () => {
           <Card
             withBorder
             radius="md"
+            p={0} // Adding p={0} makes the image go to the edges of the card
             style={{
-              height: "400px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+            height: "400px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden" // Keeps the image from "bleeding" over the rounded corners
             }}
           >
+          {/* 1. Check if product exists. 2. Check if the images list has items */}
+          {product?.productImages && product.productImages.length > 0 ? (
+            <Image
+              src={product.productImages[0].imageUrl}
+              alt={product.name}
+              height={400}
+              fit="contain" // This ensures the whole shirt/dress is visible without cropping
+            />
+          ) : (
+          /* This is your fallback if a product has no images seeded */
             <Text c="dimmed" size="sm">
               Product image coming soon
             </Text>
+          )}
           </Card>
         </Grid.Col>
 
