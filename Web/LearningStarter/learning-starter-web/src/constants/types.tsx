@@ -49,6 +49,12 @@ export type ProductSizeGetDto = {
   productPrice: number;
 };
 
+export type ProductImagesGetDto = {
+  id: number;
+  productId: number;
+  imageUrl: string;
+};
+
 export type ProductGetDto = {
   id: number;
   name: string;
@@ -56,6 +62,7 @@ export type ProductGetDto = {
   price: number;
   categoryId: number;
   sizes: ProductSizeForProductGetDto[];
+  productImages: ProductImagesGetDto[];
 };
 
 export type ProductCreateDto = {

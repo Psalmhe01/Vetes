@@ -36,6 +36,11 @@ public class ProductsController : ControllerBase
                     SizeName = x.Size.Name,
                     SizeId = x.SizeId,
                     Stock = x.Stock
+                }).ToList(),
+                ProductImages = product.ProductImages.Select(pi => new ProductImagesGetDto {
+                    Id = pi.Id,
+                    ProductId = pi.ProductId,
+                    ImageUrl = pi.ImageUrl
                 }).ToList()
             }).ToList();
 
@@ -70,6 +75,12 @@ public class ProductsController : ControllerBase
                         MeasurementTypeUnit = m.MeasurementType.Unit,
                         Value = m.Value
                     }).ToList()
+                }).ToList(),
+                ProductImages = product.ProductImages.Select(pi => new ProductImagesGetDto
+                {
+                    Id = pi.Id,
+                    ProductId = pi.ProductId,
+                    ImageUrl = pi.ImageUrl
                 }).ToList()
             })
             .FirstOrDefault(x => x.Id == id);
