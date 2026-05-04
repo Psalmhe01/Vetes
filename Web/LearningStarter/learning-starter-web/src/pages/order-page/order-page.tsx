@@ -178,7 +178,7 @@ const useStyles = createStyles((theme) => {
         color: "#C1C2C5",
       },
       width: "100%",
-      minHeight: "100vh", // Use minHeight instead of height to allow scrolling
+      minHeight: "100vh",
       color: colors.background3,
       paddingTop: "30px",
       paddingBottom: "60px",

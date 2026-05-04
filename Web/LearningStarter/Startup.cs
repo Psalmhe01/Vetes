@@ -198,7 +198,7 @@ public class Startup
 
         var seededProduct1 = new Product
         {
-            Name = "Red shirt",
+            Name = "Red Shirt",
             Description = "This vibrant red crewneck tee is a wardrobe essential, crafted from soft, breathable fabric for all-day comfort. Its classic tailored fit and durable construction make it the perfect versatile staple for layering or wearing on its own.",
             Price = 20,
             CategoryId = dataContext.Set<Category>().First(x => x.Name == "Shirts").Id,
