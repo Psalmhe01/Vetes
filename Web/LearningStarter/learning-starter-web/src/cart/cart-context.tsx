@@ -37,6 +37,7 @@ type CartState = {
     cartId: number,
     quantity: number,
   ) => Promise<void>;
+  clearCart: () => Promise<void>;
 };
 
 const INITIAL_STATE: CartState = {
@@ -49,6 +50,7 @@ const INITIAL_STATE: CartState = {
   findProduct: undefined as any,
   findProductSizeId: undefined as any,
   addToCart: undefined as any,
+  clearCart: undefined as any,
 };
 
 export const CartContext = createContext<CartState>(INITIAL_STATE);
@@ -75,6 +77,7 @@ export const CartProvider = (props: any) => {
             style: { backgroundColor: "#E9CFCF" },
           });
           navigate("/home");
+          window.scrollTo(0, 0);
         }
 
         if (response.data.data == null) {
@@ -92,6 +95,7 @@ export const CartProvider = (props: any) => {
           style: { backgroundColor: "#E9CFCF" },
         });
         navigate("/home");
+        window.scrollTo(0, 0);
       } finally {
         setLoading(false);
       }
@@ -198,6 +202,7 @@ export const CartProvider = (props: any) => {
           style: { backgroundColor: "#E9CFCF" },
         });
         navigate("/home");
+        window.scrollTo(0, 0);
       }
 
       if (response.data.data) {
@@ -277,6 +282,7 @@ export const CartProvider = (props: any) => {
             style: { backgroundColor: "#E9CFCF" },
           });
           navigate("/home");
+          window.scrollTo(0, 0);
         }
 
         if (response.data.data) {
@@ -337,6 +343,28 @@ export const CartProvider = (props: any) => {
     }
   }
 
+  async function clearCart() {
+    if (!cart || cart.products.length === 0) return;
+
+    try {
+      const deletePromises = cart.products.map((product) =>
+        api.delete(`/api/cartproducts/${product.id}`),
+      );
+
+      await Promise.all(deletePromises);
+
+      setCart({
+        ...cart,
+        products: [],
+      });
+    } catch (error) {
+      showNotification({
+        message: "Error clearing cart.",
+        color: "red",
+      });
+    }
+  }
+
   return (
     <CartContext.Provider
       value={{
@@ -349,6 +377,7 @@ export const CartProvider = (props: any) => {
         findProduct,
         findProductSizeId,
         addToCart,
+        clearCart,
       }}
     >
       {props.children}

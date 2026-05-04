@@ -29,7 +29,7 @@ import { showNotification } from "@mantine/notifications";
 import { CartProductGetDto } from "../../constants/types";
 import { useDisclosure } from "@mantine/hooks";
 
-const CartItem = ({
+export const CartItem = ({
   product,
   cartId,
   userCart,
@@ -104,7 +104,7 @@ const CartItem = ({
                   product.id,
                   newQuantity,
                   product.productSizeId,
-                  cartId
+                  cartId,
                 );
               }
             }}
@@ -128,7 +128,7 @@ const CartItem = ({
                 product.id,
                 nextQuantity,
                 product.productSizeId,
-                cartId
+                cartId,
               );
             }}
             hideControls
@@ -145,7 +145,7 @@ const CartItem = ({
                 product.id,
                 newQuantity,
                 product.productSizeId,
-                cartId
+                cartId,
               );
             }}
             variant="subtle"
@@ -197,13 +197,19 @@ export const CartPage = () => {
   const totalItems =
     cart?.products.reduce((total, val) => total + val.quantity, 0) ?? 0;
 
-  const handleNavigate = async (cartProduct: CartProductGetDto) => {
+   const handleNavigate = async (cartProduct: CartProductGetDto) => {
     const productFoundId = await userCart.findProduct(cartProduct);
 
     if (productFoundId) {
       navigate(`/products/${productFoundId}`);
+      window.scrollTo(0, 0);
     } else {
-      showNotification({ message: "Error finding product", color: "red" });
+      showNotification({
+        message: "Error finding product",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
     }
   };
 
@@ -217,7 +223,12 @@ export const CartPage = () => {
           <Space h="md" />
           <Text>Your cart is empty.</Text>
           <Space h="md" />
-          <Button onClick={() => navigate(routes.productListing)}>
+          <Button
+            onClick={() => {
+              navigate(routes.productListing);
+              window.scrollTo(0, 0);
+            }}
+          >
             Continue Shopping
           </Button>
         </>
@@ -273,7 +284,10 @@ export const CartPage = () => {
               <Button
                 color="green.9"
                 fullWidth
-                onClick={() => navigate(routes.checkoutPage)}
+                onClick={() => {
+                  navigate(routes.checkoutPage);
+                  window.scrollTo(0, 0);
+                }}
               >
                 Checkout
               </Button>
@@ -281,7 +295,10 @@ export const CartPage = () => {
                 variant="outline"
                 color="brand.9"
                 fullWidth
-                onClick={() => navigate(routes.productListing)}
+                onClick={() => {
+                  navigate(routes.productListing);
+                  window.scrollTo(0, 0);
+                }}
               >
                 Continue Shopping
               </Button>

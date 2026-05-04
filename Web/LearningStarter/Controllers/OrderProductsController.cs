@@ -52,7 +52,7 @@ public class OrderProductsController : ControllerBase
             OrderId = createDto.OrderId,
             ProductSizeId = createDto.ProductSizeId,
             Quantity = createDto.Quantity,
-            Price = 25.00m 
+            Price = createDto.Price
         };
 
         _dataContext.Set<OrderProduct>().Add(orderProductToCreate);
