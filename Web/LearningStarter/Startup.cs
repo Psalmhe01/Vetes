@@ -157,8 +157,10 @@ public class Startup
         SeedProducts(dataContext);
         SeedSizes(dataContext);
         SeedMeasurementTypes(dataContext);
-        SeedMeasurementCategories(dataContext);
+        SeedMeasurementCategories(dataContext); 
         SeedProductSizes(dataContext);
+        SeedPaymentStatuses(dataContext);
+
     }
 
     private static void SeedCategories(DataContext dataContext)
@@ -479,7 +481,25 @@ public class Startup
         };
 
         dataContext.Set<ProductSize>().AddRange(productSizesToAdd);
-            dataContext.SaveChanges();
+        dataContext.SaveChanges();
+    }
+    private static void SeedPaymentStatuses(DataContext dataContext)
+    {
+        if (dataContext.Set<PaymentStatus>().Any())
+        { 
+            return;
+        }
+    
+        var statuses = new List<PaymentStatus>
+        {
+            new PaymentStatus { Status = "Pending" },
+            new PaymentStatus { Status = "Paid" },
+            new PaymentStatus { Status = "Failed" },
+            new PaymentStatus { Status = "Refunded" }
+        };
+    
+        dataContext.Set<PaymentStatus>().AddRange(statuses);
+        dataContext.SaveChanges();
     }
 
     private static async Task SeedUsers(DataContext dataContext, UserManager<User> userManager)
