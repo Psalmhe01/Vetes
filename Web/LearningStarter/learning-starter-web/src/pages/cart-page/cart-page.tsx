@@ -16,7 +16,7 @@ import {
   Flex,
   Modal,
 } from "@mantine/core";
-import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
+
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../routes";
 import { useCart } from "../../cart/cart-context";
@@ -97,7 +97,7 @@ const CartItem = ({
             onClick={() => {
               const newQuantity = quantity - 1;
               if (newQuantity < 1) {
-                open(); // Open modal instead of instant delete if you prefer consistency
+                open();
               } else {
                 setQuantity(newQuantity);
                 userCart.updateCartProduct(
@@ -263,8 +263,8 @@ export const CartPage = () => {
             </Group>
             <Divider my="md" />
             <Group justify="space-between" mb="xs">
-              <Title order={3} >Total</Title>
-              <Title order={3}  fw={700}>
+              <Title order={3}>Total</Title>
+              <Title order={3} fw={700}>
                 ${total.toFixed(2)}
               </Title>
             </Group>

@@ -11,4 +11,5 @@ export const routes = {
   register: '/register',
   cartPage: `/cart`,
   checkoutPage: "/checkout",
+  orderPage: `/orders`,
 };
