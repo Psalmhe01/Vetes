@@ -19,6 +19,7 @@ import {
   useMantineTheme,
   ActionIcon,
   Skeleton,
+  Checkbox,
 } from "@mantine/core";
 import {
   faCartShopping,
@@ -53,13 +54,39 @@ export const SideCart = () => {
   const theme = useMantineTheme();
   const { classes, cx } = useStyles();
   const navigate = useNavigate();
+
+  const [selectedIds, setSelectedIds] = useState<number[]>(() => {
+    const saved = localStorage.getItem("selected-cart-items");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("selected-cart-items", JSON.stringify(selectedIds));
+  }, [selectedIds]);
+
+  useEffect(() => {
+    if (cartel.cart && selectedIds.length === 0 && !localStorage.getItem("selected-cart-items")) {
+      setSelectedIds(cartel.cart.products.map((p) => p.id));
+    }
+  }, [cartel.cart]);
+
+  const toggleSelection = (id: number) => {
+    setSelectedIds((current) =>
+      current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
+    );
+  };
+
   const cartTotal =
-    cartel.cart?.products.reduce(
-      (total, val) => total + val.price * val.quantity,
-      0,
-    ) ?? 0;
-  const totalItems =
-    cartel.cart?.products.reduce((total, val) => total + val.quantity, 0) ?? 0;
+    cartel.cart?.products
+      .filter((p) => selectedIds.includes(p.id))
+      .reduce((total, val) => total + val.price * val.quantity, 0) ?? 0;
+
+  const selectedItems = cartel.cart?.products.filter((p) => selectedIds.includes(p.id)).reduce
+    ((total, val) => total + val.quantity, 0)?? 0;
+
+
+  const totalItems = cartel.cart?.products
+    .reduce((total, val) => total + val.quantity, 0) ?? 0;
 
   useEffect(() => {
     if (totalItems > 0) {
@@ -86,9 +113,13 @@ export const SideCart = () => {
   const CartItem = ({
     product,
     cartId,
+    isSelected,
+    onToggle,
   }: {
     product: CartProductGetDto;
     cartId: number;
+    isSelected: boolean;
+    onToggle: (id: number) => void;
   }) => {
     const handlersRef = useRef<NumberInputHandlers>(null);
     const [quantity, setQuantity] = useState(product.quantity);
@@ -105,7 +136,13 @@ export const SideCart = () => {
           dir={"row"}
           justify="space-between"
           className={classes.sideCartItem}
+          wrap="nowrap"
         >
+          <Checkbox
+            checked={isSelected}
+            onChange={() => onToggle(product.id)}
+            mr="xs"
+          />
           <Card
             withBorder
             w={80}
@@ -166,7 +203,7 @@ export const SideCart = () => {
                   );
                 }}
                 hideControls
-                w={60}
+               maw={30}
                 styles={{ input: { textAlign: "center" } }}
                 radius={0}
                 variant="unstyled"
@@ -236,7 +273,7 @@ export const SideCart = () => {
       );
     }
 
-    if (totalItems === 0) {
+    if (cartel.cart.products.length === 0) {
       return <Text c="dimmed">No products in this cart yet.</Text>;
     }
     return (
@@ -248,6 +285,8 @@ export const SideCart = () => {
                 key={product.id}
                 product={product}
                 cartId={cartel.cart!.id}
+                isSelected={selectedIds.includes(product.id)}
+                onToggle={toggleSelection}
               />
             ))}
           </Stack>
@@ -264,8 +303,9 @@ export const SideCart = () => {
         title={
           <Group justify="space-between" align="center">
             <Text size="lg">Cart</Text>{" "}
+            <Text size="md">{totalItems} items</Text>
             <Text size="sm" c="dimmed">
-              {totalItems} items
+              ({selectedItems} selected)
             </Text>
           </Group>
         }
@@ -294,6 +334,7 @@ export const SideCart = () => {
             <Button
               fullWidth
               radius={0}
+              disabled={totalItems === 0}
               onClick={() => {
                 (navigate(routes.checkoutPage), close());
               }}

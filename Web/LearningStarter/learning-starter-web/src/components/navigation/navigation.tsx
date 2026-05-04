@@ -34,6 +34,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import logo2 from "../../assets/logo2.png";
 import { UserDto } from "../../constants/types";
 import { useAuth } from "../../authentication/use-auth";
 import { createStyles } from "@mantine/emotion";
@@ -216,7 +217,7 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
   const { logout } = useAuth();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const isMobile = useMediaQuery("(max-width: 50em)");
-  const [opened, { open, close }] = useDisclosure(false);
+  const [opened] = useDisclosure(false);
   const dark = colorScheme === "dark";
   const navigate = useNavigate();
 
@@ -233,7 +234,7 @@ export const PrimaryNavigation: React.FC<PrimaryNavigationProps> = ({
                   h={60}
                   radius="sm"
                   fallbackSrc="https://placehold.co/600x400?text=Placeholder"
-                  src={logo}
+                  src={colorScheme === "dark" ? logo : logo2}
                   alt="logo"
                 />
               </NavLink>

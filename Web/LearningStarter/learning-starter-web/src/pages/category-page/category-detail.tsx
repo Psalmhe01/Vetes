@@ -52,6 +52,7 @@ export const CategoryDetail = () => {
       if (response.data.hasErrors) {
         showNotification({ message: "Error fetching category.", color: "red" });
         navigate("/categories");
+        window.scrollTo(0, 0);
       }
       if (response.data.data) {
         setCategory(response.data.data);
@@ -106,7 +107,10 @@ export const CategoryDetail = () => {
     <Container fluid className={classes.root}>
       <Breadcrumbs mb="md">
         <Anchor
-          onClick={() => navigate("/categories")}
+          onClick={() => {
+            navigate("/categories");
+            window.scrollTo(0, 0);
+          }}
           style={{ cursor: "pointer", color: colors.text }}
         >
           Categories
@@ -143,11 +147,12 @@ export const CategoryDetail = () => {
               name={product.name}
               price={product.price}
               description={product.description}
-              onClick={() =>
+              onClick={() => {
                 navigate(`/products/${product.id}`, {
                   state: { from: "home" },
-                })
-              }
+                });
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
             />
           ))}
         </SimpleGrid>

@@ -6,6 +6,8 @@ import {
   Image,
   Text,
   Anchor,
+  Stack,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { createStyles } from "@mantine/emotion";
 
@@ -22,13 +24,14 @@ import {
 } from "../../constants/theme-constants";
 
 export const Footer = () => {
-  const logo = "/logo.png";
+  const { colorScheme } = useMantineColorScheme();
+  const logo = colorScheme === "dark" ? "/logo.png" : "/logo2.png";
   const { classes } = useStyles();
 
   return (
     <Container fluid className={classes.footerPg} w="100vw" my={0}>
-      <Group justify="space-between" className={classes.groups}>
-        <Container className={classes.groups}>
+      <Group justify="space-between" align="flex-start" p="50px">
+        <Stack gap={0} className={classes.groups}>
           <Image className={classes.logo} fit="contain" src={logo} />
           <Space h="xl" />
           <Text>555-555-5555</Text>
@@ -46,8 +49,8 @@ export const Footer = () => {
             <IconBrandTwitter />
             <IconBrandTiktok />
           </Group>
-        </Container>
-        <Container className={classes.groups}>
+        </Stack>
+        <Stack gap={0} className={classes.groups}>
           <Anchor
             href="https://youtu.be/xMHJGd3wwZk?si=06ZXdddre_nVQ85w"
             target="_blank"
@@ -62,7 +65,7 @@ export const Footer = () => {
           </Anchor>
           <Space h="xl" />
           <Text>© 2026 by Les V</Text>
-        </Container>
+        </Stack>
       </Group>
       <Space h="l" />
     </Container>
@@ -76,7 +79,7 @@ const useStyles = createStyles((theme) => {
     },
 
     footerPg: {
-      height: FOOTER_HEIGHT,
+      minHeight: FOOTER_HEIGHT,
       maxWidth: "100%",
       objectFit: "contain",
       padding: 0,
@@ -90,8 +93,6 @@ const useStyles = createStyles((theme) => {
     },
 
     groups: {
-      justifyContent: "flex-start",
-      
       marginBottom: "10px",
       color: colors.background1,
       '[data-mantine-color-scheme="dark"] &': {
@@ -104,7 +105,7 @@ const useStyles = createStyles((theme) => {
       marginRight: "5px",
       paddingTop: "5px",
       height: FOOTER_HEIGHT_NUMBER / 3,
-      alignSelf: "left",
+      alignSelf: "flex-start",
     },
 
     fullHeight: {

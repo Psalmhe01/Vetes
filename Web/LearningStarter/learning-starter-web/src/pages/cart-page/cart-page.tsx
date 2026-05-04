@@ -15,6 +15,7 @@ import {
   NumberInputHandlers,
   Flex,
   Modal,
+  Checkbox,
 } from "@mantine/core";
 
 import { useNavigate } from "react-router-dom";
@@ -29,16 +30,22 @@ import { showNotification } from "@mantine/notifications";
 import { CartProductGetDto } from "../../constants/types";
 import { useDisclosure } from "@mantine/hooks";
 
-const CartItem = ({
+export const CartItem = ({
   product,
   cartId,
   userCart,
   handleNavigate,
+  isSelected,
+  onToggle,
+  hideCheckbox = false,
 }: {
   product: CartProductGetDto;
   cartId: number;
   userCart: any;
   handleNavigate: (product: CartProductGetDto) => void;
+  isSelected?: boolean;
+  onToggle?: (id: number) => void;
+  hideCheckbox?: boolean;
 }) => {
   const { classes } = useStyles();
   const handlersRef = useRef<NumberInputHandlers>(null);
@@ -58,7 +65,11 @@ const CartItem = ({
         className={classes.sideCartItem}
         align="flex-start"
         p={20}
+        wrap="nowrap"
       >
+        {!hideCheckbox && onToggle && (
+          <Checkbox checked={isSelected} onChange={() => onToggle(product.id)} mt="md" />
+        )}
         <Group>
           <Card
             withBorder
@@ -104,7 +115,7 @@ const CartItem = ({
                   product.id,
                   newQuantity,
                   product.productSizeId,
-                  cartId
+                  cartId,
                 );
               }
             }}
@@ -128,7 +139,7 @@ const CartItem = ({
                 product.id,
                 nextQuantity,
                 product.productSizeId,
-                cartId
+                cartId,
               );
             }}
             hideControls
@@ -145,7 +156,7 @@ const CartItem = ({
                 product.id,
                 newQuantity,
                 product.productSizeId,
-                cartId
+                cartId,
               );
             }}
             variant="subtle"
@@ -190,20 +201,46 @@ export const CartPage = () => {
   const { classes } = useStyles();
   const cart = userCart.cart;
 
-  const total =
-    cart?.products.reduce((sum, item) => sum + item.price * item.quantity, 0) ??
-    0;
+  const [selectedIds, setSelectedIds] = useState<number[]>(() => {
+    const saved = localStorage.getItem("selected-cart-items");
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  const totalItems =
-    cart?.products.reduce((total, val) => total + val.quantity, 0) ?? 0;
+  useEffect(() => {
+    localStorage.setItem("selected-cart-items", JSON.stringify(selectedIds));
+  }, [selectedIds]);
 
-  const handleNavigate = async (cartProduct: CartProductGetDto) => {
+  useEffect(() => {
+    if (cart && selectedIds.length === 0 && !localStorage.getItem("selected-cart-items")) {
+      setSelectedIds(cart.products.map((p) => p.id));
+    }
+  }, [cart]);
+
+  const toggleSelection = (id: number) => {
+    setSelectedIds((current) =>
+      current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
+    );
+  };
+
+  const selectedProducts = cart?.products.filter((p) => selectedIds.includes(p.id)) ?? [];
+
+  const total = selectedProducts.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const totalItems = selectedProducts.reduce((total, val) => total + val.quantity, 0);
+
+   const handleNavigate = async (cartProduct: CartProductGetDto) => {
     const productFoundId = await userCart.findProduct(cartProduct);
 
     if (productFoundId) {
       navigate(`/products/${productFoundId}`);
+      window.scrollTo(0, 0);
     } else {
-      showNotification({ message: "Error finding product", color: "red" });
+      showNotification({
+        message: "Error finding product",
+        color: "red",
+        position: "top-center",
+        style: { backgroundColor: "#E9CFCF" },
+      });
     }
   };
 
@@ -211,13 +248,18 @@ export const CartPage = () => {
     <Container size="xl" className={classes.cartRoot}>
       {userCart.loading && <Text>Loading cart...</Text>}
 
-      {!userCart.loading && cart && totalItems === 0 && (
+      {!userCart.loading && cart && cart.products.length === 0 && (
         <>
           <Text size="xl">Cart</Text>
           <Space h="md" />
           <Text>Your cart is empty.</Text>
           <Space h="md" />
-          <Button onClick={() => navigate(routes.productListing)}>
+          <Button
+            onClick={() => {
+              navigate(routes.productListing);
+              window.scrollTo(0, 0);
+            }}
+          >
             Continue Shopping
           </Button>
         </>
@@ -240,6 +282,8 @@ export const CartPage = () => {
                 cartId={cart.id}
                 userCart={userCart}
                 handleNavigate={handleNavigate}
+                isSelected={selectedIds.includes(product.id)}
+                onToggle={toggleSelection}
               />
             ))}
           </Stack>
@@ -273,7 +317,11 @@ export const CartPage = () => {
               <Button
                 color="green.9"
                 fullWidth
-                onClick={() => navigate(routes.checkoutPage)}
+                disabled={totalItems === 0}
+                onClick={() => {
+                  navigate(routes.checkoutPage);
+                  window.scrollTo(0, 0);
+                }}
               >
                 Checkout
               </Button>
@@ -281,7 +329,10 @@ export const CartPage = () => {
                 variant="outline"
                 color="brand.9"
                 fullWidth
-                onClick={() => navigate(routes.productListing)}
+                onClick={() => {
+                  navigate(routes.productListing);
+                  window.scrollTo(0, 0);
+                }}
               >
                 Continue Shopping
               </Button>
