@@ -15,6 +15,7 @@ import {
   NumberInputHandlers,
   Flex,
   Modal,
+  Checkbox,
 } from "@mantine/core";
 
 import { useNavigate } from "react-router-dom";
@@ -34,11 +35,17 @@ export const CartItem = ({
   cartId,
   userCart,
   handleNavigate,
+  isSelected,
+  onToggle,
+  hideCheckbox = false,
 }: {
   product: CartProductGetDto;
   cartId: number;
   userCart: any;
   handleNavigate: (product: CartProductGetDto) => void;
+  isSelected?: boolean;
+  onToggle?: (id: number) => void;
+  hideCheckbox?: boolean;
 }) => {
   const { classes } = useStyles();
   const handlersRef = useRef<NumberInputHandlers>(null);
@@ -58,7 +65,11 @@ export const CartItem = ({
         className={classes.sideCartItem}
         align="flex-start"
         p={20}
+        wrap="nowrap"
       >
+        {!hideCheckbox && onToggle && (
+          <Checkbox checked={isSelected} onChange={() => onToggle(product.id)} mt="md" />
+        )}
         <Group>
           <Card
             withBorder
@@ -190,12 +201,32 @@ export const CartPage = () => {
   const { classes } = useStyles();
   const cart = userCart.cart;
 
-  const total =
-    cart?.products.reduce((sum, item) => sum + item.price * item.quantity, 0) ??
-    0;
+  const [selectedIds, setSelectedIds] = useState<number[]>(() => {
+    const saved = localStorage.getItem("selected-cart-items");
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  const totalItems =
-    cart?.products.reduce((total, val) => total + val.quantity, 0) ?? 0;
+  useEffect(() => {
+    localStorage.setItem("selected-cart-items", JSON.stringify(selectedIds));
+  }, [selectedIds]);
+
+  useEffect(() => {
+    if (cart && selectedIds.length === 0 && !localStorage.getItem("selected-cart-items")) {
+      setSelectedIds(cart.products.map((p) => p.id));
+    }
+  }, [cart]);
+
+  const toggleSelection = (id: number) => {
+    setSelectedIds((current) =>
+      current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
+    );
+  };
+
+  const selectedProducts = cart?.products.filter((p) => selectedIds.includes(p.id)) ?? [];
+
+  const total = selectedProducts.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const totalItems = selectedProducts.reduce((total, val) => total + val.quantity, 0);
 
    const handleNavigate = async (cartProduct: CartProductGetDto) => {
     const productFoundId = await userCart.findProduct(cartProduct);
@@ -217,7 +248,7 @@ export const CartPage = () => {
     <Container size="xl" className={classes.cartRoot}>
       {userCart.loading && <Text>Loading cart...</Text>}
 
-      {!userCart.loading && cart && totalItems === 0 && (
+      {!userCart.loading && cart && cart.products.length === 0 && (
         <>
           <Text size="xl">Cart</Text>
           <Space h="md" />
@@ -251,6 +282,8 @@ export const CartPage = () => {
                 cartId={cart.id}
                 userCart={userCart}
                 handleNavigate={handleNavigate}
+                isSelected={selectedIds.includes(product.id)}
+                onToggle={toggleSelection}
               />
             ))}
           </Stack>
@@ -284,6 +317,7 @@ export const CartPage = () => {
               <Button
                 color="green.9"
                 fullWidth
+                disabled={totalItems === 0}
                 onClick={() => {
                   navigate(routes.checkoutPage);
                   window.scrollTo(0, 0);

@@ -384,6 +384,8 @@ export const CheckoutPage = () => {
         <TextInput
           label="Card Number"
           placeholder="1234 5678 9101 1121"
+          maxLength={19}
+          withAsterisk
           value={form.cardNumber}
           onChange={(e) => handleChange("cardNumber", e.target.value)}
         />
@@ -392,13 +394,17 @@ export const CheckoutPage = () => {
             label="Expiration Date"
             placeholder="MM/YY"
             value={form.expiration}
+            maxLength={5}
             onChange={(e) => handleChange("expiration", e.target.value)}
+            withAsterisk
           />
           <TextInput
             label="CVV"
             placeholder="123"
+            maxLength={3}
             value={form.cvv}
             onChange={(e) => handleChange("cvv", e.target.value)}
+            withAsterisk
           />
         </Group>
       </Stack>
