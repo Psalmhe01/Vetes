@@ -298,19 +298,19 @@ export const ProductDetail = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            overflow: "hidden" // Keeps the image from "bleeding" over the rounded corners
+            overflow: "hidden" 
             }}
           >
-          {/* 1. Check if product exists. 2. Check if the images list has items */}
+          
           {product?.productImages && product.productImages.length > 0 ? (
             <Image
               src={product.productImages[0].imageUrl}
               alt={product.name}
               height={400}
-              fit="contain" // This ensures the whole shirt/dress is visible without cropping
+              fit="contain"
             />
           ) : (
-          /* This is your fallback if a product has no images seeded */
+          
             <Text c="dimmed" size="sm">
               Product image coming soon
             </Text>
