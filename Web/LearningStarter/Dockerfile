@@ -4,10 +4,9 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY ["LearningStarter.csproj", "."]
-RUN dotnet restore
 COPY . .
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet restore "LearningStarter/LearningStarter.csproj"
+RUN dotnet publish "LearningStarter/LearningStarter.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
