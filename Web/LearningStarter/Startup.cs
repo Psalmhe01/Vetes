@@ -102,6 +102,15 @@ public class Startup
         // configure DI for application services
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+
+        services.AddCors(options => {
+            options.AddPolicy("AllowFrontend", policy => {
+            policy.WithOrigins("https://vetes.vercel.app")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+    });
+});
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
