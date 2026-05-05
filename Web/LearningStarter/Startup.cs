@@ -44,8 +44,8 @@ public class Startup
 
         services.AddDbContext<DataContext>(options =>
         {
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                sqlServerOptions => sqlServerOptions.CommandTimeout(120));
+            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
+                npgsqlOptions => npgsqlOptions.CommandTimeout(120));
         });
 
         services.AddIdentity<User, Role>(
@@ -107,7 +107,11 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataContext dataContext)
     {
-        dataContext.Database.EnsureDeleted();
+        if (env.IsDevelopment())
+        {
+            dataContext.Database.EnsureDeleted();
+        }
+        
         dataContext.Database.EnsureCreated();
         
         app.UseHsts();
