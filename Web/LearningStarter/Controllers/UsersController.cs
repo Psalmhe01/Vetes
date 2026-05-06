@@ -99,7 +99,7 @@ public class UsersController : ControllerBase
             response.AddError("password", "Password cannot be empty.");
         }
 
-        if ((_context.Users.FirstOrDefault(x => x.UserName == userCreateDto.UserName)) != null)
+        if ((await _context.Users.FirstOrDefaultAsync(x => x.UserName == userCreateDto.UserName)) != null)
         {
             response.AddError("username", "Username already exists.");
         }
