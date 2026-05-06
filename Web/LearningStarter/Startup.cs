@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace LearningStarter;
@@ -106,7 +106,7 @@ public class Startup
             });
 
             c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out var methodInfo) ? methodInfo.Name : null);
-            c.MapType(typeof(IFormFile), () => new OpenApiSchema { Type = JsonSchemaType.Object, Format = "binary" });
+            c.MapType(typeof(IFormFile), () => new OpenApiSchema { Type = "object", Format = "binary" });
         });
 
         services.AddSpaStaticFiles(config =>
