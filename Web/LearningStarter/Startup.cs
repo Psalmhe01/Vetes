@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -42,6 +43,14 @@ public class Startup
                     .AllowCredentials();
             });
         });
+
+        services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+
         services.AddControllers();
 
         services.AddHsts(options =>
@@ -115,6 +124,13 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataContext dataContext)
     {
+        app.UseForwardedHeaders();
+
+        if (!env.IsDevelopment())
+        {
+            app.UseExceptionHandler("/Error");
+        }
+
         if (env.IsDevelopment())
         {
             dataContext.Database.EnsureDeleted();
@@ -124,7 +140,6 @@ public class Startup
         
 
         app.UseHsts();
-        app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseSpaStaticFiles();
         app.UseRouting();
@@ -157,11 +172,16 @@ public class Startup
         });
         
         using var scope = app.ApplicationServices.CreateScope();
-        var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
-        var roleManager = scope.ServiceProvider.GetService<RoleManager<Role>>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 
-        SeedRoles(dataContext, roleManager).Wait();
-        SeedUsers(dataContext, userManager).Wait();
+        InitializeDatabase(dataContext, userManager, roleManager);
+    }
+
+    private static void InitializeDatabase(DataContext dataContext, UserManager<User> userManager, RoleManager<Role> roleManager)
+    {
+        SeedRoles(dataContext, roleManager).GetAwaiter().GetResult();
+        SeedUsers(dataContext, userManager).GetAwaiter().GetResult();
         SeedCategories(dataContext);
         SeedProducts(dataContext);
         SeedSizes(dataContext);

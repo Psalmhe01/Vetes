@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿﻿using System.Linq;
+using System.Threading.Tasks;
 using LearningStarter.Common;
 using LearningStarter.Data;
 using LearningStarter.Entities;
@@ -22,11 +23,11 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
         var response = new Response();
 
-        response.Data = _context
+        response.Data = await _context
             .Users
             .Select(x => new UserGetDto
             {
@@ -37,18 +38,18 @@ public class UsersController : ControllerBase
                 Email = x.Email,
                 Phone = x.Phone
             })
-            .ToList();
+            .ToListAsync();
 
         return Ok(response);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetById(
+    public async Task<IActionResult> GetById(
         [FromRoute] int id)
     {
         var response = new Response();
 
-        var user = _context.Users.FirstOrDefault(x => x.Id == id);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
         if (user == null)
         {
@@ -72,7 +73,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(
+    public async Task<IActionResult> Create(
         [FromBody] UserCreateDto userCreateDto)
     {
         var response = new Response();
@@ -116,9 +117,9 @@ public class UsersController : ControllerBase
             Phone = userCreateDto.Phone,
         };
 
-        _userManager.CreateAsync(userToCreate, userCreateDto.Password).Wait();
-        _userManager.AddToRoleAsync(userToCreate, "Admin").Wait();
-        _context.SaveChanges();
+        await _userManager.CreateAsync(userToCreate, userCreateDto.Password);
+        await _userManager.AddToRoleAsync(userToCreate, "Admin");
+        await _context.SaveChangesAsync();
 
         var userGetDto = new UserGetDto
         {
@@ -136,7 +137,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Edit(
+    public async Task<IActionResult> Edit(
         [FromRoute] int id, 
         [FromBody] UserUpdateDto userUpdateDto)
     {
@@ -148,7 +149,7 @@ public class UsersController : ControllerBase
             return NotFound(response);
         }
         
-        var userToEdit = _context.Users.FirstOrDefault(x => x.Id == id);
+        var userToEdit = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
         if (userToEdit == null)
         {
@@ -189,7 +190,7 @@ public class UsersController : ControllerBase
         userToEdit.Email = userUpdateDto.Email;
         userToEdit.Phone = userUpdateDto.Phone;
 
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         var userGetDto = new UserGetDto
         {
@@ -206,11 +207,11 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         var response = new Response();
 
-        var user = _context.Users.FirstOrDefault(x => x.Id == id);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
         if (user == null)
         {
@@ -219,7 +220,7 @@ public class UsersController : ControllerBase
         }
 
         _context.Users.Remove(user);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return Ok(response);
     }
