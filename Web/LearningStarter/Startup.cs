@@ -44,8 +44,7 @@ public class Startup
 
         services.AddDbContext<DataContext>(options =>
         {
-            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
-                npgsqlOptions => npgsqlOptions.CommandTimeout(120));
+            options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
         });
 
         services.AddIdentity<User, Role>(
@@ -123,6 +122,12 @@ public class Startup
         
         dataContext.Database.EnsureCreated();
         
+
+        app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
         app.UseHsts();
         app.UseHttpsRedirection();
         app.UseStaticFiles();
@@ -132,10 +137,7 @@ public class Startup
         app.UseAuthorization();
 
         // global cors policy
-        app.UseCors(x => x
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+        
 
         // Enable middleware to serve generated Swagger as a JSON endpoint.
         app.UseSwagger();
