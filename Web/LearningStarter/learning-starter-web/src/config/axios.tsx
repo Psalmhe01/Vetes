@@ -3,10 +3,11 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { ApiResponse } from "../constants/types";
 import { EnvVars } from "./env-vars";
 
-type ErrorHandlerKeys = keyof typeof errorHandlers
+type ErrorHandlerKeys = keyof typeof errorHandlers;
 
 const axiosInstance = axios.create({
   baseURL: EnvVars.apiBaseUrl,
+  withCredentials: true,
 });
 
 const errorHandlers = {
@@ -37,13 +38,13 @@ const errorHandlers = {
   },
   404: (response: AxiosResponse<unknown, any>) => {
     console.log(
-      "Endpoint Not Found. Check the route you are hitting on your front end matches the route on the backend."
+      "Endpoint Not Found. Check the route you are hitting on your front end matches the route on the backend.",
     );
     return Promise.resolve(response);
   },
   500: (response: AxiosResponse<unknown, any>) => {
     console.log(
-      "Server Error. Check your backend for null reference exceptions or similar errors."
+      "Server Error. Check your backend for null reference exceptions or similar errors.",
     );
     showNotification({
       message: "We've encountered a problem.",
@@ -58,7 +59,7 @@ const errorHandlers = {
 export async function handleResponseError(error: AxiosError) {
   if (error.response) {
     const response: AxiosResponse = error.response;
-    const status = response.status as ErrorHandlerKeys
+    const status = response.status as ErrorHandlerKeys;
     const handler = errorHandlers[status];
     if (handler) {
       const result = await handler(error.response);

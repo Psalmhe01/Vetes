@@ -32,7 +32,16 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddCors();
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowFrontend", policy =>
+            {
+                policy.WithOrigins("https://vetes.vercel.app", "https://vetes-iota.vercel.app")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
         services.AddControllers();
 
         services.AddHsts(options =>
@@ -44,7 +53,7 @@ public class Startup
 
         services.AddDbContext<DataContext>(options =>
         {
-            options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
         });
 
         services.AddIdentity<User, Role>(
@@ -101,15 +110,6 @@ public class Startup
         // configure DI for application services
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
-
-
-        services.AddCors(options => {
-            options.AddPolicy("AllowFrontend", policy => {
-            policy.WithOrigins("https://vetes.vercel.app")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-    });
-});
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -123,21 +123,14 @@ public class Startup
         dataContext.Database.EnsureCreated();
         
 
-        app.UseCors(x => x
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
-
         app.UseHsts();
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseSpaStaticFiles();
         app.UseRouting();
+        app.UseCors("AllowFrontend");
         app.UseAuthentication();
         app.UseAuthorization();
-
-        // global cors policy
-        
 
         // Enable middleware to serve generated Swagger as a JSON endpoint.
         app.UseSwagger();
@@ -148,9 +141,6 @@ public class Startup
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Learning Starter Server API V1");
         });
-
-        app.UseAuthentication();
-        app.UseAuthorization();
 
         app.UseEndpoints(x =>
         {
