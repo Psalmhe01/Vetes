@@ -175,7 +175,7 @@ public class UsersController : ControllerBase
 
         
         
-        if ((_context.Users.FirstOrDefault(x => (x.UserName == userUpdateDto.UserName && x.Id != userUpdateDto.Id))) != null)
+        if ((await _context.Users.FirstOrDefaultAsync(x => (x.UserName == userUpdateDto.UserName && x.Id != userUpdateDto.Id))) != null)
         {
             response.AddError("username", "Username already exists.");
         }

@@ -158,7 +158,7 @@ public class Startup
         app.UseStaticFiles();
         app.UseSpaStaticFiles();
         app.UseRouting();
-        app.UseCors("AllowAll");
+        app.UseCors("AllowFrontend");
         app.UseAuthentication();
         app.UseAuthorization();
 
@@ -459,7 +459,7 @@ public class Startup
         var mediumId = dataContext.Set<Size>().FirstOrDefault(x => x.Name == "Medium").Id;
         var largeId = dataContext.Set<Size>().FirstOrDefault(x => x.Name == "Large").Id;
         
-        var shirtId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Red shirt").Id;
+        var shirtId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Red Shirt").Id;
         var dressId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Floral Dress").Id;
         var pantId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Khaki Pant").Id;
         var blouseId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Silk Blouse").Id;
@@ -554,7 +554,7 @@ public class Startup
             return;
         }
         
-        var shirtId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Red shirt").Id;
+        var shirtId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Red Shirt").Id;
         var dressId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Floral Dress").Id;
         var pantId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Khaki Pant").Id;
         var blouseId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Silk Blouse").Id;
