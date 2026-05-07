@@ -40,6 +40,12 @@ public class AdsController : ControllerBase
     {
         var response = new Response();
         
+        if (string.IsNullOrEmpty(createDto.LinkUrl))
+        {
+            response.AddError(nameof(createDto.LinkUrl), "A Link URL is required.");
+            return BadRequest(response);
+        }
+
         var adToCreate = new Ads
         {
             LinkUrl = createDto.LinkUrl,

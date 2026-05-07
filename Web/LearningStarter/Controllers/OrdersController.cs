@@ -92,9 +92,9 @@ public class OrdersController: ControllerBase
             response.AddError(nameof(createDto.Status), "Status must not be empty");
         }
 
-        if (createDto.ShippingAddressId < 0)
+        if (createDto.ShippingAddressId <= 0)
         {
-            response.AddError(nameof(createDto.ShippingAddressId), "Shipping Address must be positive");
+            response.AddError(nameof(createDto.ShippingAddressId), "A valid Shipping Address is required.");
         }
 
         var userExists = _dataContext.Set<User>().Any(x => x.Id == createDto.UserId);
@@ -213,4 +213,3 @@ public class OrdersController: ControllerBase
         return Ok(response);
     }
 }
-
