@@ -73,8 +73,8 @@ public class Startup
             {
                 var databaseUri = new Uri(connectionString.Replace("postgresql://", "postgres://"));
                 var userInfo = databaseUri.UserInfo.Split(':');
-
-                connectionString = $"Host={databaseUri.Host};Port={databaseUri.Port};Database={databaseUri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Prefer;Trust Server Certificate=true";
+                var port = databaseUri.IsDefaultPort ? 5432 : databaseUri.Port; // Use default PostgreSQL port if not specified
+                connectionString = $"Host={databaseUri.Host};Port={port};Database={databaseUri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Prefer;Trust Server Certificate=true";
             }
 
             options.UseNpgsql(connectionString ?? throw new InvalidOperationException("Connection string 'DefaultConnection' or 'DATABASE_URL' not found."));
