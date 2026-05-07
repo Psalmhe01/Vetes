@@ -95,8 +95,7 @@ public class ProductSizeMeasurementsController : ControllerBase
 
         var exists = _dataContext.Set<ProductSizeMeasurement>()
             .Any(x => x.ProductSizeId == createDto.ProductSizeId &&
-                      x.MeasurementTypeId == updateDto.MeasurementTypeId &&
-                      x.Id != id);
+                      x.MeasurementTypeId == createDto.MeasurementTypeId);
         if (exists)
         {
             response.AddError("MeasurementTypeId", "Measurement already exists for this product");
@@ -109,6 +108,7 @@ public class ProductSizeMeasurementsController : ControllerBase
         if (productSize == null)
         {
             response.AddError(nameof(createDto.ProductSizeId), "Product size not found");
+            return BadRequest(response);
         }
 
         var product = _dataContext
@@ -193,6 +193,7 @@ public class ProductSizeMeasurementsController : ControllerBase
         if (productSize == null)
         {
             response.AddError(nameof(updateDto.ProductSizeId), "Product size not found");
+            return BadRequest(response);
         }
 
         var product = _dataContext
