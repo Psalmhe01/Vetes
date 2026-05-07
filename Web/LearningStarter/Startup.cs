@@ -158,7 +158,7 @@ public class Startup
         app.UseStaticFiles();
         app.UseSpaStaticFiles();
         app.UseRouting();
-        app.UseCors("AllowFrontend");
+        app.UseCors("AllowAll");
         app.UseAuthentication();
         app.UseAuthorization();
 
@@ -241,7 +241,7 @@ public class Startup
             Name = "Red Shirt",
             Description = "This vibrant red crewneck tee is a wardrobe essential, crafted from soft, breathable fabric for all-day comfort. Its classic tailored fit and durable construction make it the perfect versatile staple for layering or wearing on its own.",
             Price = 20,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Shirts").Id,
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shirts").Id,
         };
 
         var seededProduct2 = new Product
@@ -249,7 +249,7 @@ public class Startup
             Name = "Floral Dress",
             Description = "Embrace a cottagecore aesthetic with this floral midi dress, featuring a charming blue-and-white botanical print and whimsical butterfly accents. The sweetheart neckline and puffed sleeves pair with a ruched bodice to create a feminine, timeless silhouette perfect for garden parties or weekend brunches.",
             Price = 50,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Dresses").Id,
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Dresses").Id,
         };
 
         var seededProduct3 = new Product
@@ -257,7 +257,7 @@ public class Startup
             Name = "Khaki Pant",
             Description = "These durable khaki work pants offer a classic straight-leg fit designed for both comfort and utility. Featuring reinforced stitching and deep pockets, they provide a clean, professional look that stands up to the demands of the workday.",
             Price = 30,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Pants").Id,
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Pants").Id,
         };
 
         var seededProduct4 = new Product
@@ -265,7 +265,7 @@ public class Startup
             Name = "Silk Blouse",
             Description = "This elegant champagne silk blouse features a sophisticated pointed collar and a hidden button placket for a seamless, polished look. Its unique empire-waist pleating creates a graceful, flowy drape that adds effortless movement and luxury to any outfit.",
             Price = 50,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Blouses").Id
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Blouses").Id
         };
 
         var seededProduct5 = new Product
@@ -274,7 +274,7 @@ public class Startup
             Description =
                 "This sophisticated mock-neck blouse features a built-in camisole lining and sheer, dramatic lantern sleeves for a layered look in one piece. Finished with smocked cuffs and a relaxed silhouette, it offers an effortless transition from professional settings to evening events.",
             Price = 35,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Blouses").Id
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Blouses").Id
         };
 
         var seededProduct6 = new Product
@@ -283,7 +283,7 @@ public class Startup
             Description =
                 "These romantic lace wide-leg pants feature an intricate floral pattern and a delicate eyelash lace hem for a touch of bohemian luxury. Designed with a comfortable drawstring waistband, they offer a relaxed yet elevated silhouette that transitions beautifully from lounge to special occasions.",
             Price = 40,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Pants").Id,
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Pants").Id,
         };
 
         var seededProduct7 = new Product
@@ -292,7 +292,7 @@ public class Startup
             Description =
                 "This vibrant floral mini dress features a delicate camisole neckline and a playful, asymmetrical handkerchief hemline. Its whimsical wildflower print and draped silhouette make it an ideal choice for sun-drenched afternoons or casual summer celebrations.",
             Price = 40,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Dresses").Id,
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Dresses").Id,
         };
 
         var seededProduct8 = new Product
@@ -301,7 +301,7 @@ public class Startup
             Description =
                 "This printed performance polo features an eye-catching, organic maze pattern in vibrant shades of green. Crafted from a moisture-wicking stretch fabric with a classic three-button placket, it’s designed to provide both bold style and breathable comfort on the golf course or at the weekend BBQ.",
             Price = 30,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Shirts").Id,
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shirts").Id,
         };
 
         var seededProduct9 = new Product
@@ -310,7 +310,7 @@ public class Startup
             Description =
                 "This tiered maxi skirt features a classic blue-and-white botanical print that radiates effortless bohemian charm. Designed with a comfortable smocked drawstring waist and a flowy, multi-tiered silhouette, it’s the perfect breezy staple for sunny days and seaside strolls.",
             Price = 30,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Skirts").Id,
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Skirts").Id,
         };
 
         var seededProduct10 = new Product
@@ -319,7 +319,7 @@ public class Startup
             Description =
                 "This vibrant red skater skirt features a structured, high-waisted fit and voluminous box pleats for a dramatic flared silhouette. Crafted from a smooth, mid-weight fabric, it’s a bold statement piece that adds a touch of modern retro charm to any look.",
             Price = 25,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Skirts").Id,
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Skirts").Id,
         };
 
         var seededProduct11 = new Product
@@ -328,7 +328,7 @@ public class Startup
             Description =
                 "These lavender pinstripe shorts feature a charming ruffled hem and a comfortable elastic waistband for an easy, breezy fit. Crafted from a lightweight seersucker-style fabric, they are the perfect playful choice for lounging or warm weather outings.",
             Price = 20,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Shorts").Id,
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shorts").Id,
         };
 
         var seededProduct12 = new Product
@@ -336,7 +336,7 @@ public class Startup
             Name = "Navy Short",
             Description = "These navy drawstring shorts are crafted from a lightweight, textured fabric perfect for warm-weather versatility. Featuring a comfortable elastic waistband and a clean, straight-leg fit, they offer an effortless blend of casual comfort and classic style.",
             Price = 25,
-            CategoryId = dataContext.Set<Category>().First(x => x.Name == "Shorts").Id,
+            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shorts").Id,
         };
         
         dataContext.Set<Product>().Add(seededProduct1);
@@ -408,19 +408,19 @@ public class Startup
             return;
         }
 
-        var shirtId = dataContext.Set<Category>().First(x => x.Name == "Shirts").Id;
-        var dressId = dataContext.Set<Category>().First(x => x.Name == "Dresses").Id;
-        var skirtId = dataContext.Set<Category>().First(x => x.Name == "Skirts").Id;
-        var pantId = dataContext.Set<Category>().First(x => x.Name == "Pants").Id;
-        var blouseId = dataContext.Set<Category>().First(x => x.Name == "Blouses").Id;
-        var shortId = dataContext.Set<Category>().First(x => x.Name == "Shorts").Id;
+        var shirtId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shirts").Id;
+        var dressId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Dresses").Id;
+        var skirtId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Skirts").Id;
+        var pantId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Pants").Id;
+        var blouseId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Blouses").Id;
+        var shortId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shorts").Id;
         
-        var chestId = dataContext.Set<MeasurementType>().First(x => x.Name == "Chest/Bust Width").Id;
-        var inseamId = dataContext.Set<MeasurementType>().First(x => x.Name == "Inseam").Id;
-        var waistId = dataContext.Set<MeasurementType>().First(x => x.Name == "Waist Width").Id;
-        var sleeveId = dataContext.Set<MeasurementType>().First(x => x.Name == "Sleeve Length").Id;
-        var shoulderId = dataContext.Set<MeasurementType>().First(x => x.Name == "Shoulder Width").Id;
-        var lengthId = dataContext.Set<MeasurementType>().First(x => x.Name == "Total Length").Id;
+        var chestId = dataContext.Set<MeasurementType>().FirstOrDefault(x => x.Name == "Chest/Bust Width").Id;
+        var inseamId = dataContext.Set<MeasurementType>().FirstOrDefault(x => x.Name == "Inseam").Id;
+        var waistId = dataContext.Set<MeasurementType>().FirstOrDefault(x => x.Name == "Waist Width").Id;
+        var sleeveId = dataContext.Set<MeasurementType>().FirstOrDefault(x => x.Name == "Sleeve Length").Id;
+        var shoulderId = dataContext.Set<MeasurementType>().FirstOrDefault(x => x.Name == "Shoulder Width").Id;
+        var lengthId = dataContext.Set<MeasurementType>().FirstOrDefault(x => x.Name == "Total Length").Id;
 
         var links = new List<MeasurementCategory>
         {
@@ -455,22 +455,22 @@ public class Startup
             return;
         }
 
-        var smallId = dataContext.Set<Size>().First(x => x.Name == "Small").Id;
-        var mediumId = dataContext.Set<Size>().First(x => x.Name == "Medium").Id;
-        var largeId = dataContext.Set<Size>().First(x => x.Name == "Large").Id;
+        var smallId = dataContext.Set<Size>().FirstOrDefault(x => x.Name == "Small").Id;
+        var mediumId = dataContext.Set<Size>().FirstOrDefault(x => x.Name == "Medium").Id;
+        var largeId = dataContext.Set<Size>().FirstOrDefault(x => x.Name == "Large").Id;
         
-        var shirtId = dataContext.Set<Product>().First(x => x.Name == "Red shirt").Id;
-        var dressId = dataContext.Set<Product>().First(x => x.Name == "Floral Dress").Id;
-        var pantId = dataContext.Set<Product>().First(x => x.Name == "Khaki Pant").Id;
-        var blouseId = dataContext.Set<Product>().First(x => x.Name == "Silk Blouse").Id;
-        var sheerbId = dataContext.Set<Product>().First(x => x.Name == "Sheer Black Blouse").Id;
-        var plpId = dataContext.Set<Product>().First(x => x.Name == "Pink Lace Pants").Id;
-        var asymId = dataContext.Set<Product>().First(x => x.Name == "Asymmetrical Mini Dress").Id;
-        var poloId = dataContext.Set<Product>().First(x => x.Name == "Green Polo").Id;
-        var maxiId = dataContext.Set<Product>().First(x => x.Name == "Boho Maxi Skirt").Id;
-        var skaterId = dataContext.Set<Product>().First(x => x.Name == "Skater Skirt").Id;
-        var ruffId = dataContext.Set<Product>().First(x => x.Name == "Ruffled Short").Id;
-        var navyId = dataContext.Set<Product>().First(x => x.Name == "Navy Short").Id;
+        var shirtId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Red shirt").Id;
+        var dressId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Floral Dress").Id;
+        var pantId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Khaki Pant").Id;
+        var blouseId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Silk Blouse").Id;
+        var sheerbId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Sheer Black Blouse").Id;
+        var plpId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Pink Lace Pants").Id;
+        var asymId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Asymmetrical Mini Dress").Id;
+        var poloId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Green Polo").Id;
+        var maxiId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Boho Maxi Skirt").Id;
+        var skaterId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Skater Skirt").Id;
+        var ruffId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Ruffled Short").Id;
+        var navyId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Navy Short").Id;
 
 
         var productSizesToAdd = new List<ProductSize>
@@ -554,18 +554,18 @@ public class Startup
             return;
         }
         
-        var shirtId = dataContext.Set<Product>().First(x => x.Name == "Red shirt").Id;
-        var dressId = dataContext.Set<Product>().First(x => x.Name == "Floral Dress").Id;
-        var pantId = dataContext.Set<Product>().First(x => x.Name == "Khaki Pant").Id;
-        var blouseId = dataContext.Set<Product>().First(x => x.Name == "Silk Blouse").Id;
-        var sheerbId = dataContext.Set<Product>().First(x => x.Name == "Sheer Black Blouse").Id;
-        var plpId = dataContext.Set<Product>().First(x => x.Name == "Pink Lace Pants").Id;
-        var asymId = dataContext.Set<Product>().First(x => x.Name == "Asymmetrical Mini Dress").Id;
-        var poloId = dataContext.Set<Product>().First(x => x.Name == "Green Polo").Id;
-        var maxiId = dataContext.Set<Product>().First(x => x.Name == "Boho Maxi Skirt").Id;
-        var skaterId = dataContext.Set<Product>().First(x => x.Name == "Skater Skirt").Id;
-        var ruffId = dataContext.Set<Product>().First(x => x.Name == "Ruffled Short").Id;
-        var navyId = dataContext.Set<Product>().First(x => x.Name == "Navy Short").Id;
+        var shirtId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Red shirt").Id;
+        var dressId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Floral Dress").Id;
+        var pantId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Khaki Pant").Id;
+        var blouseId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Silk Blouse").Id;
+        var sheerbId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Sheer Black Blouse").Id;
+        var plpId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Pink Lace Pants").Id;
+        var asymId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Asymmetrical Mini Dress").Id;
+        var poloId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Green Polo").Id;
+        var maxiId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Boho Maxi Skirt").Id;
+        var skaterId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Skater Skirt").Id;
+        var ruffId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Ruffled Short").Id;
+        var navyId = dataContext.Set<Product>().FirstOrDefault(x => x.Name == "Navy Short").Id;
 
         var ProductImagestoAdd = new List<ProductImage>
         {
