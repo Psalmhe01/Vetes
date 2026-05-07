@@ -211,8 +211,8 @@ public class ProductSizesController : ControllerBase
         var productSizeToReturn = new ProductSizeGetDto
         {
             Id = productSizeToUpdate.Id,
-            SizeId = productSizeToUpdate.Size.Id,
-            ProductId = productSizeToUpdate.Product.Id,
+            SizeId = productSizeToUpdate.SizeId,
+            ProductId = productSizeToUpdate.ProductId,
             Stock = productSizeToUpdate.Stock
         };
         

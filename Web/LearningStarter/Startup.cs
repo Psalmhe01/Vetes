@@ -236,12 +236,19 @@ public class Startup
             return;
         }
 
+        var shirts = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shirts");
+        var dresses = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Dresses");
+        var pants = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Pants");
+        var blouses = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Blouses");
+        var skirts = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Skirts");
+        var shorts = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shorts");
+
         var seededProduct1 = new Product
         {
             Name = "Red Shirt",
             Description = "This vibrant red crewneck tee is a wardrobe essential, crafted from soft, breathable fabric for all-day comfort. Its classic tailored fit and durable construction make it the perfect versatile staple for layering or wearing on its own.",
             Price = 20,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shirts").Id,
+            CategoryId = shirts?.Id ?? 0,
         };
 
         var seededProduct2 = new Product
@@ -249,7 +256,7 @@ public class Startup
             Name = "Floral Dress",
             Description = "Embrace a cottagecore aesthetic with this floral midi dress, featuring a charming blue-and-white botanical print and whimsical butterfly accents. The sweetheart neckline and puffed sleeves pair with a ruched bodice to create a feminine, timeless silhouette perfect for garden parties or weekend brunches.",
             Price = 50,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Dresses").Id,
+            CategoryId = dresses?.Id ?? 0,
         };
 
         var seededProduct3 = new Product
@@ -257,7 +264,7 @@ public class Startup
             Name = "Khaki Pant",
             Description = "These durable khaki work pants offer a classic straight-leg fit designed for both comfort and utility. Featuring reinforced stitching and deep pockets, they provide a clean, professional look that stands up to the demands of the workday.",
             Price = 30,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Pants").Id,
+            CategoryId = pants?.Id ?? 0,
         };
 
         var seededProduct4 = new Product
@@ -265,7 +272,7 @@ public class Startup
             Name = "Silk Blouse",
             Description = "This elegant champagne silk blouse features a sophisticated pointed collar and a hidden button placket for a seamless, polished look. Its unique empire-waist pleating creates a graceful, flowy drape that adds effortless movement and luxury to any outfit.",
             Price = 50,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Blouses").Id
+            CategoryId = blouses?.Id ?? 0
         };
 
         var seededProduct5 = new Product
@@ -274,7 +281,7 @@ public class Startup
             Description =
                 "This sophisticated mock-neck blouse features a built-in camisole lining and sheer, dramatic lantern sleeves for a layered look in one piece. Finished with smocked cuffs and a relaxed silhouette, it offers an effortless transition from professional settings to evening events.",
             Price = 35,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Blouses").Id
+            CategoryId = blouses?.Id ?? 0
         };
 
         var seededProduct6 = new Product
@@ -283,7 +290,7 @@ public class Startup
             Description =
                 "These romantic lace wide-leg pants feature an intricate floral pattern and a delicate eyelash lace hem for a touch of bohemian luxury. Designed with a comfortable drawstring waistband, they offer a relaxed yet elevated silhouette that transitions beautifully from lounge to special occasions.",
             Price = 40,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Pants").Id,
+            CategoryId = pants?.Id ?? 0,
         };
 
         var seededProduct7 = new Product
@@ -292,7 +299,7 @@ public class Startup
             Description =
                 "This vibrant floral mini dress features a delicate camisole neckline and a playful, asymmetrical handkerchief hemline. Its whimsical wildflower print and draped silhouette make it an ideal choice for sun-drenched afternoons or casual summer celebrations.",
             Price = 40,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Dresses").Id,
+            CategoryId = dresses?.Id ?? 0,
         };
 
         var seededProduct8 = new Product
@@ -301,7 +308,7 @@ public class Startup
             Description =
                 "This printed performance polo features an eye-catching, organic maze pattern in vibrant shades of green. Crafted from a moisture-wicking stretch fabric with a classic three-button placket, it’s designed to provide both bold style and breathable comfort on the golf course or at the weekend BBQ.",
             Price = 30,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shirts").Id,
+            CategoryId = shirts?.Id ?? 0,
         };
 
         var seededProduct9 = new Product
@@ -310,7 +317,7 @@ public class Startup
             Description =
                 "This tiered maxi skirt features a classic blue-and-white botanical print that radiates effortless bohemian charm. Designed with a comfortable smocked drawstring waist and a flowy, multi-tiered silhouette, it’s the perfect breezy staple for sunny days and seaside strolls.",
             Price = 30,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Skirts").Id,
+            CategoryId = skirts?.Id ?? 0,
         };
 
         var seededProduct10 = new Product
@@ -319,7 +326,7 @@ public class Startup
             Description =
                 "This vibrant red skater skirt features a structured, high-waisted fit and voluminous box pleats for a dramatic flared silhouette. Crafted from a smooth, mid-weight fabric, it’s a bold statement piece that adds a touch of modern retro charm to any look.",
             Price = 25,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Skirts").Id,
+            CategoryId = skirts?.Id ?? 0,
         };
 
         var seededProduct11 = new Product
@@ -328,7 +335,7 @@ public class Startup
             Description =
                 "These lavender pinstripe shorts feature a charming ruffled hem and a comfortable elastic waistband for an easy, breezy fit. Crafted from a lightweight seersucker-style fabric, they are the perfect playful choice for lounging or warm weather outings.",
             Price = 20,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shorts").Id,
+            CategoryId = shorts?.Id ?? 0,
         };
 
         var seededProduct12 = new Product
@@ -336,7 +343,7 @@ public class Startup
             Name = "Navy Short",
             Description = "These navy drawstring shorts are crafted from a lightweight, textured fabric perfect for warm-weather versatility. Featuring a comfortable elastic waistband and a clean, straight-leg fit, they offer an effortless blend of casual comfort and classic style.",
             Price = 25,
-            CategoryId = dataContext.Set<Category>().FirstOrDefault(x => x.Name == "Shorts").Id,
+            CategoryId = shorts?.Id ?? 0,
         };
         
         dataContext.Set<Product>().Add(seededProduct1);

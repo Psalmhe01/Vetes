@@ -104,6 +104,8 @@ public class SizeController : ControllerBase
         var response = new Response();
         
         var size = _dataContext.Set<Size>()
+            .Include(x => x.Products)
+            .ThenInclude(x => x.Product)
             .FirstOrDefault(x => x.Id == sizeId);
         if (size == null)
         {
