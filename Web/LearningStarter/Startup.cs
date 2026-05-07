@@ -64,15 +64,20 @@ public class Startup
         {
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-            if (connectionString != null && connectionString.StartsWith("postgres://"))
+            if (string.IsNullOrEmpty(connectionString))
             {
-                var databaseUri = new Uri(connectionString);
+                connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+            }
+
+            if (connectionString != null && (connectionString.StartsWith("postgres://") || connectionString.StartsWith("postgresql://")))
+            {
+                var databaseUri = new Uri(connectionString.Replace("postgresql://", "postgres://"));
                 var userInfo = databaseUri.UserInfo.Split(':');
 
                 connectionString = $"Host={databaseUri.Host};Port={databaseUri.Port};Database={databaseUri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Prefer;Trust Server Certificate=true";
             }
 
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(connectionString ?? throw new InvalidOperationException("Connection string 'DefaultConnection' or 'DATABASE_URL' not found."));
         });
 
         services.AddIdentity<User, Role>(
