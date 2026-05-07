@@ -146,9 +146,9 @@ public class OrdersController: ControllerBase
             response.AddError(nameof(updateDto.Status), "Status must not be empty");
         }
 
-        if (updateDto.ShippingAddressId < 0)
+        if (updateDto.ShippingAddressId <= 0)
         {
-            response.AddError(nameof(updateDto.ShippingAddressId), "Shipping Address must be positive");
+            response.AddError(nameof(updateDto.ShippingAddressId), "A valid Shipping Address is required.");
         }
         
         var ordersToUpdate = _dataContext.Set<Orders>()

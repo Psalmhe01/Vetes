@@ -95,7 +95,8 @@ public class ProductSizeMeasurementsController : ControllerBase
 
         var exists = _dataContext.Set<ProductSizeMeasurement>()
             .Any(x => x.ProductSizeId == createDto.ProductSizeId &&
-                      x.MeasurementTypeId == createDto.MeasurementTypeId);
+                      x.MeasurementTypeId == updateDto.MeasurementTypeId &&
+                      x.Id != id);
         if (exists)
         {
             response.AddError("MeasurementTypeId", "Measurement already exists for this product");
