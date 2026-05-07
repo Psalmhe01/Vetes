@@ -115,6 +115,12 @@ public class ProductSizeMeasurementsController : ControllerBase
             .Set<Product>()
             .FirstOrDefault(x => x.Id == productSize.ProductId);
 
+        if (product == null)
+        {
+            response.AddError(nameof(createDto.ProductSizeId), "Product associated with this size not found");
+            return BadRequest(response);
+        }
+
         var allowed = _dataContext
             .Set<MeasurementCategory>()
             .Any(mc => mc.CategoryId == product.CategoryId && mc.MeasurementTypeId == createDto.MeasurementTypeId);
@@ -199,6 +205,12 @@ public class ProductSizeMeasurementsController : ControllerBase
         var product = _dataContext
             .Set<Product>()
             .FirstOrDefault(x => x.Id == productSize.ProductId);
+
+        if (product == null)
+        {
+            response.AddError(nameof(updateDto.ProductSizeId), "Product associated with this size not found");
+            return BadRequest(response);
+        }
 
         var allowed = _dataContext
             .Set<MeasurementCategory>()

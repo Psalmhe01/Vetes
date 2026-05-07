@@ -48,6 +48,7 @@ public class AdsController : ControllerBase
 
         var adToCreate = new Ads
         {
+            Title = createDto.Description.Length > 20 ? createDto.Description.Substring(0, 20) : createDto.Description,
             LinkUrl = createDto.LinkUrl,
             Description = createDto.Description,
             ImageId = createDto.ImageId,
