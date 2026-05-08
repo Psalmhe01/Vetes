@@ -2,6 +2,7 @@ using System.Linq;
 using LearningStarter.Common;
 using LearningStarter.Data;
 using LearningStarter.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc; 
 namespace LearningStarter.Controllers;
 [ApiController]
@@ -21,6 +22,10 @@ public class CartProductsController : ControllerBase
         var response = new Response();
         var data = _dataContext
             .Set<CartProduct>()
+            .Include(cp => cp.ProductSize)
+                .ThenInclude(ps => ps.Product)
+            .Include(cp => cp.ProductSize)
+                .ThenInclude(ps => ps.Size)
             .Select(cartProduct => new CartProductGetDto
             {
                 Id = cartProduct.Id,
@@ -164,6 +169,10 @@ public class CartProductsController : ControllerBase
 
         var cartProductToReturn = _dataContext.Set<CartProduct>()
             .Where(cp => cp.Id == id)
+            .Include(cp => cp.ProductSize)
+                .ThenInclude(ps => ps.Product)
+            .Include(cp => cp.ProductSize)
+                .ThenInclude(ps => ps.Size)
             .Select(cp => new CartProductGetDto
             {
                 Id = cp.Id,

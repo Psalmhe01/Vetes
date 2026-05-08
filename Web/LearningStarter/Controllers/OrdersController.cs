@@ -1,14 +1,15 @@
-
 using System.Linq;
+using System.Security.Claims;
 using LearningStarter.Common;
 using LearningStarter.Data;
 using LearningStarter.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace LearningStarter.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/orders")]
-
 public class OrdersController: ControllerBase
 {
     private readonly DataContext _dataContext;
@@ -22,9 +23,11 @@ public class OrdersController: ControllerBase
     public IActionResult GetAll()
     {
         var response = new Response();
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         
         var data = _dataContext
             .Set<Orders>()
+            .Where(x => x.UserId == userId)
             .Select(orders => new OrdersGetDto
             {
                 Id = orders.Id,
@@ -51,9 +54,11 @@ public class OrdersController: ControllerBase
     public IActionResult GetById(int id)
     {
         var response = new Response();
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         var data = _dataContext
             .Set<Orders>()
+            .Where(x => x.UserId == userId)
             .Select(orders => new OrdersGetDto
             {
                 Id = orders.Id,
@@ -86,6 +91,7 @@ public class OrdersController: ControllerBase
     public IActionResult Create([FromBody] OrdersCreateDto createDto)
     {
         var response = new Response();
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         if (string.IsNullOrEmpty(createDto.Status))
         {
@@ -95,12 +101,6 @@ public class OrdersController: ControllerBase
         if (createDto.ShippingAddressId <= 0)
         {
             response.AddError(nameof(createDto.ShippingAddressId), "A valid Shipping Address is required.");
-        }
-
-        var userExists = _dataContext.Set<User>().Any(x => x.Id == createDto.UserId);
-        if (!userExists)
-        {
-            response.AddError(nameof(createDto.UserId), "User does not exist");
         }
 
         var addressExists = _dataContext.Set<ShippingAddresses>().Any(x => x.Id == createDto.ShippingAddressId);
@@ -116,7 +116,7 @@ public class OrdersController: ControllerBase
 
         var ordersToCreate = new Orders
         {
-            UserId = createDto.UserId,
+            UserId = userId,
             Status = createDto.Status,
             ShippingAddressId = createDto.ShippingAddressId,
         };
@@ -140,6 +140,7 @@ public class OrdersController: ControllerBase
     public IActionResult Update([FromBody] OrdersUpdateDto updateDto, int id)
     {
         var response = new Response();
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         
         if (string.IsNullOrEmpty(updateDto.Status))
         {
@@ -152,7 +153,7 @@ public class OrdersController: ControllerBase
         }
         
         var ordersToUpdate = _dataContext.Set<Orders>()
-            .FirstOrDefault(orders => orders.Id == id);
+            .FirstOrDefault(orders => orders.Id == id && orders.UserId == userId);
         
         if (ordersToUpdate == null)
         {
@@ -192,9 +193,10 @@ public class OrdersController: ControllerBase
     public IActionResult Delete(int id)
     {
         var response = new Response();
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         var ordersToDelete = _dataContext.Set<Orders>()
-            .FirstOrDefault(orders => orders.Id == id);
+            .FirstOrDefault(orders => orders.Id == id && orders.UserId == userId);
 
         if (ordersToDelete == null)
         {

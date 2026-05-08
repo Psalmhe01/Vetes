@@ -25,6 +25,8 @@ public class SizeController : ControllerBase
         var response = new Response();
         var data = _dataContext
             .Set<Size>()
+            .Include(s => s.Products)
+                .ThenInclude(ps => ps.Product)
             .Select(size => new SizeGetDto
             {
                 Id = size.Id,
@@ -50,6 +52,8 @@ public class SizeController : ControllerBase
         var response = new Response();
         var data = _dataContext
             .Set<Size>()
+            .Include(s => s.Products)
+                .ThenInclude(ps => ps.Product)
             .Select(size => new SizeGetDto
             {
                 Id = size.Id,

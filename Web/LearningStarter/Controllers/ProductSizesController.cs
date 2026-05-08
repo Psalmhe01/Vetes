@@ -3,6 +3,7 @@ using System.Linq;
 using LearningStarter.Common;
 using LearningStarter.Data;
 using LearningStarter.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningStarter.Controllers;
@@ -26,6 +27,8 @@ public class ProductSizesController : ControllerBase
 
         var data = _dataContext
             .Set<ProductSize>()
+            .Include(ps => ps.Product)
+            .Include(ps => ps.Size)
             .Select(product => new ProductSizeGetDto
             {
                 Id = product.Id,
@@ -48,6 +51,8 @@ public class ProductSizesController : ControllerBase
 
         var data = _dataContext
             .Set<ProductSize>()
+            .Include(ps => ps.Product)
+            .Include(ps => ps.Size)
             .Select(product => new ProductSizeGetDto
             {
                 Id = product.Id,
@@ -79,6 +84,8 @@ public class ProductSizesController : ControllerBase
 
         var data = _dataContext
             .Set<ProductSize>()
+            .Include(ps => ps.Product)
+            .Include(ps => ps.Size)
             .Select(product => new ProductSizeGetDto
             {
                 Id = product.Id,

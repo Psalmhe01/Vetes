@@ -18,15 +18,17 @@ const errorHandlers = {
   401: () => {
     console.log("Unauthenticated. Make sure you are signed in.");
     return Promise.resolve({
-      data: null,
-      hasErrors: true,
-      errors: [
-        {
-          property: "",
-          message: "Sign in.",
-        },
-      ],
-    } as ApiResponse<any>);
+      data: {
+        data: null,
+        hasErrors: true,
+        errors: [
+          {
+            property: "",
+            message: "Sign in.",
+          },
+        ],
+      },
+    });
   },
   403: () => {
     showNotification({
@@ -70,28 +72,22 @@ export async function handleResponseError(error: AxiosError) {
   }
 }
 
-const baseUrl = EnvVars.apiBaseUrl;
-
 axiosInstance.interceptors.response.use((x: any) => x, handleResponseError);
 
 function post<T>(route: string, data: any) {
-  var url = baseUrl + route;
-  return axiosInstance.post<T>(url, data);
+  return axiosInstance.post<T>(route, data);
 }
 
 function get<T>(route: string) {
-  var url = baseUrl + route;
-  return axiosInstance.get<T>(url);
+  return axiosInstance.get<T>(route);
 }
 
 function put<T>(route: string, data: any) {
-  var url = baseUrl + route;
-  return axiosInstance.put<T>(url, data);
+  return axiosInstance.put<T>(route, data);
 }
 
 function remove<T>(route: string) {
-  var url = baseUrl + route;
-  return axiosInstance.delete<T>(url);
+  return axiosInstance.delete<T>(route);
 }
 
 type Api = {

@@ -49,6 +49,7 @@ public class PaymentController : ControllerBase
 
         var data = _dataContext
             .Set<Orders>()
+            .Include(o => o.Payments) // Include payments for the order
             .Select(orders => new OrdersGetDto
             {
                 Id = orders.Id,

@@ -24,6 +24,7 @@ public class CategoriesController : ControllerBase
             
             var data = _dataContext
                 .Set<Category>()
+                .Include(c => c.Product) // Include the related products
                 .Select(category => new CategoryGetDto
                 {
                     Id = category.Id,
@@ -49,6 +50,7 @@ public class CategoriesController : ControllerBase
             
         var data = _dataContext
             .Set<Category>()
+            .Include(c => c.Product) // Include the related products
             .Select(category => new CategoryGetDto
             {
                 Id = category.Id,
